@@ -10,16 +10,25 @@ public class RatchettCabinSceneController : MonoBehaviour
     [SerializeField] private string exhaustedHint = "没有什么值得注意的了";
     [SerializeField] private string cannotLeaveHint = "好像还有什么值得注意的地方";
 
+    [Header("场景热点（Hierarchy 中物体名，需带 Button）")]
+    [SerializeField] private string bodyHotspotObjectName = "Hotspot_Body_Button";
+    [SerializeField] private string floorHotspotObjectName = "Hotspot_Floor_Button";
+    [SerializeField] private string tableHotspotObjectName = "Hotspot_Table_Button";
+    [SerializeField] private string daggerHotspotObjectName = "Hotspot_Dagger_Button";
+    [SerializeField] private string leaveHotspotObjectName = "Hotspot_Leave_Button";
+
     private HoverHintTrigger bodyHintTrigger;
     private HoverHintTrigger floorHintTrigger;
     private HoverHintTrigger tableHintTrigger;
+    private HoverHintTrigger daggerHintTrigger;
 
     void Start()
     {
-        bodyHintTrigger = AutoBindButton("Hotspot_Body_Button", OnBodyClicked, "点击查看");
-        floorHintTrigger = AutoBindButton("Hotspot_Floor_Button", OnFloorClicked, "点击查看");
-        tableHintTrigger = AutoBindButton("Hotspot_Table_Button", OnTableClicked, "点击查看");
-        AutoBindButton("Hotspot_Leave_Button", OnLeaveCabinClicked, "离开房间", false);
+        bodyHintTrigger = AutoBindButton(bodyHotspotObjectName, OnBodyClicked, "点击查看");
+        floorHintTrigger = AutoBindButton(floorHotspotObjectName, OnFloorClicked, "点击查看");
+        tableHintTrigger = AutoBindButton(tableHotspotObjectName, OnTableClicked, "点击查看");
+        daggerHintTrigger = AutoBindButton(daggerHotspotObjectName, OnDaggerClicked, "点击查看");
+        AutoBindButton(leaveHotspotObjectName, OnLeaveCabinClicked, "离开房间", false);
         RefreshHintStates();
     }
 
@@ -33,6 +42,13 @@ public class RatchettCabinSceneController : MonoBehaviour
     public void OnFloorClicked()
     {
         AddEvidence(EvidenceIds.H_HANDKERCHIEF);
+        TryMarkCrimeSceneFinished();
+        RefreshHintStates();
+    }
+
+    public void OnDaggerClicked()
+    {
+        AddEvidence(EvidenceIds.DAGGER);
         TryMarkCrimeSceneFinished();
         RefreshHintStates();
     }
@@ -160,6 +176,8 @@ public class RatchettCabinSceneController : MonoBehaviour
             || HasNotebookEvidence(notebookManager, EvidenceIds.H_HANDKERCHIEF);
         bool tableDone = HasOldClue(evidenceManager, EvidenceIds.BURNED_PAPER)
             || HasNotebookEvidence(notebookManager, EvidenceIds.BURNED_PAPER);
+        bool daggerDone = HasOldClue(evidenceManager, EvidenceIds.DAGGER)
+            || HasNotebookEvidence(notebookManager, EvidenceIds.DAGGER);
 
         if (bodyHintTrigger != null)
         {
@@ -172,6 +190,10 @@ public class RatchettCabinSceneController : MonoBehaviour
         if (tableHintTrigger != null)
         {
             tableHintTrigger.SetHint(tableDone ? exhaustedHint : "点击查看");
+        }
+        if (daggerHintTrigger != null)
+        {
+            daggerHintTrigger.SetHint(daggerDone ? exhaustedHint : "点击查看");
         }
     }
 
@@ -196,6 +218,7 @@ public class RatchettCabinSceneController : MonoBehaviour
         return notebookManager != null
             && notebookManager.HasEvidence(EvidenceIds.KNIFE_WOUND)
             && notebookManager.HasEvidence(EvidenceIds.H_HANDKERCHIEF)
+            && notebookManager.HasEvidence(EvidenceIds.DAGGER)
             && notebookManager.HasEvidence(EvidenceIds.BURNED_PAPER);
     }
 }

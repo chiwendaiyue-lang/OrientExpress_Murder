@@ -68,6 +68,7 @@ public class RatchettTableSceneController : MonoBehaviour
         bool done = notebookManager != null
             && notebookManager.HasEvidence(EvidenceIds.KNIFE_WOUND)
             && notebookManager.HasEvidence(EvidenceIds.H_HANDKERCHIEF)
+            && notebookManager.HasEvidence(EvidenceIds.DAGGER)
             && notebookManager.HasEvidence(EvidenceIds.BURNED_PAPER);
 
         if (done)
