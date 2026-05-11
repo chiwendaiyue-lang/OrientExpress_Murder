@@ -1,0 +1,551 @@
+{
+  "sceneId": "mrs_hubbard",
+  "startNodeId": "node1",
+  "nodes": [
+    {
+      "id": "node1",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "mrs_hubbard",
+        "speakerName": "哈伯德太太",
+        "text": "快跟我说，这儿谁负责？我有极要紧的话要说，真的，极要紧的话。可是，我只想跟负责的人说。你这位先生要是──",
+        "nextNodeId": "node2"
+      }
+    },
+    {
+      "id": "node2",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "太太，跟我说吧。不过，先请坐下来。",
+        "nextNodeId": "node3"
+      }
+    },
+    {
+      "id": "node3",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "mrs_hubbard",
+        "speakerName": "哈伯德太太",
+        "text": "昨晚车上发生一宗人命案，凶手恰恰就在我的房里呆过。",
+        "nextNodeId": "node4"
+      }
+    },
+    {
+      "id": "node4",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "真的吗？太太？",
+        "nextNodeId": "node5"
+      }
+    },
+    {
+      "id": "node5",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "mrs_hubbard",
+        "speakerName": "哈伯德太太",
+        "text": "当然真的，错不了！我才不瞎说哩。我这就把事情一五一十说给你听。我上床就睡着了。突然，醒了过来——四周黑古隆冬的──我明白过来了，原来房里来了个男人。吓得我不敢吱声。我就这么躺着，心里直嘀咕：‘老天爷，这下我可没命了。’我想到的净是些书本上读到过的种种杀人抢劫什么的。心想：‘管它呢，反正他拿不走我的金银珠宝。’知道吗，我早藏在袜子里塞在枕头下了──睡起来自然不很舒服，有点儿高低不平。要是你明白我的意思才好呢。重要的不在这儿。我说到哪儿了？",
+        "nextNodeId": "node6"
+      }
+    },
+    {
+      "id": "node6",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "太太，你说有个男人在你的房里。",
+        "nextNodeId": "node7"
+      }
+    },
+    {
+      "id": "node7",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "mrs_hubbard",
+        "speakerName": "哈伯德太太",
+        "text": "正是，我闭着眼，就这么躺着。寻思该怎么办。心想：‘谢天谢地，幸好我的女儿不知道我在受苦受难。’后来，我灵机一动，悄悄地摸到了铃儿，一按，想让列车员来。我一个劲地按铃，按呀按，可是没半点响动。我敢说，我的心眼看着就要不跳了。‘老天爷，’我心想，‘很可能是他把车上的人全宰了。’车停着没开，四周静得叫人发毛。可是我还是一个劲地按铃。后来总算听到脚步声朝过道这头来，有人敲我的门，我这才松了口气。‘进来！’我惊叫起来，同时把灯点亮，睁眼一看，信不信由你，那儿连个人影也没有。",
+        "nextNodeId": "node8"
+      }
+    },
+    {
+      "id": "node8",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "太太，后来呢？",
+        "nextNodeId": "node9"
+      }
+    },
+    {
+      "id": "node9",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "mrs_hubbard",
+        "speakerName": "哈伯德太太",
+        "text": "于是，我就把这怪事跟来人说了。他硬是不信，说，很可能是我在做梦。我让他朝铺位底下瞧瞧，他说，床底下窄得很，怎么也躲不下人。再清楚也不过了。那人定是溜走了。反正房里来过人，就这么一回事。可是最让人受不了的，就数那个列车员，他左劝右说，百般哄我，简直叫人发疯。可我不是人爱瞎想的人，先生。──请问先生大名？",
+        "nextNodeId": "node10",
+        "rewards": {
+          "testimonyToAdd": [
+            "mrs_hubbard_man_in_room"
+          ]
+        }
+      }
+    },
+    {
+      "id": "node10",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "波洛，太太。这位是鲍克先生，公司的董事。这位是康斯坦丁大夫。",
+        "nextNodeId": "node11"
+      }
+    },
+    {
+      "id": "node11",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "mrs_hubbard",
+        "speakerName": "哈伯德太太",
+        "text": "我相信，碰到诸位很开心。我倒不想把自己装作聪明绝顶，我心里明白，就是隔壁的那个男人──那个给人杀了的可怜的男人。我让列车员瞧瞧两个房间的那扇公用的门。那门明摆着没闩上，我一眼就瞧见了。于是我让他当着我的面当场把门闩上。他走后，我从床上起来，拿来一只提箱顶着，更保险。",
+        "nextNodeId": "node12"
+      }
+    },
+    {
+      "id": "node12",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "哈伯德太太，那是什么时候？",
+        "nextNodeId": "node13"
+      }
+    },
+    {
+      "id": "node13",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "mrs_hubbard",
+        "speakerName": "哈伯德太太",
+        "text": "当时我的心乱成一团麻，压根儿没留神。",
+        "nextNodeId": "node14"
+      }
+    },
+    {
+      "id": "node14",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "你觉得那男人又回到隔壁的房间去了？",
+        "nextNodeId": "node15"
+      }
+    },
+    {
+      "id": "node15",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "mrs_hubbard",
+        "speakerName": "哈伯德太太",
+        "text": "他到哪里去，我怎么知道？当时我的眼睛紧闭着呢。",
+        "nextNodeId": "node16"
+      }
+    },
+    {
+      "id": "node16",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "太太，你是认为，你听到的就是有人在隔壁房里──被害人的房里，走动的声响吗？",
+        "nextNodeId": "node17"
+      }
+    },
+    {
+      "id": "node17",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "mrs_hubbard",
+        "speakerName": "哈伯德太太",
+        "text": "不，我可不这么想，先生。──你的大名？──波洛。波洛先生，千真万确，他就是到我房里来过。再说，我还有证据哩。",
+        "nextNodeId": "node18"
+      }
+    },
+    {
+      "id": "node18",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "system",
+        "speakerName": "系统",
+        "text": "哈伯德太太从她的提包里掏出一大堆东西，一副骨架眼镜，一瓶阿司匹林，一包芒硝……最后是一颗金属钮扣。",
+        "nextNodeId": "node19"
+      }
+    },
+    {
+      "id": "node19",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "mrs_hubbard",
+        "speakerName": "哈伯德太太",
+        "text": "你见过这种钮扣吗？这可不是我的钮扣，也不是我的什么衣服上掉下的。是今天早上我起床时捡到的。",
+        "nextNodeId": "node20"
+      }
+    },
+    {
+      "id": "node20",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "bouc",
+        "speakerName": "鲍克",
+        "text": "这是列车员制服上的钮扣。",
+        "nextNodeId": "node21",
+        "rewards": {
+          "evidenceToAdd": [
+            "metal_button"
+          ]
+        }
+      }
+    },
+    {
+      "id": "node21",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "对此可以有一种很合理的解释。太太，这颗钮扣可能是从列车员制服上掉下来的。不是他查看你的包房时掉的，就是昨晚为你铺床时掉的。",
+        "nextNodeId": "node22"
+      }
+    },
+    {
+      "id": "node22",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "mrs_hubbard",
+        "speakerName": "哈伯德太太",
+        "text": "听我说，列车员在门边瞧了瞧我的床下，然后进来闩上与隔壁相通的那扇门，可是他没挨近过那扇窗。今天早上我就在杂志上面发现这颗钮扣。",
+        "nextNodeId": "node23"
+      }
+    },
+    {
+      "id": "node23",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "你提供了最有趣，最有价值的证据。现在我能不能问几个问题？",
+        "nextNodeId": "node24"
+      }
+    },
+    {
+      "id": "node24",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "既然你那么怕这个雷切特，怎么事先不把那扇两个房间相通的门闩上呢，这是怎么一回事？",
+        "nextNodeId": "node25"
+      }
+    },
+    {
+      "id": "node25",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "mrs_hubbard",
+        "speakerName": "哈伯德太太",
+        "text": "事实上，我问过那个瑞典女人──一个讨人喜欢的女人──门是不是闩上，她说闩上的。",
+        "nextNodeId": "node26"
+      }
+    },
+    {
+      "id": "node26",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "你自己为什么不亲自去看看呢？",
+        "nextNodeId": "node27"
+      }
+    },
+    {
+      "id": "node27",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "mrs_hubbard",
+        "speakerName": "哈伯德太太",
+        "text": "因为我已经上了床，我的提包也挂在门把上，我看不见门有没有闩上。",
+        "nextNodeId": "hubbard_latch_notice"
+      }
+    },
+    {
+      "id": "hubbard_latch_notice",
+      "node": {
+        "nodeType": "notice",
+        "speakerCharacterId": "system",
+        "speakerName": "系统",
+        "targetType": "presented_image",
+        "text": "",
+        "prompt": "哈伯德太太说的情况和房间结构并不相符。请找出不自然之处。",
+        "presentedImage": {
+          "imageId": "hubbard_room",
+          "position": "full"
+        },
+        "hotspots": [
+          {
+            "id": "under_bed",
+            "label": "床下",
+            "correct": false,
+            "failureNodeId": "notice_hubbard_latch_failure_bed",
+            "x": 0.22,
+            "y": 0.22,
+            "width": 0.14,
+            "height": 0.10
+          },
+          {
+            "id": "bell",
+            "label": "门铃",
+            "correct": false,
+            "failureNodeId": "notice_hubbard_latch_failure_bell",
+            "x": 0.58,
+            "y": 0.24,
+            "width": 0.12,
+            "height": 0.10
+          },
+          {
+            "id": "latch",
+            "label": "门闩",
+            "correct": true,
+            "successNodeId": "notice_hubbard_latch_success",
+            "x": 0.72,
+            "y": 0.52,
+            "width": 0.12,
+            "height": 0.12
+          }
+        ]
+      }
+    },
+    {
+      "id": "notice_hubbard_latch_failure_bed",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "system",
+        "speakerName": "系统",
+        "text": "床下确实很窄，藏不下一个成年人。但这并不能解释哈伯德太太关于门闩的说法。",
+        "nextNodeId": "hubbard_latch_notice"
+      }
+    },
+    {
+      "id": "notice_hubbard_latch_failure_bell",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "system",
+        "speakerName": "系统",
+        "text": "门铃的位置可以从床上摸到，这一点和她的说法并不冲突。",
+        "nextNodeId": "hubbard_latch_notice"
+      }
+    },
+    {
+      "id": "notice_hubbard_latch_success",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "system",
+        "speakerName": "系统",
+        "text": "门闩在门把手上方。即使提包挂在门把手上，也不可能挡住门闩。哈伯德太太的说法和房间结构不符。",
+        "nextNodeId": "node28",
+        "rewards": {
+          "testimonyStageToUpdate": [
+            {
+              "itemId": "mrs_hubbard_man_in_room",
+              "stageId": "latch_position_contradiction"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "node28",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "这以后，你听见雷切特先生房里有什么声响吗？",
+        "nextNodeId": "node29"
+      }
+    },
+    {
+      "id": "node29",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "mrs_hubbard",
+        "speakerName": "哈伯德太太",
+        "text": "很难说──他在打呼噜，响极了。前天晚上闹得我一刻也不安宁。",
+        "nextNodeId": "node30"
+      }
+    },
+    {
+      "id": "node30",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "哈伯德太太，你可记得阿姆斯特朗拐骗案？",
+        "nextNodeId": "node31"
+      }
+    },
+    {
+      "id": "node31",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "mrs_hubbard",
+        "speakerName": "哈伯德太太",
+        "text": "记得，当然记得。这个坏蛋竟然还给他漏了网！阿，我真想亲手宰了他！",
+        "nextNodeId": "node32"
+      }
+    },
+    {
+      "id": "node32",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "他可逃不了啦，他死了。昨天晚上死的，雷切特就是他。",
+        "nextNodeId": "node33"
+      }
+    },
+    {
+      "id": "node33",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "mrs_hubbard",
+        "speakerName": "哈伯德太太",
+        "text": "好阿，想想看，这该多好。我非写信告诉我的女儿不可。昨天晚上我不是跟你说过，这人有一副可恶的面孔？瞧，我说对了。我的女儿老是说，只要妈妈一猜，你尽管押上全部的钱，准保会赢。",
+        "nextNodeId": "node34"
+      }
+    },
+    {
+      "id": "node34",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "你跟阿姆斯特朗一家认识吗，哈伯德太太？",
+        "nextNodeId": "node35"
+      }
+    },
+    {
+      "id": "node35",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "mrs_hubbard",
+        "speakerName": "哈伯德太太",
+        "text": "不认识。他们家进进出出的尽是有身份的人家。不过我听过，阿姆斯特朗太太是个讨人喜欢的女人，她的丈夫很敬重她。",
+        "nextNodeId": "node36"
+      }
+    },
+    {
+      "id": "node36",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "哈伯德太太，你帮了我们的大忙──说真的很大的忙。",
+        "nextNodeId": "node37"
+      }
+    },
+    {
+      "id": "node37",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "顺便问一句，你有鲜红色的丝睡衣？",
+        "nextNodeId": "node38"
+      }
+    },
+    {
+      "id": "node38",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "mrs_hubbard",
+        "speakerName": "哈伯德太太",
+        "text": "老天爷，问得多奇怪！怎么会有呢！我身边有两件睡衣──一件是粉红色的法兰绒的，坐般时穿起来挺舒服。还有一件是我女儿送给我的礼物──紫色的，丝的，在家里时穿。可是你为什么问我的睡衣？",
+        "nextNodeId": "node39"
+      }
+    },
+    {
+      "id": "node39",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "是这么一回事，太太。有一个穿鲜红睡衣的，昨天晚上到过你的包房或雷切特先生的包房。正如你刚才所说的那样，那时全部房门都关着，这样就很难弄明白究竟是哪个包房。",
+        "nextNodeId": "node40"
+      }
+    },
+    {
+      "id": "node40",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "mrs_hubbard",
+        "speakerName": "哈伯德太太",
+        "text": "可是没什么穿红睡衣的人到过我的包房。",
+        "nextNodeId": "node41"
+      }
+    },
+    {
+      "id": "node41",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "那必然是到雷切特先生的包房去了。",
+        "nextNodeId": "node42"
+      }
+    },
+    {
+      "id": "node42",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "mrs_hubbard",
+        "speakerName": "哈伯德太太",
+        "text": "或许吧，这我可不清楚。",
+        "nextNodeId": "node49"
+      }
+    },
+    {
+      "id": "node49",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "system",
+        "speakerName": "系统",
+        "text": "波洛帮太太收拾东西。",
+        "nextNodeId": "node50"
+      }
+    },
+    {
+      "id": "node50",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "你的手帕掉了，太太。",
+        "nextNodeId": "node51"
+      }
+    },
+    {
+      "id": "node51",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "mrs_hubbard",
+        "speakerName": "哈伯德太太",
+        "text": "这不是我的，波洛先生。我的帕上绣着C·M·H三个字母，而且都是些很合用的普普通通的大路货──不是高档的巴黎来的稀罕玩意儿。这么精细的帕谁配得上用？",
+        "nextNodeId": "END"
+      }
+    }
+  ]
+}

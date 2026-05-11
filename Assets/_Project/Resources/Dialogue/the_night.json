@@ -1,0 +1,439 @@
+{
+  "sceneId": "the_night",
+  "startNodeId": "node1",
+  "nodes": [
+    {
+      "id": "node1",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "unknown_voice",
+        "speakerName": "? ? ?",
+        "text": "啊！",
+        "nextNodeId": "node2"
+      }
+    },
+    {
+      "id": "node2",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "system",
+        "speakerName": "系统",
+        "text": "有什么人在呻吟，几乎是一声喊叫。",
+        "nextNodeId": "node3"
+      }
+    },
+    {
+      "id": "node3",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "system",
+        "speakerName": "系统",
+        "text": "噔，噔，噔，砰砰砰，有人在敲门。",
+        "nextNodeId": "node4"
+      }
+    },
+    {
+      "id": "node4",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "pierre",
+        "speakerName": "列车员皮埃尔",
+        "text": "砰砰砰",
+        "nextNodeId": "node5"
+      }
+    },
+    {
+      "id": "node5",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "unknown_voice",
+        "speakerName": "? ? ?",
+        "text": "没什么事，是我搞错了（法语）",
+        "nextNodeId": "node6"
+      }
+    },
+    {
+      "id": "node6",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "pierre",
+        "speakerName": "列车员皮埃尔",
+        "text": "是，先生",
+        "options": [
+          {
+            "text": "真可疑",
+            "nextNodeId": "node7"
+          }
+        ]
+      }
+    },
+    {
+      "id": "node7",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "现在几点了",
+        "options": [
+          {
+            "text": "查看手表",
+            "nextNodeId": "node8"
+          }
+        ]
+      }
+    },
+    {
+      "id": "node8",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "system",
+        "speakerName": "系统",
+        "text": "现在是12:37",
+        "presentedImage": {
+          "imageId": "clock",
+          "position": "center"
+        },
+        "nextNodeId": "node9",
+        "rewards": {
+          "testimonyToAdd": [
+            "french_answer"
+          ]
+        }
+      }
+    },
+    {
+      "id": "node9",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "system",
+        "speakerName": "系统",
+        "text": "咔哒，哗哗哗（流水声）...咔哒",
+        "nextNodeId": "node10"
+      }
+    },
+    {
+      "id": "node10",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "system",
+        "speakerName": "系统",
+        "text": "噔——噔——噔",
+        "nextNodeId": "node11"
+      }
+    },
+    {
+      "id": "node11",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "睡不着...",
+        "options": [
+          {
+            "text": "向列车员要一杯水",
+            "nextNodeId": "node12"
+          }
+        ]
+      }
+    },
+    {
+      "id": "node12",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "system",
+        "speakerName": "系统",
+        "text": "叮铃，叮铃，叮铃……",
+        "nextNodeId": "node13"
+      }
+    },
+    {
+      "id": "node13",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "mrs_hubbard",
+        "speakerName": "哈伯德太太",
+        "text": "有个男人在我的房间里面……",
+        "nextNodeId": "node14"
+      }
+    },
+    {
+      "id": "node14",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "system",
+        "speakerName": "系统",
+        "text": "……",
+        "nextNodeId": "node15"
+      }
+    },
+    {
+      "id": "node15",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "pierre",
+        "speakerName": "列车员皮埃尔",
+        "text": "晚安，太太",
+        "options": [
+          {
+            "text": "查看车厢",
+            "nextNodeId": "node16"
+          }
+        ]
+      }
+    },
+    {
+      "id": "node16",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "system",
+        "speakerName": "系统",
+        "text": "一个身穿红色睡衣的人远去",
+        "presentedImage": {
+          "imageId": "man_in_red",
+          "position": "center"
+        },
+        "nextNodeId": "node17",
+        "rewards": {
+          "testimonyToAdd": [
+            "red_sleepwear_person"
+          ]
+        }
+      }
+    },
+    {
+      "id": "node17",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "这一晚上真是不消停",
+        "nextNodeId": "node18"
+      }
+    },
+    {
+      "id": "node18",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "pierre",
+        "speakerName": "列车员皮埃尔",
+        "text": "波洛先生！波洛先生！请开门！",
+        "stage": {
+          "focusCharacterId": "pierre",
+          "slots": [
+            {
+              "slotId": "right",
+              "characterId": "pierre",
+              "portrait": "pierre_anxious"
+            }
+          ]
+        },
+        "nextNodeId": "node19"
+      }
+    },
+    {
+      "id": "node19",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "什么事这么急",
+        "stage": {
+          "focusCharacterId": "",
+          "slots": [
+            {
+              "slotId": "right",
+              "characterId": "pierre",
+              "portrait": "pierre_anxious"
+            }
+          ]
+        },
+        "nextNodeId": "node20"
+      }
+    },
+    {
+      "id": "node20",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "pierre",
+        "speakerName": "列车员皮埃尔",
+        "text": "鲍克先生说想马上见您",
+        "stage": {
+          "focusCharacterId": "pierre",
+          "slots": [
+            {
+              "slotId": "right",
+              "characterId": "pierre",
+              "portrait": "pierre_anxious"
+            }
+          ]
+        },
+        "nextNodeId": "node21"
+      }
+    },
+    {
+      "id": "node21",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "没说什么原因吗",
+        "stage": {
+          "focusCharacterId": "",
+          "slots": [
+            {
+              "slotId": "right",
+              "characterId": "pierre",
+              "portrait": "pierre_anxious"
+            }
+          ]
+        },
+        "nextNodeId": "node22"
+      }
+    },
+    {
+      "id": "node22",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "pierre",
+        "speakerName": "列车员皮埃尔",
+        "text": "是，非常紧急的事情，原因您马上就会知道",
+        "stage": {
+          "focusCharacterId": "pierre",
+          "slots": [
+            {
+              "slotId": "right",
+              "characterId": "pierre",
+              "portrait": "pierre_anxious"
+            }
+          ]
+        },
+        "nextNodeId": "node23"
+      }
+    },
+    {
+      "id": "node23",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "什么事",
+        "stage": {
+          "focusCharacterId": "",
+          "slots": []
+        },
+        "nextNodeId": "node24"
+      }
+    },
+    {
+      "id": "node24",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "bouc",
+        "speakerName": "鲍克",
+        "text": "首先，列车现在停着，我们已经陷在雪堆里了，而现在——",
+        "stage": {
+          "focusCharacterId": "bouc",
+          "slots": [
+            {
+              "slotId": "right",
+              "characterId": "bouc",
+              "portrait": "bouc_serious"
+            }
+          ]
+        },
+        "nextNodeId": "node25"
+      }
+    },
+    {
+      "id": "node25",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "现在怎么啦",
+        "stage": {
+          "focusCharacterId": "",
+          "slots": [
+            {
+              "slotId": "right",
+              "characterId": "bouc",
+              "portrait": "bouc_serious"
+            }
+          ]
+        },
+        "nextNodeId": "node26"
+      }
+    },
+    {
+      "id": "node26",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "bouc",
+        "speakerName": "鲍克",
+        "text": "而现在又有一个旅客死在卧铺上──被刺。",
+        "stage": {
+          "focusCharacterId": "bouc",
+          "slots": [
+            {
+              "slotId": "right",
+              "characterId": "bouc",
+              "portrait": "bouc_serious"
+            }
+          ]
+        },
+        "nextNodeId": "node27"
+      }
+    },
+    {
+      "id": "node27",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "bouc",
+        "speakerName": "鲍克",
+        "text": "现在列车困在南斯拉夫的境内，在南斯拉夫警察到来的时候，如果我们能找到凶手，那就简单多了，否则就会拖延时间，增加麻烦，增加数不清的麻烦。",
+        "stage": {
+          "focusCharacterId": "bouc",
+          "slots": [
+            {
+              "slotId": "right",
+              "characterId": "bouc",
+              "portrait": "bouc_serious"
+            }
+          ]
+        },
+        "nextNodeId": "node28"
+      }
+    },
+    {
+      "id": "node28",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "bouc",
+        "speakerName": "鲍克",
+        "text": "所以，我代表国际列车公司，希望你，大侦探波洛，帮我们查清真相",
+        "stage": {
+          "focusCharacterId": "bouc",
+          "slots": [
+            {
+              "slotId": "right",
+              "characterId": "bouc",
+              "portrait": "bouc_serious"
+            }
+          ]
+        },
+        "options": [
+          {
+            "text": "包在我身上",
+            "nextNodeId": "END",
+            "nextSceneName": "CrimeScene"
+          },
+          {
+            "text": "我会尽力的...",
+            "nextNodeId": "END",
+            "nextSceneName": "CrimeScene"
+          }
+        ]
+      }
+    }
+  ]
+}

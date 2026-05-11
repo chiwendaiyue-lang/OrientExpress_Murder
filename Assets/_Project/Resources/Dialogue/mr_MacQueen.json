@@ -1,0 +1,987 @@
+{
+  "sceneId": "mr_MacQueen",
+  "startNodeId": "node1",
+  "nodes": [
+    {
+      "id": "node1",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "macqueen",
+        "speakerName": "麦克昆",
+        "text": "有什么进展吗？",
+        "stage": {
+          "focusCharacterId": "macqueen",
+          "slots": [
+            {
+              "slotId": "right",
+              "characterId": "macqueen",
+              "portrait": "macqueen"
+            }
+          ]
+        },
+        "nextNodeId": "node2"
+      }
+    },
+    {
+      "id": "node2",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "不太坏。我们了解到一些情况，雷切特不过是化名，他就是凯赛梯，那个大名鼎鼎的专拐儿童的角色──包括轰动一时的小黛西·阿姆斯特朗拐骗案。",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot"
+            },
+            {
+              "slotId": "right",
+              "characterId": "macqueen",
+              "portrait": "macqueen"
+            }
+          ]
+        },
+        "nextNodeId": "node3"
+      }
+    },
+    {
+      "id": "node3",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "system",
+        "speakerName": "系统",
+        "text": "麦克昆的脸上顿时露出极度惊讶的表情，不久又变得阴沉起来。",
+        "stage": {
+          "focusCharacterId": "macqueen",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot"
+            },
+            {
+              "slotId": "right",
+              "characterId": "macqueen",
+              "portrait": "macqueen_agitated"
+            }
+          ]
+        },
+        "nextNodeId": "node4"
+      }
+    },
+    {
+      "id": "node4",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "macqueen",
+        "speakerName": "麦克昆",
+        "text": "这个该死的坏蛋！",
+        "stage": {
+          "focusCharacterId": "macqueen",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot"
+            },
+            {
+              "slotId": "right",
+              "characterId": "macqueen",
+              "portrait": "macqueen_agitated"
+            }
+          ]
+        },
+        "nextNodeId": "node5"
+      }
+    },
+    {
+      "id": "node5",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "麦克昆先生，你对此竟一无所知？",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot"
+            },
+            {
+              "slotId": "right",
+              "characterId": "macqueen",
+              "portrait": "macqueen_agitated"
+            }
+          ]
+        },
+        "nextNodeId": "node6"
+      }
+    },
+    {
+      "id": "node6",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "macqueen",
+        "speakerName": "麦克昆",
+        "text": "是的，先生。要是我知道，宁愿砍掉右手，也不会去当他的秘书。",
+        "stage": {
+          "focusCharacterId": "macqueen",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot"
+            },
+            {
+              "slotId": "right",
+              "characterId": "macqueen",
+              "portrait": "macqueen_agitated"
+            }
+          ]
+        },
+        "hotspots": [
+          {
+            "id": "macqueen_agitated_hotspot",
+            "targetType": "portrait",
+            "targetId": "macqueen",
+            "label": "！",
+            "successNodeId": "notice_macqueen_agitated_success"
+          }
+        ]
+      }
+    },
+    {
+      "id": "notice_macqueen_agitated_success",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "麦克昆的反应太激烈了。这不像只是一个普通秘书听见雇主真面目时的惊讶。",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot"
+            },
+            {
+              "slotId": "right",
+              "characterId": "macqueen",
+              "portrait": "macqueen_agitated"
+            }
+          ]
+        },
+        "nextNodeId": "node7"
+      }
+    },
+    {
+      "id": "node7",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "麦克昆先生，你对这事的反应挺强烈，是吗？",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot"
+            },
+            {
+              "slotId": "right",
+              "characterId": "macqueen",
+              "portrait": "macqueen_agitated"
+            }
+          ]
+        },
+        "nextNodeId": "node8"
+      }
+    },
+    {
+      "id": "node8",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "macqueen",
+        "speakerName": "麦克昆",
+        "text": "这有我个人的原因。我的父亲是地方检察官，经手过这宗案子。我跟阿姆斯特朗太太不止见过一次面──她是个挺漂亮的女人。这么一位有身份的人死得好惨呀。这原是雷切特，或者说凯赛梯应得的报应。落得这么一个下场才称我的心哩。这种人不配活在世上。",
+        "stage": {
+          "focusCharacterId": "macqueen",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot"
+            },
+            {
+              "slotId": "right",
+              "characterId": "macqueen",
+              "portrait": "macqueen_agitated"
+            }
+          ]
+        },
+        "nextNodeId": "node9"
+      }
+    },
+    {
+      "id": "node9",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "看来，你好像很想自己亲手去干这种好事罗？",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot"
+            },
+            {
+              "slotId": "right",
+              "characterId": "macqueen",
+              "portrait": "macqueen_agitated"
+            }
+          ]
+        },
+        "nextNodeId": "node10"
+      }
+    },
+    {
+      "id": "node10",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "macqueen",
+        "speakerName": "麦克昆",
+        "text": "我会干的，我──",
+        "stage": {
+          "focusCharacterId": "macqueen",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot"
+            },
+            {
+              "slotId": "right",
+              "characterId": "macqueen",
+              "portrait": "macqueen_agitated"
+            }
+          ]
+        },
+        "nextNodeId": "node11"
+      }
+    },
+    {
+      "id": "node11",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "system",
+        "speakerName": "系统",
+        "text": "他停了一会，自知失言，脸刷地红了起来。",
+        "stage": {
+          "focusCharacterId": "macqueen",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot"
+            },
+            {
+              "slotId": "right",
+              "characterId": "macqueen",
+              "portrait": "macqueen_agitated"
+            }
+          ]
+        },
+        "nextNodeId": "node11a"
+      }
+    },
+    {
+      "id": "node11a",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "macqueen",
+        "speakerName": "麦克昆",
+        "text": "要是你不嫌我过于好奇的话，请告诉我，你们是怎样弄清这事的？我是说凯赛梯的身份是如何弄清的？",
+        "stage": {
+          "focusCharacterId": "macqueen",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot"
+            },
+            {
+              "slotId": "right",
+              "characterId": "macqueen",
+              "portrait": "macqueen_agitated"
+            }
+          ]
+        },
+        "nextNodeId": "node11b"
+      }
+    },
+    {
+      "id": "node11b",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "根据他房间里找到的一斑信的碎片。",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot"
+            },
+            {
+              "slotId": "right",
+              "characterId": "macqueen",
+              "portrait": "macqueen_agitated"
+            }
+          ]
+        },
+        "nextNodeId": "node11c"
+      }
+    },
+    {
+      "id": "node11c",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "macqueen",
+        "speakerName": "麦克昆",
+        "text": "但是，可以肯定……呃，我是说那老头儿是相当粗心的，是吗？",
+        "stage": {
+          "focusCharacterId": "macqueen",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot"
+            },
+            {
+              "slotId": "right",
+              "characterId": "macqueen",
+              "portrait": "macqueen_agitated"
+            }
+          ]
+        },
+        "hotspots": [
+          {
+            "id": "macqueen_letter_slip_hotspot",
+            "targetType": "dialogue_text",
+            "targetId": "macqueen_letter_slip_text",
+            "label": "！",
+            "successNodeId": "notice_macqueen_slip_success"
+          }
+        ]
+      }
+    },
+    {
+      "id": "notice_macqueen_slip_success",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "麦克昆说话时停顿了。他似乎先想到的是那封信本该不会留下来。",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot"
+            },
+            {
+              "slotId": "right",
+              "characterId": "macqueen",
+              "portrait": "macqueen_agitated"
+            }
+          ]
+        },
+        "nextNodeId": "node11d"
+      }
+    },
+    {
+      "id": "node11d",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "仁者见仁，智者见智嘛。",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot"
+            },
+            {
+              "slotId": "right",
+              "characterId": "macqueen",
+              "portrait": "macqueen_agitated"
+            }
+          ]
+        },
+        "nextNodeId": "node12"
+      }
+    },
+    {
+      "id": "node12",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "似乎没有必要再来问你的包房的号码了，因为我们还同住过一夜呢。那是二等车，六号铺和七号铺。我走了后，你一个人用着，是不是？",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot"
+            },
+            {
+              "slotId": "right",
+              "characterId": "macqueen",
+              "portrait": "macqueen"
+            }
+          ]
+        },
+        "nextNodeId": "node13"
+      }
+    },
+    {
+      "id": "node13",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "macqueen",
+        "speakerName": "麦克昆",
+        "text": "对极了。",
+        "stage": {
+          "focusCharacterId": "macqueen",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot"
+            },
+            {
+              "slotId": "right",
+              "characterId": "macqueen",
+              "portrait": "macqueen"
+            }
+          ]
+        },
+        "nextNodeId": "node14"
+      }
+    },
+    {
+      "id": "node14",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "麦克昆先生，现在我倒想请你回忆一下昨晚离开餐车后，你做了些什么呢？",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot"
+            },
+            {
+              "slotId": "right",
+              "characterId": "macqueen",
+              "portrait": "macqueen"
+            }
+          ]
+        },
+        "nextNodeId": "node15"
+      }
+    },
+    {
+      "id": "node15",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "macqueen",
+        "speakerName": "麦克昆",
+        "text": "我到雷切特先生的包房去，记了一些他要我写的信件的提要。我出来后，见阿巴思诺特上校还站在过道上。因为我的铺位已经收拾好了，就请他到我那儿喝一杯。我们聊到挺迟，大概都有两点了吧。",
+        "stage": {
+          "focusCharacterId": "macqueen",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot"
+            },
+            {
+              "slotId": "right",
+              "characterId": "macqueen",
+              "portrait": "macqueen"
+            }
+          ]
+        },
+        "nextNodeId": "node16",
+        "rewards": {
+          "testimonyToAdd": [
+            "macqueen_alibi"
+          ]
+        }
+      }
+    },
+    {
+      "id": "node16",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "你们有没有发现列车停了？",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot"
+            },
+            {
+              "slotId": "right",
+              "characterId": "macqueen",
+              "portrait": "macqueen"
+            }
+          ]
+        },
+        "nextNodeId": "node17"
+      }
+    },
+    {
+      "id": "node17",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "macqueen",
+        "speakerName": "麦克昆",
+        "text": "发现了，但我们没料到会那么严重，我们本来打算在文科夫戚下车透气的。后来上校道了晚安回房，我就叫来列车员铺床，自己站在过道抽烟。",
+        "stage": {
+          "focusCharacterId": "macqueen",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot"
+            },
+            {
+              "slotId": "right",
+              "characterId": "macqueen",
+              "portrait": "macqueen"
+            }
+          ]
+        },
+        "nextNodeId": "node18"
+      }
+    },
+    {
+      "id": "node18",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "后来呢？",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot"
+            },
+            {
+              "slotId": "right",
+              "characterId": "macqueen",
+              "portrait": "macqueen"
+            }
+          ]
+        },
+        "nextNodeId": "node19"
+      }
+    },
+    {
+      "id": "node19",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "macqueen",
+        "speakerName": "麦克昆",
+        "text": "铺好床我就睡了，一直到天亮。",
+        "stage": {
+          "focusCharacterId": "macqueen",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot"
+            },
+            {
+              "slotId": "right",
+              "characterId": "macqueen",
+              "portrait": "macqueen"
+            }
+          ]
+        },
+        "options": [
+          {
+            "text": "夜里你离开过火车吗？",
+            "nextNodeId": "node20"
+          },
+          {
+            "text": "你们聊天时，你包房朝过道的门开着吗？",
+            "nextNodeId": "node22"
+          },
+          {
+            "text": "麦克昆先生，你是用烟斗的吧？",
+            "nextNodeId": "node30"
+          },
+          {
+            "text": "没有要聊的了",
+            "nextNodeId": "node32"
+          }
+        ]
+      }
+    },
+    {
+      "id": "node20",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "夜里你离开过火车吗？",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot"
+            },
+            {
+              "slotId": "right",
+              "characterId": "macqueen",
+              "portrait": "macqueen"
+            }
+          ]
+        },
+        "nextNodeId": "node21"
+      }
+    },
+    {
+      "id": "node21",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "macqueen",
+        "speakerName": "麦克昆",
+        "text": "我和上校去文科夫戚站透了口气，从餐车隔壁那扇门下的车，雪真的太大了，我们很快就回车里了。我记得出去的时候门是闩着的，但回来后我忘了把它插回去。",
+        "stage": {
+          "focusCharacterId": "macqueen",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot"
+            },
+            {
+              "slotId": "right",
+              "characterId": "macqueen",
+              "portrait": "macqueen"
+            }
+          ]
+        },
+        "nextNodeId": "node19"
+      }
+    },
+    {
+      "id": "node22",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "你们聊天时，你包房朝过道的门开着吗？",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot"
+            },
+            {
+              "slotId": "right",
+              "characterId": "macqueen",
+              "portrait": "macqueen"
+            }
+          ]
+        },
+        "nextNodeId": "node23"
+      }
+    },
+    {
+      "id": "node23",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "macqueen",
+        "speakerName": "麦克昆",
+        "text": "是的，一直开着。",
+        "stage": {
+          "focusCharacterId": "macqueen",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot"
+            },
+            {
+              "slotId": "right",
+              "characterId": "macqueen",
+              "portrait": "macqueen"
+            }
+          ]
+        },
+        "nextNodeId": "node24"
+      }
+    },
+    {
+      "id": "node24",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "可以的话，想请你告诉我，从火车离开文科夫戚以后直到你们分手回房睡觉的这段时间里，是不是有人经过过道？",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot"
+            },
+            {
+              "slotId": "right",
+              "characterId": "macqueen",
+              "portrait": "macqueen"
+            }
+          ]
+        },
+        "nextNodeId": "node25"
+      }
+    },
+    {
+      "id": "node25",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "macqueen",
+        "speakerName": "麦克昆",
+        "text": "我想，有一次列车员走过，从餐车那边来的。还有一次，有个女人经过过道从另一个方向来的，向餐车那去。",
+        "stage": {
+          "focusCharacterId": "macqueen",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot"
+            },
+            {
+              "slotId": "right",
+              "characterId": "macqueen",
+              "portrait": "macqueen"
+            }
+          ]
+        },
+        "nextNodeId": "node26"
+      }
+    },
+    {
+      "id": "node26",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "哪个女人？",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot"
+            },
+            {
+              "slotId": "right",
+              "characterId": "macqueen",
+              "portrait": "macqueen"
+            }
+          ]
+        },
+        "nextNodeId": "node27"
+      }
+    },
+    {
+      "id": "node27",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "macqueen",
+        "speakerName": "麦克昆",
+        "text": "说不上。事实上，没留意。你是知道的，我跟阿巴思诺特上校辩论得正热烈，偶然看到一个穿鲜红丝料衣服的人从门口过去。我没看，反正也不会看清这个人的脸的。我的房间正对着餐车的一头，所以这个女人沿着过道向餐车走去，势必是背朝着我的。",
+        "stage": {
+          "focusCharacterId": "macqueen",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot"
+            },
+            {
+              "slotId": "right",
+              "characterId": "macqueen",
+              "portrait": "macqueen"
+            }
+          ]
+        },
+        "nextNodeId": "node28"
+      }
+    },
+    {
+      "id": "node28",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "她回来时你看见了吗？",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot"
+            },
+            {
+              "slotId": "right",
+              "characterId": "macqueen",
+              "portrait": "macqueen"
+            }
+          ]
+        },
+        "nextNodeId": "node29"
+      }
+    },
+    {
+      "id": "node29",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "macqueen",
+        "speakerName": "麦克昆",
+        "text": "没有。虽然我没见过她回来，可是她总得要回来的呀。",
+        "stage": {
+          "focusCharacterId": "macqueen",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot"
+            },
+            {
+              "slotId": "right",
+              "characterId": "macqueen",
+              "portrait": "macqueen"
+            }
+          ]
+        },
+        "nextNodeId": "node19",
+        "rewards": {
+          "testimonyStageToUpdate": [
+            {
+              "itemId": "red_sleepwear_person",
+              "stageId": "macqueen_saw_red_silk_person"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "node30",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "麦克昆先生，你是用烟斗的吧？",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot"
+            },
+            {
+              "slotId": "right",
+              "characterId": "macqueen",
+              "portrait": "macqueen"
+            }
+          ]
+        },
+        "nextNodeId": "node31"
+      }
+    },
+    {
+      "id": "node31",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "macqueen",
+        "speakerName": "麦克昆",
+        "text": "不，我不用烟斗。",
+        "stage": {
+          "focusCharacterId": "macqueen",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot"
+            },
+            {
+              "slotId": "right",
+              "characterId": "macqueen",
+              "portrait": "macqueen"
+            }
+          ]
+        },
+        "nextNodeId": "node19"
+      }
+    },
+    {
+      "id": "node32",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "我看，暂且就谈这些吧。谢谢你，麦克昆先生。",
+        "stage": {
+          "focusCharacterId": "",
+          "slots": []
+        },
+        "nextNodeId": "END",
+        "nextDialogueId": "mrs_hubbard"
+      }
+    }
+  ]
+}

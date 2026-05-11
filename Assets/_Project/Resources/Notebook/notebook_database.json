@@ -1,0 +1,148 @@
+{
+  "evidence": [
+    {
+      "id": "ratchett_dagger",
+      "type": "physical",
+      "name": "凶器匕首",
+      "description": "一把带血的厨房用刀，刀刃上有血迹。",
+      "foundLocation": "雷切特包厢·地板上",
+      "icon": "",
+      "updates": []
+    },
+    {
+      "id": "burned_paper_fragment",
+      "type": "physical",
+      "name": "烧焦纸条",
+      "description": "在雷切特包厢的烟灰缸里发现的烧焦纸片。",
+      "foundLocation": "雷切特包厢·烟灰缸",
+      "icon": "",
+      "updates": [
+        {
+          "stageId": "mentions_daisy_armstrong",
+          "description": "纸片残留文字中可以辨认出“黛西·阿姆斯特朗”。"
+        }
+      ]
+    },
+    {
+      "id": "ratchett_knife_wound",
+      "type": "physical",
+      "name": "十二处刀伤",
+      "description": "尸体身上有多处深浅不一的刺伤，疑似多人参与行凶。",
+      "foundLocation": "雷切特包厢·尸体",
+      "icon": "",
+      "updates": []
+    },
+    {
+      "id": "h_handkerchief",
+      "type": "physical",
+      "name": "手帕",
+      "description": "地板上发现的女士手帕，角落绣有字母 H。",
+      "foundLocation": "雷切特包厢·地板",
+      "icon": "",
+      "updates": []
+    },
+    {
+      "id": "metal_button",
+      "type": "physical",
+      "name": "列车员钮扣",
+      "description": "哈伯德太太声称在自己的包厢里发现了一颗金属钮扣。鲍克认出这是列车员制服上的钮扣。",
+      "foundLocation": "哈伯德太太包厢·杂志上",
+      "icon": "icon_metal_button",
+      "updates": []
+    }
+  ],
+  "testimonies": [
+    {
+      "id": "french_answer",
+      "type": "testimony",
+      "name": "法语回答",
+      "speakerCharacterId": "unknown_voice",
+      "speakerName": "未知男声",
+      "summary": "00:37左右，波洛听到有人喊叫。列车员敲门后，包厢内有人用法语回答没事",
+      "originalText": "没什么事，是我搞错了（法语）",
+      "source": "案发夜 00:37，波洛听到",
+      "topic": "night_timeline",
+      "updates": []
+    },
+    {
+      "id": "red_sleepwear_person",
+      "type": "testimony",
+      "name": "红睡衣人",
+      "speakerCharacterId": "poirot",
+      "speakerName": "波洛",
+      "summary": "波洛在夜里看见一个身穿红色睡衣的人远去。",
+      "originalText": "一个身穿红色睡衣的人远去",
+      "source": "案发夜，波洛查看车厢时",
+      "topic": "night_timeline",
+      "updates": [
+        {
+          "stageId": "macqueen_saw_red_silk_person",
+          "summary": "波洛夜里看见红睡衣人远去；麦克昆也称曾看见一个穿鲜红丝料衣服的人沿过道朝餐车方向走去，但没有看清脸，也没见她回来。",
+          "originalText": "偶然看到一个穿鲜红丝料衣服的人从门口过去……她总得要回来的呀。",
+          "source": "询问麦克昆时补充"
+        }
+      ]
+    },
+    {
+      "id": "macqueen_alibi",
+      "type": "testimony",
+      "name": "麦克昆的不在场证明",
+      "speakerCharacterId": "macqueen",
+      "speakerName": "麦克昆",
+      "summary": "麦克昆称离开餐车后先去雷切特包厢整理信件提要，随后与阿巴思诺特上校在自己包房喝酒聊天，直到大约两点。",
+      "originalText": "我到雷切特先生的包房去，记了一些他要我写的信件的提要……我们聊到挺迟，大概都有两点了吧。",
+      "source": "第一次询问麦克昆",
+      "topic": "alibi",
+      "updates": []
+    },
+    {
+      "id": "mrs_hubbard_man_in_room",
+      "type": "testimony",
+      "name": "房间里的男人",
+      "speakerCharacterId": "mrs_hubbard",
+      "speakerName": "哈伯德太太",
+      "summary": "哈伯德太太声称案发夜有个男人进入过她的包厢。她按铃叫来列车员后，房间里已经没有人影。",
+      "originalText": "原来房里来了个男人……信不信由你，那儿连个人影也没有。",
+      "source": "第一次询问哈伯德太太",
+      "topic": "night_timeline",
+      "updates": [
+        {
+          "stageId": "latch_position_contradiction",
+          "summary": "哈伯德太太声称案发夜有男人进入她的包厢，但她关于提包挡住门闩、自己看不见门是否闩上的说法与包厢结构不符。",
+          "originalText": "因为我已经上了床，我的提包也挂在门把上，我看不见门有没有闩上。",
+          "source": "哈伯德太太包厢结构察觉后更新"
+        }
+      ]
+    }
+  ],
+  "doubts": [
+    {
+      "id": "ratchett_enemy",
+      "type": "doubt",
+      "name": "雷切特的敌人",
+      "question": "雷切特为什么认为自己正处于危险之中？他的敌人是谁？",
+      "description": "雷切特声称自己受到威胁，并含糊地说自己有敌人，因此随身带着手枪。",
+      "finalConclusion": "",
+      "resolved": false,
+      "updates": []
+    },
+    {
+      "id": "armstrong_case_connection",
+      "type": "doubt",
+      "name": "阿姆斯特朗案关联",
+      "question": "雷切特与阿姆斯特朗案是否有关？",
+      "description": "目前只有零散迹象指向阿姆斯特朗案，还不足以形成结论。",
+      "finalConclusion": "",
+      "resolved": false,
+      "updates": [
+        {
+          "stageId": "paper_mentions_daisy",
+          "question": "烧焦纸片为什么提到黛西·阿姆斯特朗？",
+          "description": "烧焦纸片上的名字说明雷切特遇害可能并非普通仇杀，而与阿姆斯特朗案有关。",
+          "finalConclusion": "雷切特的真实身份和阿姆斯特朗案之间很可能存在关键联系。",
+          "resolved": true
+        }
+      ]
+    }
+  ]
+}

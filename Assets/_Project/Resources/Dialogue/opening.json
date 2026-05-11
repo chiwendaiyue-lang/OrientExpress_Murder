@@ -1,0 +1,436 @@
+{
+  "sceneId": "opening",
+  "startNodeId": "node1",
+  "nodes": [
+    {
+      "id": "node1",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "ratchett",
+        "speakerName": "雷切特",
+        "text": "能借个火吗，我叫雷切特。",
+        "stage": {
+          "focusCharacterId": "ratchett",
+          "slots": [
+            {
+              "slotId": "right",
+              "characterId": "ratchett",
+              "portrait": "ratchett_neutral"
+            }
+          ]
+        },
+        "nextNodeId": "node2",
+        "options": []
+      }
+    },
+    {
+      "id": "node2",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "system",
+        "speakerName": "系统",
+        "text": "波洛稍微点了点头，把手伸进口袋，取出一盒火柴递给那人，雷切特接过火柴，但没有擦。",
+        "stage": {
+          "focusCharacterId": "",
+          "slots": [
+            {
+              "slotId": "right",
+              "characterId": "ratchett",
+              "portrait": "ratchett_neutral"
+            }
+          ]
+        },
+        "nextNodeId": "node3",
+        "options": []
+      }
+    },
+    {
+      "id": "node3",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "ratchett",
+        "speakerName": "雷切特",
+        "text": "我想，我是有幸在和赫卡尔·波洛先生谈话吧。是那样么？",
+        "stage": {
+          "focusCharacterId": "ratchett",
+          "slots": [
+            {
+              "slotId": "right",
+              "characterId": "ratchett",
+              "portrait": "ratchett_neutral"
+            }
+          ]
+        },
+        "nextNodeId": "node4",
+        "options": []
+      }
+    },
+    {
+      "id": "node4",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "你了解得正确，先生。",
+        "stage": {
+          "focusCharacterId": "",
+          "slots": [
+            {
+              "slotId": "right",
+              "characterId": "ratchett",
+              "portrait": "ratchett_neutral"
+            }
+          ]
+        },
+        "nextNodeId": "node5",
+        "options": []
+      }
+    },
+    {
+      "id": "node5",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "ratchett",
+        "speakerName": "雷切特",
+        "text": "在我们的国家里，习惯于开门见山。波洛先生，我要你为我担任一项职务。",
+        "stage": {
+          "focusCharacterId": "ratchett",
+          "slots": [
+            {
+              "slotId": "right",
+              "characterId": "ratchett",
+              "portrait": "ratchett_neutral"
+            }
+          ]
+        },
+        "nextNodeId": "node6",
+        "options": []
+      }
+    },
+    {
+      "id": "node6",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "你希望我为你做的是什么呢，雷切特先生？",
+        "stage": {
+          "focusCharacterId": "",
+          "slots": [
+            {
+              "slotId": "right",
+              "characterId": "ratchett",
+              "portrait": "ratchett_neutral"
+            }
+          ]
+        },
+        "nextNodeId": "node7",
+        "options": []
+      }
+    },
+    {
+      "id": "node7",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "ratchett",
+        "speakerName": "雷切特",
+        "text": "波洛先生，我是个有钱人──一个非常有钱的人。处在这种地位的人总是有敌人的。我也有一个敌人。",
+        "stage": {
+          "focusCharacterId": "ratchett",
+          "slots": [
+            {
+              "slotId": "right",
+              "characterId": "ratchett",
+              "portrait": "ratchett_neutral"
+            }
+          ]
+        },
+        "nextNodeId": "node8",
+        "options": []
+      }
+    },
+    {
+      "id": "node8",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "只有一个敌人？",
+        "stage": {
+          "focusCharacterId": "",
+          "slots": [
+            {
+              "slotId": "right",
+              "characterId": "ratchett",
+              "portrait": "ratchett_neutral"
+            }
+          ]
+        },
+        "nextNodeId": "node9",
+        "options": []
+      }
+    },
+    {
+      "id": "node9",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "ratchett",
+        "speakerName": "雷切特",
+        "text": "你提这问题是什么意思呢？",
+        "stage": {
+          "focusCharacterId": "ratchett",
+          "slots": [
+            {
+              "slotId": "right",
+              "characterId": "ratchett",
+              "portrait": "ratchett_nervous"
+            }
+          ]
+        },
+        "nextNodeId": "node10",
+        "options": []
+      }
+    },
+    {
+      "id": "node10",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "先生，根据我的经验，当一个人处于象你所说的有敌人的情况时，那通常是不会只有一个敌人的。",
+        "stage": {
+          "focusCharacterId": "",
+          "slots": [
+            {
+              "slotId": "right",
+              "characterId": "ratchett",
+              "portrait": "ratchett_nervous"
+            }
+          ]
+        },
+        "nextNodeId": "node11",
+        "options": []
+      }
+    },
+    {
+      "id": "node11",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "ratchett",
+        "speakerName": "雷切特",
+        "text": "呃──对，我欣赏你这个观点。一个敌人，或者是好多个敌人，不过都没有关系，要紧的是我的安全。",
+        "stage": {
+          "focusCharacterId": "ratchett",
+          "slots": [
+            {
+              "slotId": "right",
+              "characterId": "ratchett",
+              "portrait": "ratchett_neutral"
+            }
+          ]
+        },
+        "nextNodeId": "node12",
+        "options": []
+      }
+    },
+    {
+      "id": "node12",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "ratchett",
+        "speakerName": "雷切特",
+        "text": "我的生命已经受到威胁，波洛先生。要知道，我是一个颇能爱护自己的人。",
+        "stage": {
+          "focusCharacterId": "ratchett",
+          "slots": [
+            {
+              "slotId": "right",
+              "characterId": "ratchett",
+              "portrait": "ratchett_neutral"
+            }
+          ]
+        },
+        "nextNodeId": "node13",
+        "options": []
+      }
+    },
+    {
+      "id": "node13",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "system",
+        "speakerName": "系统",
+        "text": "雷切特伸手从上衣口袋里掏出一支小小的自动手枪，展示了一下。",
+        "stage": {
+          "focusCharacterId": "",
+          "slots": [
+            {
+              "slotId": "right",
+              "characterId": "ratchett",
+              "portrait": "ratchett_neutral"
+            }
+          ]
+        },
+        "nextNodeId": "node14",
+        "options": []
+      }
+    },
+    {
+      "id": "node14",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "ratchett",
+        "speakerName": "雷切特",
+        "text": "我认为我不是那种疏忽大意的人。但是，当我看到这东西时，我就更想要得到双倍的安全保证。我想，你是可以得到我的钱的适当人选，波洛先生。请记住──一大笔钱。",
+        "stage": {
+          "focusCharacterId": "ratchett",
+          "slots": [
+            {
+              "slotId": "right",
+              "characterId": "ratchett",
+              "portrait": "ratchett_neutral"
+            }
+          ]
+        },
+        "nextNodeId": "node15",
+        "rewards": {
+          "doubtToAdd": [
+            "ratchett_enemy"
+          ]
+        },
+        "options": []
+      }
+    },
+    {
+      "id": "node15",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "我很抱歉，先生，我不能答应你的要求。",
+        "stage": {
+          "focusCharacterId": "",
+          "slots": [
+            {
+              "slotId": "right",
+              "characterId": "ratchett",
+              "portrait": "ratchett_neutral"
+            }
+          ]
+        },
+        "nextNodeId": "node16",
+        "options": []
+      }
+    },
+    {
+      "id": "node16",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "ratchett",
+        "speakerName": "雷切特",
+        "text": "还是说个价钱吧。",
+        "stage": {
+          "focusCharacterId": "ratchett",
+          "slots": [
+            {
+              "slotId": "right",
+              "characterId": "ratchett",
+              "portrait": "ratchett_nervous"
+            }
+          ]
+        },
+        "nextNodeId": "node17",
+        "options": []
+      }
+    },
+    {
+      "id": "node17",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "ratchett",
+        "speakerName": "雷切特",
+        "text": "两万美元能使你感兴趣吗？",
+        "stage": {
+          "focusCharacterId": "ratchett",
+          "slots": [
+            {
+              "slotId": "right",
+              "characterId": "ratchett",
+              "portrait": "ratchett_neutral"
+            }
+          ]
+        },
+        "nextNodeId": "node18",
+        "options": []
+      }
+    },
+    {
+      "id": "node18",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "不能。",
+        "stage": {
+          "focusCharacterId": "",
+          "slots": [
+            {
+              "slotId": "right",
+              "characterId": "ratchett",
+              "portrait": "ratchett_neutral"
+            }
+          ]
+        },
+        "nextNodeId": "node19",
+        "options": []
+      }
+    },
+    {
+      "id": "node19",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "ratchett",
+        "speakerName": "雷切特",
+        "text": "我的建议有什么不对吗？",
+        "stage": {
+          "focusCharacterId": "ratchett",
+          "slots": [
+            {
+              "slotId": "right",
+              "characterId": "ratchett",
+              "portrait": "ratchett_nervous"
+            }
+          ]
+        },
+        "nextNodeId": "node20",
+        "options": []
+      }
+    },
+    {
+      "id": "node20",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "要是你能原谅──恕我直言，我不喜欢你的这副尊容，雷切特先生。",
+        "stage": {
+          "focusCharacterId": "ratchett",
+          "slots": [
+            {
+              "slotId": "right",
+              "characterId": "ratchett",
+              "portrait": "ratchett_nervous"
+            }
+          ]
+        },
+        "options": [
+          {
+            "text": "离开餐车",
+            "nextNodeId": "END",
+            "nextDialogueId": "the_night"
+          }
+        ]
+      }
+    }
+  ]
+}

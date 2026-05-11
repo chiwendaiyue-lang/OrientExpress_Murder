@@ -1,0 +1,195 @@
+{
+  "characterId": "count_andrenyi",
+  "characterName": "安德雷尼伯爵",
+  "defaultPortrait": "count_andrenyi_normal",
+  "startNodeId": "start",
+  "nodes": {
+    "start": {
+      "speaker": "安德雷尼伯爵",
+      "text": "波洛先生？我妻子身体不适，请不要打扰她太久。有什么问题请问吧。",
+      "portrait": "count_andrenyi_normal",
+      "options": [
+        {
+          "text": "您昨晚在哪里？",
+          "nextNodeId": "ask_where",
+          "clueToAdd": null,
+          "requiredClueId": null
+        },
+        {
+          "text": "您认识雷切特先生吗？",
+          "nextNodeId": "ask_know",
+          "clueToAdd": null,
+          "requiredClueId": null
+        },
+        {
+          "text": "雷切特先生的真实身份，您知道吗？",
+          "nextNodeId": "ask_identity",
+          "clueToAdd": null,
+          "requiredClueId": null
+        },
+        {
+          "text": "您妻子昨晚身体不适？",
+          "nextNodeId": "ask_wife",
+          "clueToAdd": null,
+          "requiredClueId": null
+        },
+        {
+          "text": "【出示证据】",
+          "nextNodeId": "evidence_menu",
+          "clueToAdd": null,
+          "requiredClueId": null
+        },
+        {
+          "text": "结束对话",
+          "nextNodeId": "END",
+          "clueToAdd": null,
+          "requiredClueId": null
+        }
+      ]
+    },
+    
+    "ask_where": {
+      "speaker": "安德雷尼伯爵",
+      "text": "我和妻子一直在包厢里，从未离开。",
+      "portrait": "count_andrenyi_normal",
+      "options": [
+        {
+          "text": "继续",
+          "nextNodeId": "start",
+          "clueToAdd": null,
+          "requiredClueId": null
+        }
+      ]
+    },
+    
+    "ask_know": {
+      "speaker": "安德雷尼伯爵",
+      "text": "生意上有过往来。仅此而已。",
+      "portrait": "count_andrenyi_hesitant",
+      "options": [
+        {
+          "text": "继续",
+          "nextNodeId": "start",
+          "clueToAdd": "伯爵语气犹豫",
+          "requiredClueId": null
+        }
+      ]
+    },
+    
+    "ask_identity": {
+      "speaker": "安德雷尼伯爵",
+      "text": "我不知道你在说什么。他就是一个美国商人。",
+      "portrait": "count_andrenyi_hiding",
+      "options": [
+        {
+          "text": "继续",
+          "nextNodeId": "start",
+          "clueToAdd": "伯爵在隐瞒",
+          "requiredClueId": null
+        }
+      ]
+    },
+    
+    "ask_wife": {
+      "speaker": "安德雷尼伯爵",
+      "text": "她只是晕车，不需要医生。请不要打扰她。",
+      "portrait": "count_andrenyi_serious",
+      "options": [
+        {
+          "text": "继续",
+          "nextNodeId": "start",
+          "clueToAdd": null,
+          "requiredClueId": null
+        }
+      ]
+    },
+    
+    "evidence_menu": {
+      "speaker": "安德雷尼伯爵",
+      "text": "你想给我看什么？",
+      "portrait": "count_andrenyi_normal",
+      "options": [
+        {
+          "text": "【出示：带血的匕首】",
+          "nextNodeId": "evidence_dagger",
+          "clueToAdd": null,
+          "requiredClueId": null
+        },
+        {
+          "text": "【出示：烧焦的纸条】",
+          "nextNodeId": "evidence_paper",
+          "clueToAdd": null,
+          "requiredClueId": null
+        },
+        {
+          "text": "【出示：打翻的酒杯】",
+          "nextNodeId": "evidence_glass",
+          "clueToAdd": null,
+          "requiredClueId": null
+        },
+        {
+          "text": "返回",
+          "nextNodeId": "start",
+          "clueToAdd": null,
+          "requiredClueId": null
+        }
+      ]
+    },
+    
+    "evidence_dagger": {
+      "speaker": "安德雷尼伯爵",
+      "text": "这把匕首...我没见过。不过看起来像是厨房用的。",
+      "portrait": "count_andrenyi_normal",
+      "options": [
+        {
+          "text": "继续",
+          "nextNodeId": "evidence_menu",
+          "clueToAdd": null,
+          "requiredClueId": null
+        }
+      ]
+    },
+    
+    "evidence_paper": {
+      "speaker": "安德雷尼伯爵",
+      "text": "（脸色骤变）你怎么会有这个...",
+      "portrait": "count_andrenyi_shocked",
+      "options": [
+        {
+          "text": "这是什么意思？",
+          "nextNodeId": "paper_reveal",
+          "clueToAdd": null,
+          "requiredClueId": null
+        }
+      ]
+    },
+    
+    "paper_reveal": {
+      "speaker": "安德雷尼伯爵",
+      "text": "好吧。既然你已经找到了这个...雷切特的真名是卡塞蒂。他是五年前阿姆斯特朗绑架案的凶手。那个小女孩黛西...就是他的受害者。这列火车上，有些人和那个案子有关。",
+      "portrait": "count_andrenyi_serious",
+      "options": [
+        {
+          "text": "结束对话",
+          "nextNodeId": "END",
+          "clueToAdd": "雷切特等于卡塞蒂",
+          "requiredClueId": null
+        }
+      ]
+    },
+    
+    "evidence_glass": {
+      "speaker": "安德雷尼伯爵",
+      "text": "酒杯？上面有口红印？这和我们没有关系。我妻子身体不适，一直卧床休息。",
+      "portrait": "count_andrenyi_normal",
+      "options": [
+        {
+          "text": "继续",
+          "nextNodeId": "evidence_menu",
+          "clueToAdd": null,
+          "requiredClueId": null
+        }
+      ]
+    }
+  }
+}
