@@ -152,6 +152,7 @@ public class EvidenceSlotUI : MonoBehaviour
             titleText.alignment = TextAlignmentOptions.TopLeft;
             titleText.enableWordWrapping = true;
             titleText.overflowMode = TextOverflowModes.Ellipsis;
+            ownerPanel?.ApplyGeneratedTextStyle(titleText);
         }
 
         if (previewText != null && previewText != titleText)
@@ -160,6 +161,7 @@ public class EvidenceSlotUI : MonoBehaviour
             previewText.alignment = TextAlignmentOptions.TopLeft;
             previewText.enableWordWrapping = true;
             previewText.overflowMode = TextOverflowModes.Ellipsis;
+            ownerPanel?.ApplyGeneratedTextStyle(previewText);
         }
     }
 

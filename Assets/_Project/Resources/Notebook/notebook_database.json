@@ -51,6 +51,36 @@
       "updates": []
     }
   ],
+  "characters": [
+    {
+      "id": "macqueen",
+      "displayName": "麦克昆",
+      "role": "死者秘书",
+      "portrait": "",
+      "sortOrder": 10
+    },
+    {
+      "id": "mrs_hubbard",
+      "displayName": "哈伯德太太",
+      "role": "美国旅客",
+      "portrait": "",
+      "sortOrder": 20
+    },
+    {
+      "id": "poirot",
+      "displayName": "波洛",
+      "role": "侦探",
+      "portrait": "",
+      "sortOrder": 30
+    },
+    {
+      "id": "unknown_voice",
+      "displayName": "未知人物",
+      "role": "待确认身份",
+      "portrait": "",
+      "sortOrder": 999
+    }
+  ],
   "testimonies": [
     {
       "id": "french_answer",

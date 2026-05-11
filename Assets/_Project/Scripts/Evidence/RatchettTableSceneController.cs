@@ -11,7 +11,6 @@ public class RatchettTableSceneController : MonoBehaviour
 
     void Start()
     {
-        EnsureNotebookUI();
         burnedPaperHintTrigger = AutoBindButton("Hotspot_BurnedPaper_Button", OnBurnedPaperClicked, "点击查看");
         AutoBindButton("Hotspot_Back_Button", OnBackToCabinClicked, "返回包厢");
         RefreshHintState();
@@ -109,24 +108,6 @@ public class RatchettTableSceneController : MonoBehaviour
         }
         trigger.hint = hint;
         return trigger;
-    }
-
-    private void EnsureNotebookUI()
-    {
-        if (FindObjectOfType<EvidencePanelUI>() != null)
-        {
-            return;
-        }
-
-#if UNITY_EDITOR
-        GameObject prefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>(
-            "Assets/_Project/Prefabs/UI/EvidenceRoot.prefab"
-        );
-        if (prefab != null)
-        {
-            Instantiate(prefab);
-        }
-#endif
     }
 
     private void ConfigureBackButton(GameObject buttonObject)
