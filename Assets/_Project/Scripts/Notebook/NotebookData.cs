@@ -5,8 +5,19 @@ using System.Collections.Generic;
 public class NotebookDatabase
 {
     public List<PhysicalEvidenceDefinition> evidence;
+    public List<CharacterDefinition> characters;
     public List<TestimonyDefinition> testimonies;
     public List<DoubtDefinition> doubts;
+}
+
+[Serializable]
+public class CharacterDefinition
+{
+    public string id;
+    public string displayName;
+    public string role;
+    public string portrait;
+    public int sortOrder;
 }
 
 [Serializable]

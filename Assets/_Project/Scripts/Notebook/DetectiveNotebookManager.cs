@@ -10,6 +10,7 @@ public class DetectiveNotebookManager : MonoBehaviour
 
     private NotebookDatabase database;
     private readonly Dictionary<string, PhysicalEvidenceDefinition> evidenceLookup = new Dictionary<string, PhysicalEvidenceDefinition>();
+    private readonly Dictionary<string, CharacterDefinition> characterLookup = new Dictionary<string, CharacterDefinition>();
     private readonly Dictionary<string, TestimonyDefinition> testimonyLookup = new Dictionary<string, TestimonyDefinition>();
     private readonly Dictionary<string, DoubtDefinition> doubtLookup = new Dictionary<string, DoubtDefinition>();
 
@@ -243,6 +244,37 @@ public class DetectiveNotebookManager : MonoBehaviour
         return current;
     }
 
+    public CharacterDefinition GetCharacter(string characterId)
+    {
+        if (string.IsNullOrEmpty(characterId))
+        {
+            return null;
+        }
+
+        CharacterDefinition definition;
+        return characterLookup.TryGetValue(characterId, out definition) ? definition : null;
+    }
+
+    public List<CharacterDefinition> GetAllCharacters()
+    {
+        List<CharacterDefinition> result = new List<CharacterDefinition>();
+        if (database == null || database.characters == null)
+        {
+            return result;
+        }
+
+        foreach (CharacterDefinition character in database.characters)
+        {
+            if (character != null && !string.IsNullOrEmpty(character.id))
+            {
+                result.Add(character);
+            }
+        }
+
+        result.Sort((a, b) => a.sortOrder.CompareTo(b.sortOrder));
+        return result;
+    }
+
     public DoubtDefinition GetCurrentDoubt(string itemId)
     {
         DoubtDefinition definition;
@@ -271,6 +303,7 @@ public class DetectiveNotebookManager : MonoBehaviour
     private void LoadDatabase()
     {
         evidenceLookup.Clear();
+        characterLookup.Clear();
         testimonyLookup.Clear();
         doubtLookup.Clear();
 
@@ -291,6 +324,7 @@ public class DetectiveNotebookManager : MonoBehaviour
         }
 
         BuildEvidenceLookup();
+        BuildCharacterLookup();
         BuildTestimonyLookup();
         BuildDoubtLookup();
     }
@@ -326,6 +360,23 @@ public class DetectiveNotebookManager : MonoBehaviour
                 continue;
             }
             testimonyLookup[item.id] = item;
+        }
+    }
+
+    private void BuildCharacterLookup()
+    {
+        if (database.characters == null)
+        {
+            return;
+        }
+
+        foreach (CharacterDefinition item in database.characters)
+        {
+            if (item == null || string.IsNullOrEmpty(item.id))
+            {
+                continue;
+            }
+            characterLookup[item.id] = item;
         }
     }
 

@@ -30,8 +30,27 @@ public class EvidencePanelUI : MonoBehaviour
     public GameObject evidenceSlotPrefab;
     public Transform evidenceContainer;
     public GameObject evidencePanel;
+    public GameObject backgroundDim;
+    public GameObject physicalPanel;
+    public GameObject testimonyPanel;
+    public GameObject doubtPanel;
+    public Transform testimonyCharacterList;
+    public Transform testimonyList;
+    public Transform leftDoubtList;
+    public Transform rightDoubtList;
     public TMP_Text clueDetailText;
     public Image clueDetailIcon;
+
+    [Header("Generated Layout")]
+    [SerializeField] private Color generatedPanelColor = new Color(0.93f, 0.88f, 0.78f, 0.86f);
+    [SerializeField] private Color generatedInnerPanelColor = new Color(0.74f, 0.67f, 0.56f, 0.30f);
+    [SerializeField] private Color generatedSelectedColor = new Color(0.72f, 0.57f, 0.28f, 0.95f);
+    [SerializeField] private Color generatedOutlineColor = new Color(0.22f, 0.16f, 0.10f, 1f);
+    [SerializeField] private Color generatedTextColor = new Color(0.16f, 0.12f, 0.08f, 1f);
+    [SerializeField] private Color generatedAccentColor = new Color(0.46f, 0.16f, 0.14f, 1f);
+    [SerializeField] private Vector2 testimonyCharacterListWidth = new Vector2(248f, 0f);
+    [SerializeField] private Vector2 testimonyCardHeight = new Vector2(0f, 124f);
+    [SerializeField] private Vector2 doubtItemHeight = new Vector2(0f, 62f);
 
     [Header("Drag")]
     [Tooltip("是否让 NotebookPanel 在运行时可被鼠标拖动。")]
@@ -58,6 +77,10 @@ public class EvidencePanelUI : MonoBehaviour
     [SerializeField, Range(0f, 1f)] private float matchWidthOrHeight = 0.5f;
 
     private DetectiveNotebookManager notebookManager;
+    private string selectedTestimonyCharacterId;
+    private string selectedDoubtId;
+    private TMP_FontAsset generatedFontAsset;
+    private Material generatedFontMaterial;
 
     public static bool IsNotebookOpen
     {
@@ -151,6 +174,7 @@ public class EvidencePanelUI : MonoBehaviour
     {
         EnsureEventSystem();
         TryAutoBindReferences();
+        EnsurePanelStructure();
         EnsureDraggablePanel();
 
         notebookManager = DetectiveNotebookManager.EnsureInstance();
@@ -164,6 +188,11 @@ public class EvidencePanelUI : MonoBehaviour
         if (evidencePanel != null)
         {
             evidencePanel.SetActive(false);
+        }
+
+        if (backgroundDim != null)
+        {
+            backgroundDim.SetActive(false);
         }
 
         HideClueDetail();
@@ -297,12 +326,70 @@ public class EvidencePanelUI : MonoBehaviour
                 ?? FindChildGameObject("DetectiveNotebookPanel");
         }
 
+        if (backgroundDim == null)
+        {
+            backgroundDim = FindChildGameObject("BackgroundDim");
+        }
+
         if (evidenceContainer == null)
         {
-            GameObject container = FindChildGameObject("Content");
+            GameObject container = FindChildGameObject("EvidenceGrid")
+                ?? FindChildGameObject("Content");
             if (container != null)
             {
                 evidenceContainer = container.transform;
+            }
+        }
+
+        if (physicalPanel == null)
+        {
+            physicalPanel = FindChildGameObject("EvidencePanel")
+                ?? FindChildGameObject("Scroll View");
+        }
+
+        if (testimonyPanel == null)
+        {
+            testimonyPanel = FindChildGameObject("TestimonyPanel");
+        }
+
+        if (doubtPanel == null)
+        {
+            doubtPanel = FindChildGameObject("DoubtPanel");
+        }
+
+        if (testimonyCharacterList == null)
+        {
+            GameObject list = FindChildGameObject("CharacterList");
+            if (list != null)
+            {
+                testimonyCharacterList = list.transform;
+            }
+        }
+
+        if (testimonyList == null)
+        {
+            GameObject list = FindChildGameObject("TestimonyList");
+            if (list != null)
+            {
+                testimonyList = list.transform;
+            }
+        }
+
+        if (leftDoubtList == null)
+        {
+            GameObject list = FindChildGameObject("LeftDoubtList");
+            if (list != null)
+            {
+                leftDoubtList = list.transform;
+            }
+        }
+
+        if (rightDoubtList == null)
+        {
+            GameObject list = FindChildGameObject("RightDoubtList");
+            if (list != null)
+            {
+                rightDoubtList = list.transform;
             }
         }
 
@@ -390,15 +477,23 @@ public class EvidencePanelUI : MonoBehaviour
         if (!HasNotebookContent())
         {
             evidencePanel.SetActive(false);
+            if (backgroundDim != null)
+            {
+                backgroundDim.SetActive(false);
+            }
             HideClueDetail();
             return;
         }
 
         evidencePanel.SetActive(!evidencePanel.activeSelf);
+        if (backgroundDim != null)
+        {
+            backgroundDim.SetActive(evidencePanel.activeSelf);
+        }
         if (evidencePanel.activeSelf)
         {
             EnsureCurrentTabAvailable();
-            RefreshEvidenceList();
+            RefreshCurrentTab();
         }
         HideClueDetail();
     }
@@ -418,6 +513,12 @@ public class EvidencePanelUI : MonoBehaviour
         RefreshNotebookVisibility();
         if (!HasNotebookContent())
         {
+            return;
+        }
+
+        if (NormalizeTab(currentTab) != EvidenceTab.Physical)
+        {
+            RefreshCurrentTab();
             return;
         }
 
@@ -514,7 +615,8 @@ public class EvidencePanelUI : MonoBehaviour
         }
 
         currentTab = normalizedTab;
-        RefreshEvidenceList();
+        UpdateContentPanels();
+        RefreshCurrentTab();
         HideClueDetail();
     }
 
@@ -711,25 +813,20 @@ public class EvidencePanelUI : MonoBehaviour
         RefreshNotebookVisibility();
         if (evidencePanel != null && evidencePanel.activeSelf)
         {
-            RefreshEvidenceList();
+            RefreshCurrentTab();
         }
     }
 
     private void BindButtons()
     {
-        if (evidenceToggleButton != null)
-        {
-            evidenceToggleButton.onClick.RemoveListener(ToggleEvidencePanel);
-            evidenceToggleButton.onClick.AddListener(ToggleEvidencePanel);
-        }
-
-        BindTabButton(physicalTabButton, ShowPhysicalTab);
-        BindTabButton(testimonyTabButton, ShowTestimonyTab);
-        BindTabButton(doubtTabButton, ShowDoubtTab);
-        BindTabButton(inferenceTabButton, ShowInferenceTab);
+        BindButtonIfNeeded(evidenceToggleButton, ToggleEvidencePanel, nameof(ToggleEvidencePanel));
+        BindButtonIfNeeded(physicalTabButton, ShowPhysicalTab, nameof(ShowPhysicalTab));
+        BindButtonIfNeeded(testimonyTabButton, ShowTestimonyTab, nameof(ShowTestimonyTab));
+        BindButtonIfNeeded(doubtTabButton, ShowDoubtTab, nameof(ShowDoubtTab));
+        BindButtonIfNeeded(inferenceTabButton, ShowInferenceTab, nameof(ShowInferenceTab));
     }
 
-    private static void BindTabButton(Button button, UnityEngine.Events.UnityAction action)
+    private static void BindButtonIfNeeded(Button button, UnityEngine.Events.UnityAction action, string methodName)
     {
         if (button == null)
         {
@@ -737,7 +834,29 @@ public class EvidencePanelUI : MonoBehaviour
         }
 
         button.onClick.RemoveListener(action);
-        button.onClick.AddListener(action);
+        if (!HasPersistentBinding(button, methodName))
+        {
+            button.onClick.AddListener(action);
+        }
+    }
+
+    private static bool HasPersistentBinding(Button button, string methodName)
+    {
+        if (button == null || string.IsNullOrEmpty(methodName))
+        {
+            return false;
+        }
+
+        int count = button.onClick.GetPersistentEventCount();
+        for (int i = 0; i < count; i++)
+        {
+            if (button.onClick.GetPersistentMethodName(i) == methodName)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private void RefreshNotebookVisibility()
@@ -756,6 +875,10 @@ public class EvidencePanelUI : MonoBehaviour
             {
                 evidencePanel.SetActive(false);
             }
+            if (backgroundDim != null)
+            {
+                backgroundDim.SetActive(false);
+            }
             HideClueDetail();
         }
 
@@ -764,6 +887,7 @@ public class EvidencePanelUI : MonoBehaviour
         SetTabVisible(doubtTabButton, notebookManager != null && notebookManager.HasUnlockedDoubt());
         SetTabVisible(inferenceTabButton, notebookManager != null && notebookManager.HasUnlockedDoubt());
         EnsureCurrentTabAvailable();
+        UpdateContentPanels();
     }
 
     private bool HasNotebookContent()
@@ -873,5 +997,574 @@ public class EvidencePanelUI : MonoBehaviour
 
         GameObject eventSystemObject = new GameObject("EventSystem", typeof(EventSystem), typeof(StandaloneInputModule));
         DontDestroyOnLoad(eventSystemObject);
+    }
+
+    private void RefreshCurrentTab()
+    {
+        UpdateContentPanels();
+
+        EvidenceTab normalizedTab = NormalizeTab(currentTab);
+        if (normalizedTab == EvidenceTab.Physical)
+        {
+            RefreshPhysicalPanel();
+            return;
+        }
+
+        if (normalizedTab == EvidenceTab.Testimony)
+        {
+            RefreshTestimonyPanel();
+            return;
+        }
+
+        RefreshDoubtPanel();
+    }
+
+    private void RefreshPhysicalPanel()
+    {
+        if (physicalPanel != null && !physicalPanel.activeSelf)
+        {
+            physicalPanel.SetActive(true);
+        }
+
+        if (testimonyPanel != null)
+        {
+            testimonyPanel.SetActive(false);
+        }
+
+        if (doubtPanel != null)
+        {
+            doubtPanel.SetActive(false);
+        }
+
+        if (clueDetailText != null)
+        {
+            clueDetailText.gameObject.SetActive(!string.IsNullOrEmpty(clueDetailText.text));
+        }
+
+        if (clueDetailIcon != null)
+        {
+            bool hasIcon = clueDetailIcon.sprite != null;
+            clueDetailIcon.enabled = hasIcon;
+            clueDetailIcon.gameObject.SetActive(hasIcon);
+        }
+
+        if (notebookManager == null || evidenceContainer == null)
+        {
+            return;
+        }
+
+        if (evidenceSlotPrefab == null)
+        {
+            Debug.LogWarning("EvidencePanelUI: evidenceSlotPrefab 未指定，无法生成线索条目。请在 Prefab 上拖入 EvidenceSlot.prefab。");
+            return;
+        }
+
+        foreach (Transform child in evidenceContainer)
+        {
+            Destroy(child.gameObject);
+        }
+
+        List<string> itemIds = GetItemIdsForTab(EvidenceTab.Physical);
+        foreach (string itemId in itemIds)
+        {
+            GameObject slot = Instantiate(evidenceSlotPrefab, evidenceContainer);
+            EvidenceSlotUI slotUI = slot.GetComponent<EvidenceSlotUI>();
+            if (slotUI != null)
+            {
+                slotUI.Init(itemId, EvidenceTab.Physical, this);
+                continue;
+            }
+
+            TMP_Text tmpText = slot.GetComponentInChildren<TMP_Text>();
+            if (tmpText != null)
+            {
+                tmpText.text = GetNotebookDisplayName(itemId, EvidenceTab.Physical);
+            }
+        }
+    }
+
+    private void RefreshTestimonyPanel()
+    {
+        if (testimonyPanel == null || testimonyCharacterList == null || testimonyList == null)
+        {
+            return;
+        }
+
+        if (physicalPanel != null)
+        {
+            physicalPanel.SetActive(false);
+        }
+
+        testimonyPanel.SetActive(true);
+
+        if (doubtPanel != null)
+        {
+            doubtPanel.SetActive(false);
+        }
+
+        HideClueDetail();
+
+        foreach (Transform child in testimonyCharacterList)
+        {
+            Destroy(child.gameObject);
+        }
+
+        foreach (Transform child in testimonyList)
+        {
+            Destroy(child.gameObject);
+        }
+
+        Dictionary<string, List<TestimonyDefinition>> grouped = BuildUnlockedTestimonyGroups();
+        if (grouped.Count == 0)
+        {
+            return;
+        }
+
+        if (string.IsNullOrEmpty(selectedTestimonyCharacterId) || !grouped.ContainsKey(selectedTestimonyCharacterId))
+        {
+            foreach (var pair in grouped)
+            {
+                selectedTestimonyCharacterId = pair.Key;
+                break;
+            }
+        }
+
+        List<CharacterDefinition> characters = notebookManager != null ? notebookManager.GetAllCharacters() : new List<CharacterDefinition>();
+        HashSet<string> added = new HashSet<string>();
+        foreach (CharacterDefinition character in characters)
+        {
+            if (character == null || string.IsNullOrEmpty(character.id) || !grouped.ContainsKey(character.id))
+            {
+                continue;
+            }
+
+            CreateCharacterButton(character, selectedTestimonyCharacterId == character.id);
+            added.Add(character.id);
+        }
+
+        foreach (var pair in grouped)
+        {
+            if (added.Contains(pair.Key))
+            {
+                continue;
+            }
+
+            CharacterDefinition fallbackCharacter = notebookManager != null ? notebookManager.GetCharacter(pair.Key) : null;
+            CreateCharacterButton(fallbackCharacter ?? new CharacterDefinition
+            {
+                id = pair.Key,
+                displayName = pair.Key,
+                role = "待确认身份"
+            }, selectedTestimonyCharacterId == pair.Key);
+        }
+
+        List<TestimonyDefinition> selectedItems = grouped[selectedTestimonyCharacterId];
+        foreach (TestimonyDefinition testimony in selectedItems)
+        {
+            CreateTestimonyCard(testimony);
+        }
+    }
+
+    private void RefreshDoubtPanel()
+    {
+        if (doubtPanel == null || leftDoubtList == null || rightDoubtList == null)
+        {
+            return;
+        }
+
+        if (physicalPanel != null)
+        {
+            physicalPanel.SetActive(false);
+        }
+
+        if (testimonyPanel != null)
+        {
+            testimonyPanel.SetActive(false);
+        }
+
+        doubtPanel.SetActive(true);
+        HideClueDetail();
+
+        foreach (Transform child in leftDoubtList)
+        {
+            Destroy(child.gameObject);
+        }
+
+        foreach (Transform child in rightDoubtList)
+        {
+            Destroy(child.gameObject);
+        }
+
+        List<string> itemIds = GetItemIdsForTab(EvidenceTab.Doubt);
+        if (itemIds.Count == 0)
+        {
+            return;
+        }
+
+        if (string.IsNullOrEmpty(selectedDoubtId) || !itemIds.Contains(selectedDoubtId))
+        {
+            selectedDoubtId = itemIds[0];
+        }
+
+        for (int i = 0; i < itemIds.Count; i++)
+        {
+            Transform parent = i % 2 == 0 ? leftDoubtList : rightDoubtList;
+            CreateDoubtButton(parent, itemIds[i], selectedDoubtId == itemIds[i]);
+        }
+    }
+
+    private void UpdateContentPanels()
+    {
+        EvidenceTab normalizedTab = NormalizeTab(currentTab);
+
+        if (physicalPanel != null)
+        {
+            physicalPanel.SetActive(normalizedTab == EvidenceTab.Physical && evidencePanel != null && evidencePanel.activeSelf);
+        }
+
+        if (testimonyPanel != null)
+        {
+            testimonyPanel.SetActive(normalizedTab == EvidenceTab.Testimony && evidencePanel != null && evidencePanel.activeSelf);
+        }
+
+        if (doubtPanel != null)
+        {
+            doubtPanel.SetActive(normalizedTab == EvidenceTab.Doubt && evidencePanel != null && evidencePanel.activeSelf);
+        }
+    }
+
+    private void EnsurePanelStructure()
+    {
+        if (physicalPanel == null)
+        {
+            physicalPanel = FindChildGameObject("EvidencePanel") ?? FindChildGameObject("Scroll View");
+        }
+
+        if (testimonyPanel == null)
+        {
+            testimonyPanel = FindChildGameObject("TestimonyPanel");
+        }
+
+        if (doubtPanel == null)
+        {
+            doubtPanel = FindChildGameObject("DoubtPanel");
+        }
+
+        if (testimonyPanel == null && evidencePanel != null)
+        {
+            testimonyPanel = CreateGeneratedPanel("TestimonyPanel", evidencePanel.transform as RectTransform);
+            CreateGeneratedTestimonyLayout(testimonyPanel.transform as RectTransform);
+        }
+
+        if (doubtPanel == null && evidencePanel != null)
+        {
+            doubtPanel = CreateGeneratedPanel("DoubtPanel", evidencePanel.transform as RectTransform);
+            CreateGeneratedDoubtLayout(doubtPanel.transform as RectTransform);
+        }
+
+        if (testimonyCharacterList == null)
+        {
+            GameObject obj = FindChildGameObject("CharacterList");
+            testimonyCharacterList = obj != null ? obj.transform : null;
+        }
+
+        if (testimonyList == null)
+        {
+            GameObject obj = FindChildGameObject("TestimonyList");
+            testimonyList = obj != null ? obj.transform : null;
+        }
+
+        if (leftDoubtList == null)
+        {
+            GameObject obj = FindChildGameObject("LeftDoubtList");
+            leftDoubtList = obj != null ? obj.transform : null;
+        }
+
+        if (rightDoubtList == null)
+        {
+            GameObject obj = FindChildGameObject("RightDoubtList");
+            rightDoubtList = obj != null ? obj.transform : null;
+        }
+    }
+
+    private GameObject CreateGeneratedPanel(string panelName, RectTransform parent)
+    {
+        GameObject panel = new GameObject(panelName, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        panel.transform.SetParent(parent, false);
+        RectTransform rect = panel.GetComponent<RectTransform>();
+        rect.anchorMin = new Vector2(0.04f, 0.08f);
+        rect.anchorMax = new Vector2(0.96f, 0.92f);
+        rect.offsetMin = Vector2.zero;
+        rect.offsetMax = Vector2.zero;
+
+        Image image = panel.GetComponent<Image>();
+        image.color = generatedInnerPanelColor;
+        image.raycastTarget = true;
+        panel.SetActive(false);
+        return panel;
+    }
+
+    private void CreateGeneratedTestimonyLayout(RectTransform panel)
+    {
+        GameObject characterListObject = CreateLayoutContainer("CharacterList", panel, new Vector2(0.02f, 0.04f), new Vector2(0.28f, 0.96f));
+        VerticalLayoutGroup characterLayout = characterListObject.AddComponent<VerticalLayoutGroup>();
+        characterLayout.spacing = 10f;
+        characterLayout.padding = new RectOffset(8, 8, 8, 8);
+        characterLayout.childControlHeight = false;
+        characterLayout.childControlWidth = true;
+        characterLayout.childForceExpandHeight = false;
+        characterLayout.childForceExpandWidth = true;
+        ContentSizeFitter characterFitter = characterListObject.AddComponent<ContentSizeFitter>();
+        characterFitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+        characterFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+
+        GameObject testimonyListObject = CreateLayoutContainer("TestimonyList", panel, new Vector2(0.32f, 0.04f), new Vector2(0.98f, 0.96f));
+        VerticalLayoutGroup testimonyLayout = testimonyListObject.AddComponent<VerticalLayoutGroup>();
+        testimonyLayout.spacing = 12f;
+        testimonyLayout.padding = new RectOffset(8, 8, 8, 8);
+        testimonyLayout.childControlHeight = false;
+        testimonyLayout.childControlWidth = true;
+        testimonyLayout.childForceExpandHeight = false;
+        testimonyLayout.childForceExpandWidth = true;
+        ContentSizeFitter testimonyFitter = testimonyListObject.AddComponent<ContentSizeFitter>();
+        testimonyFitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+        testimonyFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+
+        testimonyCharacterList = characterListObject.transform;
+        testimonyList = testimonyListObject.transform;
+    }
+
+    private void CreateGeneratedDoubtLayout(RectTransform panel)
+    {
+        GameObject leftListObject = CreateLayoutContainer("LeftDoubtList", panel, new Vector2(0.03f, 0.08f), new Vector2(0.47f, 0.94f));
+        VerticalLayoutGroup leftLayout = leftListObject.AddComponent<VerticalLayoutGroup>();
+        leftLayout.spacing = 12f;
+        leftLayout.padding = new RectOffset(8, 8, 8, 8);
+        leftLayout.childControlHeight = false;
+        leftLayout.childControlWidth = true;
+        leftLayout.childForceExpandHeight = false;
+        leftLayout.childForceExpandWidth = true;
+        ContentSizeFitter leftFitter = leftListObject.AddComponent<ContentSizeFitter>();
+        leftFitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+        leftFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+
+        GameObject rightListObject = CreateLayoutContainer("RightDoubtList", panel, new Vector2(0.53f, 0.08f), new Vector2(0.97f, 0.94f));
+        VerticalLayoutGroup rightLayout = rightListObject.AddComponent<VerticalLayoutGroup>();
+        rightLayout.spacing = 12f;
+        rightLayout.padding = new RectOffset(8, 8, 8, 8);
+        rightLayout.childControlHeight = false;
+        rightLayout.childControlWidth = true;
+        rightLayout.childForceExpandHeight = false;
+        rightLayout.childForceExpandWidth = true;
+        ContentSizeFitter rightFitter = rightListObject.AddComponent<ContentSizeFitter>();
+        rightFitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+        rightFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+
+        leftDoubtList = leftListObject.transform;
+        rightDoubtList = rightListObject.transform;
+    }
+
+    private GameObject CreateLayoutContainer(string name, RectTransform parent, Vector2 anchorMin, Vector2 anchorMax)
+    {
+        GameObject container = new GameObject(name, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        container.transform.SetParent(parent, false);
+        RectTransform rect = container.GetComponent<RectTransform>();
+        rect.anchorMin = anchorMin;
+        rect.anchorMax = anchorMax;
+        rect.offsetMin = Vector2.zero;
+        rect.offsetMax = Vector2.zero;
+
+        Image image = container.GetComponent<Image>();
+        image.color = generatedPanelColor;
+        image.raycastTarget = true;
+        return container;
+    }
+
+    private Dictionary<string, List<TestimonyDefinition>> BuildUnlockedTestimonyGroups()
+    {
+        Dictionary<string, List<TestimonyDefinition>> grouped = new Dictionary<string, List<TestimonyDefinition>>();
+        if (notebookManager == null)
+        {
+            return grouped;
+        }
+
+        List<string> testimonyIds = notebookManager.GetUnlockedTestimonyIds();
+        foreach (string testimonyId in testimonyIds)
+        {
+            TestimonyDefinition item = notebookManager.GetCurrentTestimony(testimonyId);
+            if (item == null)
+            {
+                continue;
+            }
+
+            string characterId = string.IsNullOrEmpty(item.speakerCharacterId) ? "unknown_voice" : item.speakerCharacterId;
+            List<TestimonyDefinition> list;
+            if (!grouped.TryGetValue(characterId, out list))
+            {
+                list = new List<TestimonyDefinition>();
+                grouped[characterId] = list;
+            }
+
+            list.Add(item);
+        }
+
+        return grouped;
+    }
+
+    public void ApplyGeneratedTextStyle(TMP_Text text)
+    {
+        if (text == null)
+        {
+            return;
+        }
+
+        if (generatedFontAsset == null)
+        {
+            TMP_Text source = clueDetailText != null ? clueDetailText : GetComponentInChildren<TMP_Text>(true);
+            if (source != null)
+            {
+                generatedFontAsset = source.font;
+                generatedFontMaterial = source.fontSharedMaterial;
+            }
+            else
+            {
+                generatedFontAsset = TMP_Settings.defaultFontAsset;
+                generatedFontMaterial = generatedFontAsset != null ? generatedFontAsset.material : null;
+            }
+        }
+
+        if (generatedFontAsset != null)
+        {
+            text.font = generatedFontAsset;
+        }
+
+        if (generatedFontMaterial != null)
+        {
+            text.fontSharedMaterial = generatedFontMaterial;
+        }
+    }
+
+    private void CreateCharacterButton(CharacterDefinition character, bool selected)
+    {
+        GameObject buttonObject = new GameObject(character.displayName, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(Button), typeof(LayoutElement));
+        buttonObject.transform.SetParent(testimonyCharacterList, false);
+
+        Image image = buttonObject.GetComponent<Image>();
+        image.color = selected ? generatedSelectedColor : generatedPanelColor;
+        Outline outline = buttonObject.AddComponent<Outline>();
+        outline.effectColor = generatedOutlineColor;
+        outline.effectDistance = new Vector2(2f, -2f);
+
+        LayoutElement layout = buttonObject.GetComponent<LayoutElement>();
+        layout.preferredHeight = 74f;
+        layout.flexibleWidth = 1f;
+
+        Button button = buttonObject.GetComponent<Button>();
+        string characterId = character.id;
+        button.onClick.AddListener(() =>
+        {
+            selectedTestimonyCharacterId = characterId;
+            RefreshTestimonyPanel();
+        });
+
+        GameObject labelObject = new GameObject("Label", typeof(RectTransform), typeof(CanvasRenderer), typeof(TextMeshProUGUI));
+        labelObject.transform.SetParent(buttonObject.transform, false);
+        TextMeshProUGUI label = labelObject.GetComponent<TextMeshProUGUI>();
+        ApplyGeneratedTextStyle(label);
+        label.text = $"{character.displayName}\n<size=60%>{character.role}</size>";
+        label.color = generatedTextColor;
+        label.alignment = TextAlignmentOptions.MidlineLeft;
+        label.enableWordWrapping = false;
+        label.margin = new Vector4(18f, 8f, 12f, 8f);
+
+        RectTransform labelRect = label.rectTransform;
+        labelRect.anchorMin = Vector2.zero;
+        labelRect.anchorMax = Vector2.one;
+        labelRect.offsetMin = Vector2.zero;
+        labelRect.offsetMax = Vector2.zero;
+    }
+
+    private void CreateTestimonyCard(TestimonyDefinition testimony)
+    {
+        GameObject cardObject = new GameObject(testimony.name, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(LayoutElement));
+        cardObject.transform.SetParent(testimonyList, false);
+
+        Image image = cardObject.GetComponent<Image>();
+        image.color = generatedPanelColor;
+        Outline outline = cardObject.AddComponent<Outline>();
+        outline.effectColor = generatedOutlineColor;
+        outline.effectDistance = new Vector2(1.5f, -1.5f);
+
+        LayoutElement layout = cardObject.GetComponent<LayoutElement>();
+        layout.preferredHeight = testimonyCardHeight.y;
+        layout.flexibleWidth = 1f;
+
+        GameObject accentObject = new GameObject("Accent", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        accentObject.transform.SetParent(cardObject.transform, false);
+        Image accentImage = accentObject.GetComponent<Image>();
+        accentImage.color = generatedAccentColor;
+        RectTransform accentRect = accentObject.GetComponent<RectTransform>();
+        accentRect.anchorMin = new Vector2(0f, 0f);
+        accentRect.anchorMax = new Vector2(0f, 1f);
+        accentRect.sizeDelta = new Vector2(8f, 0f);
+        accentRect.anchoredPosition = new Vector2(10f, 0f);
+
+        GameObject textObject = new GameObject("Text", typeof(RectTransform), typeof(CanvasRenderer), typeof(TextMeshProUGUI));
+        textObject.transform.SetParent(cardObject.transform, false);
+        TextMeshProUGUI text = textObject.GetComponent<TextMeshProUGUI>();
+        ApplyGeneratedTextStyle(text);
+        text.text = $"<b>{testimony.name}</b>\n<size=78%>{testimony.summary}</size>";
+        text.color = generatedTextColor;
+        text.alignment = TextAlignmentOptions.TopLeft;
+        text.enableWordWrapping = true;
+        text.margin = new Vector4(28f, 12f, 14f, 12f);
+
+        RectTransform textRect = text.rectTransform;
+        textRect.anchorMin = Vector2.zero;
+        textRect.anchorMax = Vector2.one;
+        textRect.offsetMin = Vector2.zero;
+        textRect.offsetMax = Vector2.zero;
+    }
+
+    private void CreateDoubtButton(Transform parent, string doubtId, bool selected)
+    {
+        DoubtDefinition doubt = notebookManager != null ? notebookManager.GetCurrentDoubt(doubtId) : null;
+        string display = doubt != null && !string.IsNullOrEmpty(doubt.question) ? doubt.question : doubtId;
+
+        GameObject buttonObject = new GameObject(doubtId, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(Button), typeof(LayoutElement));
+        buttonObject.transform.SetParent(parent, false);
+
+        Image image = buttonObject.GetComponent<Image>();
+        image.color = selected ? generatedSelectedColor : generatedPanelColor;
+        Outline outline = buttonObject.AddComponent<Outline>();
+        outline.effectColor = generatedOutlineColor;
+        outline.effectDistance = new Vector2(2f, -2f);
+
+        LayoutElement layout = buttonObject.GetComponent<LayoutElement>();
+        layout.preferredHeight = doubtItemHeight.y;
+        layout.flexibleWidth = 1f;
+
+        Button button = buttonObject.GetComponent<Button>();
+        button.onClick.AddListener(() =>
+        {
+            selectedDoubtId = doubtId;
+            RefreshDoubtPanel();
+        });
+
+        GameObject textObject = new GameObject("Text", typeof(RectTransform), typeof(CanvasRenderer), typeof(TextMeshProUGUI));
+        textObject.transform.SetParent(buttonObject.transform, false);
+        TextMeshProUGUI text = textObject.GetComponent<TextMeshProUGUI>();
+        ApplyGeneratedTextStyle(text);
+        text.text = display;
+        text.color = generatedTextColor;
+        text.alignment = TextAlignmentOptions.MidlineLeft;
+        text.enableWordWrapping = true;
+        text.margin = new Vector4(16f, 8f, 16f, 8f);
+
+        RectTransform textRect = text.rectTransform;
+        textRect.anchorMin = Vector2.zero;
+        textRect.anchorMax = Vector2.one;
+        textRect.offsetMin = Vector2.zero;
+        textRect.offsetMax = Vector2.zero;
     }
 }
