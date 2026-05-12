@@ -43,6 +43,8 @@ public class NotebookUnlockOverlayPresenter : MonoBehaviour
     [Header("先按钮再弹出详情")]
     [Tooltip("为 true：先显示 PrimerPanel +「查看详情」按钮，再显示下方详情面板；遮罩在此期间不可一点就关详情。")]
     [SerializeField] private bool requireConfirmBeforeReveal = true;
+    [Tooltip("这些场景名里跳过“查看详情”步骤，直接显示详情弹窗。")]
+    [SerializeField] private List<string> skipConfirmSceneNames = new List<string> { "CrimeScene" };
     [Tooltip("{0}=弹窗大类标题（如「获得新线索」）")]
     [SerializeField] private string primerPromptFormat = "{0}\n点此查看详情";
     [SerializeField] private string primerRevealButtonLabel = "查看详情";
@@ -265,7 +267,7 @@ public class NotebookUnlockOverlayPresenter : MonoBehaviour
                 body = BuildEvidenceBody(ev);
                 if (ev != null)
                 {
-                    sprite = EvidencePanelUI.LoadEvidenceIcon(ev.icon, e.ItemId);
+                    sprite = LoadOverlayEvidenceIcon(ev.icon, e.ItemId);
                 }
 
                 break;
@@ -320,7 +322,7 @@ public class NotebookUnlockOverlayPresenter : MonoBehaviour
         }
 
         Sprite sprite = EvidenceManager.Instance != null
-            ? EvidenceManager.Instance.GetClueIcon(clueId)
+            ? LoadOverlayEvidenceIcon(def != null ? def.icon : null, clueId)
             : null;
 
         PopulateAndShow("获得新线索", name, body, sprite);
@@ -349,7 +351,7 @@ public class NotebookUnlockOverlayPresenter : MonoBehaviour
         }
 
         Sprite sprite = EvidenceManager.Instance != null
-            ? EvidenceManager.Instance.GetClueIcon(outputClueId)
+            ? LoadOverlayEvidenceIcon(def != null ? def.icon : null, outputClueId)
             : null;
 
         PopulateAndShow("线索整理", name, body, sprite);
@@ -451,6 +453,55 @@ public class NotebookUnlockOverlayPresenter : MonoBehaviour
         return string.Join("\n\n", parts);
     }
 
+    private static Sprite LoadOverlayEvidenceIcon(string iconId, string fallbackId)
+    {
+        foreach (string candidate in EnumerateIconCandidates(iconId, fallbackId))
+        {
+            Sprite sprite = Resources.Load<Sprite>($"Evidence/Physical/{candidate}");
+            if (sprite != null)
+            {
+                return sprite;
+            }
+        }
+
+        return EvidencePanelUI.LoadEvidenceIcon(iconId, fallbackId);
+    }
+
+    private static IEnumerable<string> EnumerateIconCandidates(string iconId, string fallbackId)
+    {
+        string trimmedIcon = string.IsNullOrWhiteSpace(iconId) ? null : iconId.Trim();
+        string trimmedFallback = string.IsNullOrWhiteSpace(fallbackId) ? null : fallbackId.Trim();
+        HashSet<string> seen = new HashSet<string>();
+
+        if (!string.IsNullOrEmpty(trimmedIcon) && seen.Add(trimmedIcon))
+        {
+            yield return trimmedIcon;
+        }
+
+        if (!string.IsNullOrEmpty(trimmedFallback) && seen.Add(trimmedFallback))
+        {
+            yield return trimmedFallback;
+        }
+
+        if (!string.IsNullOrEmpty(trimmedFallback))
+        {
+            string prefixed = "icon_" + trimmedFallback;
+            if (seen.Add(prefixed))
+            {
+                yield return prefixed;
+            }
+        }
+
+        if (!string.IsNullOrEmpty(trimmedIcon) && trimmedIcon.StartsWith("icon_"))
+        {
+            string stripped = trimmedIcon.Substring("icon_".Length);
+            if (seen.Add(stripped))
+            {
+                yield return stripped;
+            }
+        }
+    }
+
     private void PopulateDetailContent(string title, string displayName, string body, Sprite sprite)
     {
         if (titleText != null)
@@ -491,7 +542,7 @@ public class NotebookUnlockOverlayPresenter : MonoBehaviour
 
         overlayRoot.SetActive(true);
 
-        bool usePrimer = requireConfirmBeforeReveal
+        bool usePrimer = ShouldUsePrimerInCurrentScene()
                          && primerPanelGo != null
                          && primerPromptText != null
                          && primerRevealButton != null;
@@ -523,6 +574,35 @@ public class NotebookUnlockOverlayPresenter : MonoBehaviour
         }
 
         SetDimDismissable(false);
+    }
+
+    private bool ShouldUsePrimerInCurrentScene()
+    {
+        if (!requireConfirmBeforeReveal)
+        {
+            return false;
+        }
+
+        string activeSceneName = SceneManager.GetActiveScene().name;
+        if (string.IsNullOrEmpty(activeSceneName))
+        {
+            return true;
+        }
+
+        if (skipConfirmSceneNames != null)
+        {
+            for (int i = 0; i < skipConfirmSceneNames.Count; i++)
+            {
+                string sceneName = skipConfirmSceneNames[i];
+                if (!string.IsNullOrWhiteSpace(sceneName)
+                    && string.Equals(activeSceneName, sceneName.Trim(), StringComparison.OrdinalIgnoreCase))
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     private void ApplyPrimerRevealButtonLabel()
