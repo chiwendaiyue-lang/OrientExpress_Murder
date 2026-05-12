@@ -39,8 +39,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -12.5983, y: -16.1038}
-  m_SizeDelta: {x: 930.3904, y: 512.2078}
+  m_AnchoredPosition: {x: -4.3424, y: -16.1038}
+  m_SizeDelta: {x: 799.796, y: 512.2078}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1248979703773836417
 CanvasRenderer:
@@ -354,9 +354,9 @@ RectTransform:
   m_Father: {fileID: 6006946618477002794}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.06, y: 0.08}
-  m_AnchorMax: {x: 0.94, y: 0.4}
-  m_AnchoredPosition: {x: 5.861389, y: -13.001678}
-  m_SizeDelta: {x: -12.0829, y: -74.7429}
+  m_AnchorMax: {x: 0.06, y: 0.08}
+  m_AnchoredPosition: {x: 351.91, y: 45.887}
+  m_SizeDelta: {x: 637.7953, y: 91.7734}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1592273982602666157
 CanvasRenderer:
@@ -386,8 +386,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "00:37\u5DE6\u53F3\uFF0C\u6CE2\u6D1B\u542C\u5230\u6709\u4EBA\u558A\u53EB\u3002\u5217\u8F66\u5458\u6572\u95E8\u540E\uFF0C\u5305\u53A2\u5185\u6709\u4EBA\u7528\u6CD5\u8BED\u56DE\u7B54\u6CA1\u4E8B\n\n\u539F\u6587\uFF1A\u6CA1\u4EC0\u4E48\u4E8B\uFF0C\u662F\u6211\u641E\u9519\u4E86\uFF08\u6CD5\u8BED\uFF09\n\n\u6765\u6E90\uFF1A\u6848\u53D1\u591C
-    00:37\uFF0C\u6CE2\u6D1B\u542C\u5230"
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 732ca041bcd2b1545b7d93121c542b17, type: 2}
   m_sharedMaterial: {fileID: 9043757602874854325, guid: 732ca041bcd2b1545b7d93121c542b17, type: 2}
@@ -421,8 +420,8 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 8
-  m_VerticalAlignment: 256
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -867,7 +866,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 499718469157714615}
-  - component: {fileID: 4557453175027713299}
   m_Layer: 0
   m_Name: NotebookUnlockOverlay
   m_TagString: Untagged
@@ -891,24 +889,6 @@ Transform:
   - {fileID: 375016914829719053}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4557453175027713299
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3159462270630687579}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 81fc7700d684ad64e8d853253408dd00, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  optionalOverlayPrefab: {fileID: 0}
-  overlaySortingOrder: 280
-  requireConfirmBeforeReveal: 1
-  primerPromptFormat: "{0}\n\u70B9\u6B64\u67E5\u770B\u8BE6\u60C5"
-  primerRevealButtonLabel: "\u67E5\u770B\u8BE6\u60C5"
-  overrideFont: {fileID: 0}
 --- !u!1 &4172318133478821437
 GameObject:
   m_ObjectHideFlags: 0
@@ -1154,8 +1134,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.42}
   m_AnchorMax: {x: 0.5, y: 0.68}
-  m_AnchoredPosition: {x: 5.3971, y: -7.1962}
-  m_SizeDelta: {x: 217.8225, y: 67.1139}
+  m_AnchoredPosition: {x: 0.0000019073, y: -19.907}
+  m_SizeDelta: {x: 260.322, y: 106.92}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1872373064903654214
 CanvasRenderer:

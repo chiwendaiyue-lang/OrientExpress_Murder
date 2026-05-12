@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /// <summary>
@@ -13,6 +14,15 @@ using UnityEngine.UI;
 public class NotebookUnlockOverlayPresenter : MonoBehaviour
 {
     public static NotebookUnlockOverlayPresenter Instance { get; private set; }
+    public static bool IsBlockingInput
+    {
+        get
+        {
+            return Instance != null
+                && Instance.overlayRoot != null
+                && Instance.overlayRoot.activeInHierarchy;
+        }
+    }
 
     private const string ChildDim = "Dim";
     private const string ChildPanel = "Panel";
@@ -60,6 +70,8 @@ public class NotebookUnlockOverlayPresenter : MonoBehaviour
 
     private readonly Queue<Action> pendingShows = new Queue<Action>();
     private bool isShowing;
+    private DetectiveNotebookManager subscribedNotebookManager;
+    private EvidenceManager subscribedEvidenceManager;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     private static void Bootstrap()
@@ -93,32 +105,71 @@ public class NotebookUnlockOverlayPresenter : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         EnsureViewBuilt();
         HideImmediate();
+        EnsureRuntimeSubscriptions();
     }
 
     private void OnEnable()
     {
-        if (DetectiveNotebookManager.Instance != null)
-        {
-            DetectiveNotebookManager.Instance.OnNotebookItemRevealed += HandleNotebookRevealed;
-        }
-
-        EvidenceManager evidenceManager = EvidenceManager.Instance;
-        if (evidenceManager != null)
-        {
-            evidenceManager.OnClueFirstCollected += HandleClueOnlyCollected;
-        }
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        EnsureRuntimeSubscriptions();
     }
 
     private void OnDisable()
     {
-        if (DetectiveNotebookManager.Instance != null)
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+        DetachAllSubscriptions();
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        EnsureRuntimeSubscriptions();
+    }
+
+    private void EnsureRuntimeSubscriptions()
+    {
+        DetectiveNotebookManager currentNotebook = DetectiveNotebookManager.Instance;
+        if (subscribedNotebookManager != currentNotebook)
         {
-            DetectiveNotebookManager.Instance.OnNotebookItemRevealed -= HandleNotebookRevealed;
+            if (subscribedNotebookManager != null)
+            {
+                subscribedNotebookManager.OnNotebookItemRevealed -= HandleNotebookRevealed;
+            }
+
+            subscribedNotebookManager = currentNotebook;
+            if (subscribedNotebookManager != null)
+            {
+                subscribedNotebookManager.OnNotebookItemRevealed += HandleNotebookRevealed;
+            }
         }
 
-        if (EvidenceManager.Instance != null)
+        EvidenceManager currentEvidence = EvidenceManager.Instance;
+        if (subscribedEvidenceManager != currentEvidence)
         {
-            EvidenceManager.Instance.OnClueFirstCollected -= HandleClueOnlyCollected;
+            if (subscribedEvidenceManager != null)
+            {
+                subscribedEvidenceManager.OnClueFirstCollected -= HandleClueOnlyCollected;
+            }
+
+            subscribedEvidenceManager = currentEvidence;
+            if (subscribedEvidenceManager != null)
+            {
+                subscribedEvidenceManager.OnClueFirstCollected += HandleClueOnlyCollected;
+            }
+        }
+    }
+
+    private void DetachAllSubscriptions()
+    {
+        if (subscribedNotebookManager != null)
+        {
+            subscribedNotebookManager.OnNotebookItemRevealed -= HandleNotebookRevealed;
+            subscribedNotebookManager = null;
+        }
+
+        if (subscribedEvidenceManager != null)
+        {
+            subscribedEvidenceManager.OnClueFirstCollected -= HandleClueOnlyCollected;
+            subscribedEvidenceManager = null;
         }
     }
 
@@ -536,6 +587,13 @@ public class NotebookUnlockOverlayPresenter : MonoBehaviour
             prefabSource = Resources.Load<GameObject>("UI/NotebookUnlockOverlay");
         }
 
+        if (prefabSource != null && prefabSource.GetComponent<NotebookUnlockOverlayPresenter>() != null)
+        {
+            // 防止把 Presenter 脚本也做进 UI prefab，导致实例化后触发单例互斥而自毁。
+            Debug.LogWarning("NotebookUnlockOverlayPresenter: UI prefab 上不应挂载 NotebookUnlockOverlayPresenter，已回退到运行时生成 UI。");
+            prefabSource = null;
+        }
+
         if (prefabSource != null)
         {
             overlayRoot = Instantiate(prefabSource, transform);
@@ -599,11 +657,11 @@ public class NotebookUnlockOverlayPresenter : MonoBehaviour
         }
 
         Transform rootTf = overlayRoot.transform;
-        Transform primerTf = rootTf.Find(ChildPrimerPanel);
+        Transform primerTf = FindChildDeep(rootTf, ChildPrimerPanel);
         if (primerTf == null && requireConfirmBeforeReveal)
         {
             BuildRuntimePrimerPanel(rootTf);
-            primerTf = rootTf.Find(ChildPrimerPanel);
+            primerTf = FindChildDeep(rootTf, ChildPrimerPanel);
         }
 
         if (primerTf == null)
@@ -615,8 +673,8 @@ public class NotebookUnlockOverlayPresenter : MonoBehaviour
         }
 
         primerPanelGo = primerTf.gameObject;
-        primerPromptText = primerTf.Find(ChildPrimerPrompt)?.GetComponent<TMP_Text>();
-        primerRevealButton = primerTf.Find(ChildRevealButton)?.GetComponent<Button>();
+        primerPromptText = FindChildDeep(primerTf, ChildPrimerPrompt)?.GetComponent<TMP_Text>();
+        primerRevealButton = FindChildDeep(primerTf, ChildRevealButton)?.GetComponent<Button>();
 
         if (primerRevealButton != null)
         {
@@ -704,13 +762,13 @@ public class NotebookUnlockOverlayPresenter : MonoBehaviour
 
     private void WireFromHierarchy(Transform root)
     {
-        Transform dim = root.Find(ChildDim);
+        Transform dim = FindChildDeep(root, ChildDim);
         if (dim != null)
         {
             dimImage = dim.GetComponent<Image>();
         }
 
-        Transform panel = root.Find(ChildPanel);
+        Transform panel = FindChildDeep(root, ChildPanel);
         if (panel == null)
         {
             Debug.LogWarning("NotebookUnlockOverlayPresenter: 预制体缺少 Panel 子节点。");
@@ -719,18 +777,21 @@ public class NotebookUnlockOverlayPresenter : MonoBehaviour
 
         detailPanelGo = panel.gameObject;
 
-        titleText = panel.Find(ChildTitle)?.GetComponent<TMP_Text>();
-        nameText = panel.Find(ChildName)?.GetComponent<TMP_Text>();
-        bodyText = panel.Find(ChildBody)?.GetComponent<TMP_Text>();
-        iconImage = panel.Find(ChildIcon)?.GetComponent<Image>();
-        closeButton = panel.Find(ChildClose)?.GetComponent<Button>();
+        titleText = FindChildDeep(panel, ChildTitle)?.GetComponent<TMP_Text>();
+        nameText = FindChildDeep(panel, ChildName)?.GetComponent<TMP_Text>();
+        bodyText = FindChildDeep(panel, ChildBody)?.GetComponent<TMP_Text>();
+        iconImage = FindChildDeep(panel, ChildIcon)?.GetComponent<Image>();
+        closeButton = FindChildDeep(panel, ChildClose)?.GetComponent<Button>();
 
-        rootCanvas = root.GetComponent<Canvas>();
+        rootCanvas = root.GetComponentInChildren<Canvas>(true);
         if (rootCanvas == null)
         {
             rootCanvas = root.gameObject.AddComponent<Canvas>();
             rootCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
-            root.gameObject.AddComponent<GraphicRaycaster>();
+        }
+        if (rootCanvas.GetComponent<GraphicRaycaster>() == null)
+        {
+            rootCanvas.gameObject.AddComponent<GraphicRaycaster>();
         }
 
         rootCanvas.overrideSorting = true;
@@ -852,6 +913,24 @@ public class NotebookUnlockOverlayPresenter : MonoBehaviour
         RectTransform rt = go.AddComponent<RectTransform>();
         rt.localScale = Vector3.one;
         return go;
+    }
+
+    private static Transform FindChildDeep(Transform root, string childName)
+    {
+        if (root == null || string.IsNullOrEmpty(childName))
+        {
+            return null;
+        }
+
+        foreach (Transform t in root.GetComponentsInChildren<Transform>(true))
+        {
+            if (t.name == childName)
+            {
+                return t;
+            }
+        }
+
+        return null;
     }
 
     private static void StretchFull(RectTransform rt)

@@ -61,6 +61,11 @@ public class DialogueManager : MonoBehaviour
         {
             return;
         }
+        
+        if (NotebookUnlockOverlayPresenter.IsBlockingInput)
+        {
+            return;
+        }
 
         if (waitMouseReleaseAfterEnter)
         {
@@ -260,6 +265,11 @@ public class DialogueManager : MonoBehaviour
 
     void SelectOption(DialogueOption option)
     {
+        if (NotebookUnlockOverlayPresenter.IsBlockingInput)
+        {
+            return;
+        }
+
         if (DetectiveNotebookManager.Instance != null)
         {
             DetectiveNotebookManager.Instance.ApplyRewards(option.rewards);
@@ -660,6 +670,11 @@ public class DialogueManager : MonoBehaviour
 
     private void OnHotspotClicked(DialogueHotspot hotspot, bool allowFailure)
     {
+        if (NotebookUnlockOverlayPresenter.IsBlockingInput)
+        {
+            return;
+        }
+
         if (EvidencePanelUI.IsNotebookOpen)
         {
             return;
