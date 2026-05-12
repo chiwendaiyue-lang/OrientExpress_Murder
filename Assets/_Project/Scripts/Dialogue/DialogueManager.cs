@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,6 +28,18 @@ public class DialogueManager : MonoBehaviour
     [Header("Portrait Display")]
     public bool useLeftSpeakerPortrait = false;
 
+    [Header("对话中的笔记奖励（弹丸式）")]
+    [Tooltip("无选项的点击推进节点上，若带有笔记 rewards 且未勾选 dialogueSkipDeferNotebookRewards，则默认延迟到右键收录；左键继续为跳过。")]
+    [SerializeField] private bool deferNotebookRewardsByDefaultWhenRewardsPresent = true;
+
+    [Tooltip("延迟收录时在正文下方追加的提示（TMP rich text）。")]
+    [SerializeField] private string deferNotebookRewardsHintRichText =
+        "<size=88%><color=#D4C4A8>右键：收录到侦探笔记</color><color=#8A8074> · 左键：继续（跳过线索）</color></size>";
+
+    [Tooltip("DialogueData.mainStoryBlockDeferredRewardSkip 为 true 且本句有待收录奖励时使用的提示（不可左键跳过）。")]
+    [SerializeField] private string mainStoryDeferNotebookRewardsHintRichText =
+        "<size=88%><color=#D4C4A8>右键：收录到侦探笔记</color><color=#8A8074> · 收录后方可继续</color></size>";
+
     private DialogueData currentDialogue;
     private string currentNodeId;
     private bool waitingForClickAdvance;
@@ -36,12 +49,19 @@ public class DialogueManager : MonoBehaviour
     private string pendingNextSceneName;
     private readonly List<GameObject> activeHotspots = new List<GameObject>();
 
+    private NotebookRewards pendingDeferredNotebookRewards;
+
     void Awake()
     {
         Instance = this;
         if (dialoguePanel != null)
         {
             dialoguePanel.SetActive(false);
+        }
+
+        if (dialogueText != null)
+        {
+            dialogueText.richText = true;
         }
     }
 
@@ -69,15 +89,28 @@ public class DialogueManager : MonoBehaviour
 
         if (waitMouseReleaseAfterEnter)
         {
-            if (!Input.GetMouseButton(0))
+            if (!Input.GetMouseButton(0) && !Input.GetMouseButton(1))
             {
                 waitMouseReleaseAfterEnter = false;
             }
             return;
         }
 
+        if (Input.GetMouseButtonDown(1))
+        {
+            TryApplyDeferredNotebookRewardsFromRightClick();
+            return;
+        }
+
         if (Input.GetMouseButtonDown(0))
         {
+            if (pendingDeferredNotebookRewards != null
+                && currentDialogue != null
+                && currentDialogue.mainStoryBlockDeferredRewardSkip)
+            {
+                return;
+            }
+
             AdvanceToNode(pendingNextNodeId, pendingNextDialogueId, pendingNextSceneName);
         }
     }
@@ -112,6 +145,7 @@ public class DialogueManager : MonoBehaviour
 
         currentDialogue.BuildLookup();
         currentNodeId = currentDialogue.startNodeId;
+        AbandonPendingDeferredNotebookRewards();
 
         if (currentDialogue.nodeLookup == null || !currentDialogue.nodeLookup.ContainsKey(currentNodeId))
         {
@@ -137,13 +171,27 @@ public class DialogueManager : MonoBehaviour
             return;
         }
 
-        if (DetectiveNotebookManager.Instance != null)
+        pendingDeferredNotebookRewards = null;
+
+        bool noticeHotspotNav = IsNoticeNode(node)
+            && node.hotspots != null
+            && node.hotspots.Count > 0;
+        bool deferNotebook = ShouldDeferNotebookRewards(node) && !noticeHotspotNav;
+
+        if (DetectiveNotebookManager.Instance != null && node.rewards != null)
         {
-            DetectiveNotebookManager.Instance.ApplyRewards(node.rewards);
+            if (!deferNotebook)
+            {
+                DetectiveNotebookManager.Instance.ApplyRewards(node.rewards);
+            }
+            else
+            {
+                pendingDeferredNotebookRewards = node.rewards;
+            }
         }
 
         speakerNameText.text = GetDisplaySpeakerName(node);
-        dialogueText.text = GetDisplayText(node);
+        dialogueText.text = BuildDialogueDisplayText(node, deferNotebook);
         ApplyFontIfNeeded(speakerNameText);
         ApplyFontIfNeeded(dialogueText);
         ApplyPresentedImage(node.presentedImage);
@@ -206,7 +254,7 @@ public class DialogueManager : MonoBehaviour
                 pendingNextDialogueId = node.nextDialogueId;
                 pendingNextSceneName = node.nextSceneName;
                 waitingForClickAdvance = true;
-                waitMouseReleaseAfterEnter = Input.GetMouseButton(0);
+                waitMouseReleaseAfterEnter = Input.GetMouseButton(0) || Input.GetMouseButton(1);
             }
             return;
         }
@@ -226,7 +274,7 @@ public class DialogueManager : MonoBehaviour
             pendingNextSceneName = node.nextSceneName;
             waitingForClickAdvance = true;
             // 防止由上一次点击带来的误触发
-            waitMouseReleaseAfterEnter = Input.GetMouseButton(0);
+            waitMouseReleaseAfterEnter = Input.GetMouseButton(0) || Input.GetMouseButton(1);
             return;
         }
 
@@ -270,6 +318,8 @@ public class DialogueManager : MonoBehaviour
             return;
         }
 
+        AbandonPendingDeferredNotebookRewards();
+
         if (DetectiveNotebookManager.Instance != null)
         {
             DetectiveNotebookManager.Instance.ApplyRewards(option.rewards);
@@ -300,6 +350,8 @@ public class DialogueManager : MonoBehaviour
 
     private void AdvanceToNode(string nextNodeId, string nextDialogueId, string nextSceneName)
     {
+        AbandonPendingDeferredNotebookRewards();
+
         waitingForClickAdvance = false;
         pendingNextNodeId = null;
         pendingNextDialogueId = null;
@@ -340,6 +392,8 @@ public class DialogueManager : MonoBehaviour
 
     void EndDialogue()
     {
+        AbandonPendingDeferredNotebookRewards();
+
         waitingForClickAdvance = false;
         pendingNextNodeId = null;
         pendingNextDialogueId = null;
@@ -718,6 +772,139 @@ public class DialogueManager : MonoBehaviour
         rect.anchorMax = new Vector2(Mathf.Clamp01(maxX), Mathf.Clamp01(maxY));
         rect.offsetMin = Vector2.zero;
         rect.offsetMax = Vector2.zero;
+    }
+
+    private static bool NotebookRewardsHasAny(NotebookRewards rewards)
+    {
+        if (rewards == null)
+        {
+            return false;
+        }
+
+        if (rewards.evidenceToAdd != null && rewards.evidenceToAdd.Count > 0)
+        {
+            return true;
+        }
+
+        if (rewards.testimonyToAdd != null && rewards.testimonyToAdd.Count > 0)
+        {
+            return true;
+        }
+
+        if (rewards.doubtToAdd != null && rewards.doubtToAdd.Count > 0)
+        {
+            return true;
+        }
+
+        if (rewards.evidenceStageToUpdate != null && rewards.evidenceStageToUpdate.Count > 0)
+        {
+            return true;
+        }
+
+        if (rewards.testimonyStageToUpdate != null && rewards.testimonyStageToUpdate.Count > 0)
+        {
+            return true;
+        }
+
+        if (rewards.doubtStageToUpdate != null && rewards.doubtStageToUpdate.Count > 0)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    private bool ShouldDeferNotebookRewards(DialogueNode node)
+    {
+        if (node == null || !NotebookRewardsHasAny(node.rewards))
+        {
+            return false;
+        }
+
+        if (node.dialogueSkipDeferNotebookRewards)
+        {
+            return false;
+        }
+
+        if (node.options != null && node.options.Count > 0)
+        {
+            return false;
+        }
+
+        if (node.dialogueDeferNotebookRewards)
+        {
+            return true;
+        }
+
+        return deferNotebookRewardsByDefaultWhenRewardsPresent;
+    }
+
+    private string BuildDialogueDisplayText(DialogueNode node, bool deferNotebook)
+    {
+        string raw = GetDisplayText(node) ?? string.Empty;
+
+        if (deferNotebook && !string.IsNullOrEmpty(node.dialogueHighlightPhrase))
+        {
+            string phrase = node.dialogueHighlightPhrase;
+            int idx = raw.IndexOf(phrase, StringComparison.Ordinal);
+            if (idx >= 0)
+            {
+                raw = raw.Substring(0, idx) + "<b>" + phrase + "</b>" + raw.Substring(idx + phrase.Length);
+            }
+        }
+
+        if (deferNotebook)
+        {
+            string hintLine;
+            if (string.IsNullOrWhiteSpace(node.dialogueRewardInteractHint))
+            {
+                bool mainStoryBlock = currentDialogue != null && currentDialogue.mainStoryBlockDeferredRewardSkip;
+                hintLine = mainStoryBlock
+                    ? mainStoryDeferNotebookRewardsHintRichText
+                    : deferNotebookRewardsHintRichText;
+            }
+            else
+            {
+                string custom = node.dialogueRewardInteractHint.Trim();
+                bool mainStoryBlock = currentDialogue != null && currentDialogue.mainStoryBlockDeferredRewardSkip;
+                if (custom.Length > 0 && custom[0] == '<')
+                {
+                    hintLine = custom;
+                }
+                else if (mainStoryBlock)
+                {
+                    hintLine = $"<size=88%><color=#D4C4A8>{custom}</color><color=#8A8074> · 收录后方可继续</color></size>";
+                }
+                else
+                {
+                    hintLine = $"<size=88%><color=#D4C4A8>{custom}</color><color=#8A8074> · 左键：继续（跳过线索）</color></size>";
+                }
+            }
+
+            raw = raw + "\n" + hintLine;
+        }
+
+        return raw;
+    }
+
+    private void TryApplyDeferredNotebookRewardsFromRightClick()
+    {
+        if (pendingDeferredNotebookRewards == null)
+        {
+            return;
+        }
+
+        if (DetectiveNotebookManager.Instance != null)
+        {
+            DetectiveNotebookManager.Instance.ApplyRewards(pendingDeferredNotebookRewards);
+        }
+
+        pendingDeferredNotebookRewards = null;
+    }
+
+    private void AbandonPendingDeferredNotebookRewards()
+    {
+        pendingDeferredNotebookRewards = null;
     }
 
     private void LoadScene(string sceneName)

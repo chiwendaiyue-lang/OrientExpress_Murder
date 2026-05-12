@@ -1,5 +1,6 @@
 {
   "sceneId": "opening",
+  "mainStoryBlockDeferredRewardSkip": true,
   "startNodeId": "node1",
   "nodes": [
     {
@@ -287,6 +288,7 @@
         "speakerCharacterId": "ratchett",
         "speakerName": "雷切特",
         "text": "我认为我不是那种疏忽大意的人。但是，当我看到这东西时，我就更想要得到双倍的安全保证。我想，你是可以得到我的钱的适当人选，波洛先生。请记住──一大笔钱。",
+        "dialogueHighlightPhrase": "请记住──一大笔钱。",
         "stage": {
           "focusCharacterId": "ratchett",
           "slots": [

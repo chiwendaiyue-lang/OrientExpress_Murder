@@ -520,6 +520,7 @@
         "speakerCharacterId": "macqueen",
         "speakerName": "麦克昆",
         "text": "我到雷切特先生的包房去，记了一些他要我写的信件的提要。我出来后，见阿巴思诺特上校还站在过道上。因为我的铺位已经收拾好了，就请他到我那儿喝一杯。我们聊到挺迟，大概都有两点了吧。",
+        "dialogueHighlightPhrase": "我们聊到挺迟，大概都有两点了吧。",
         "stage": {
           "focusCharacterId": "macqueen",
           "slots": [
@@ -892,6 +893,7 @@
         "speakerCharacterId": "macqueen",
         "speakerName": "麦克昆",
         "text": "没有。虽然我没见过她回来，可是她总得要回来的呀。",
+        "dialogueHighlightPhrase": "我没见过她回来",
         "stage": {
           "focusCharacterId": "macqueen",
           "slots": [

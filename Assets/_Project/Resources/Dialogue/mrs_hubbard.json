@@ -90,6 +90,7 @@
         "speakerName": "哈伯德太太",
         "text": "于是，我就把这怪事跟来人说了。他硬是不信，说，很可能是我在做梦。我让他朝铺位底下瞧瞧，他说，床底下窄得很，怎么也躲不下人。再清楚也不过了。那人定是溜走了。反正房里来过人，就这么一回事。可是最让人受不了的，就数那个列车员，他左劝右说，百般哄我，简直叫人发疯。可我不是人爱瞎想的人，先生。──请问先生大名？",
         "nextNodeId": "node10",
+        "dialogueHighlightPhrase": "反正房里来过人，就这么一回事。",
         "rewards": {
           "testimonyToAdd": [
             "mrs_hubbard_man_in_room"
@@ -358,6 +359,7 @@
         "speakerCharacterId": "system",
         "speakerName": "系统",
         "text": "门闩在门把手上方。即使提包挂在门把手上，也不可能挡住门闩。哈伯德太太的说法和房间结构不符。",
+        "dialogueHighlightPhrase": "哈伯德太太的说法和房间结构不符。",
         "nextNodeId": "node28",
         "rewards": {
           "testimonyStageToUpdate": [

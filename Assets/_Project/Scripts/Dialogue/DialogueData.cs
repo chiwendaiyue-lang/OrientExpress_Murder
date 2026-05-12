@@ -45,6 +45,18 @@ public class DialogueNode
     public string focusSlotId;
     public List<DialogueOption> options;
     public List<StageCommand> stageCommands;
+
+    /// <summary>为 true 时：本节点笔记奖励延迟到玩家在对话中右键收录；左键继续则跳过（弹丸式）。</summary>
+    public bool dialogueDeferNotebookRewards;
+
+    /// <summary>为 true 时：即使有奖励也不延迟（覆盖 Inspector 默认延迟）。</summary>
+    public bool dialogueSkipDeferNotebookRewards;
+
+    /// <summary>非空时：在正文中首次出现处包一层 &lt;b&gt;…&lt;/b&gt;（需 TMP 开启 richText）。</summary>
+    public string dialogueHighlightPhrase;
+
+    /// <summary>延迟收录时，覆盖默认的右键/左键提示行（纯文本，会包在 TMP 颜色标签外由代码拼接）。</summary>
+    public string dialogueRewardInteractHint;
 }
 
 [Serializable]
@@ -57,6 +69,12 @@ public class DialogueData
     public string characterName;
     public string defaultPortrait;
     public string startNodeId;
+
+    /// <summary>
+    /// 主线等非「人名对话」资源：有待延迟收录的笔记奖励时，禁止左键跳过，须右键收录后方可继续。
+    /// </summary>
+    public bool mainStoryBlockDeferredRewardSkip;
+
     public List<DialogueNodeEntry> nodes;
 
     [NonSerialized] public Dictionary<string, DialogueNode> nodeLookup;

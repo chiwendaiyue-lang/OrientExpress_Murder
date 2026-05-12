@@ -1,5 +1,6 @@
 {
   "sceneId": "the_night",
+  "mainStoryBlockDeferredRewardSkip": true,
   "startNodeId": "node1",
   "nodes": [
     {
@@ -89,6 +90,7 @@
         "speakerCharacterId": "system",
         "speakerName": "系统",
         "text": "现在是12:37",
+        "dialogueHighlightPhrase": "现在是12:37",
         "presentedImage": {
           "imageId": "clock",
           "position": "center"
@@ -188,6 +190,7 @@
         "speakerCharacterId": "system",
         "speakerName": "系统",
         "text": "一个身穿红色睡衣的人远去",
+        "dialogueHighlightPhrase": "一个身穿红色睡衣的人远去",
         "presentedImage": {
           "imageId": "man_in_red",
           "position": "center"
