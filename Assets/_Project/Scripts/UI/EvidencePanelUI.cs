@@ -52,6 +52,7 @@ public class EvidencePanelUI : MonoBehaviour
     [SerializeField] private Vector2 testimonyCharacterListWidth = new Vector2(248f, 0f);
     [SerializeField] private Vector2 testimonyCardHeight = new Vector2(0f, 124f);
     [SerializeField] private Vector2 doubtItemHeight = new Vector2(0f, 62f);
+    [SerializeField, Min(1f)] private float doubtListFontSize = 22f;
 
     [Header("Drag")]
     [Tooltip("是否让 NotebookPanel 在运行时可被鼠标拖动。")]
@@ -1661,6 +1662,8 @@ public class EvidencePanelUI : MonoBehaviour
         textObject.transform.SetParent(buttonObject.transform, false);
         TextMeshProUGUI text = textObject.GetComponent<TextMeshProUGUI>();
         ApplyGeneratedTextStyle(text);
+        text.fontSize = doubtListFontSize;
+        text.enableAutoSizing = false;
         text.text = $"<b>{display}</b>";
         text.color = generatedTextColor;
         text.alignment = TextAlignmentOptions.MidlineLeft;

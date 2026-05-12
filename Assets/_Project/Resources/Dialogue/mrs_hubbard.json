@@ -205,6 +205,8 @@
         "speakerName": "鲍克",
         "text": "这是列车员制服上的钮扣。",
         "nextNodeId": "node21",
+        "dialogueDeferNotebookRewards": true,
+        "dialogueHighlightPhrase": "这是列车员制服上的钮扣。",
         "rewards": {
           "evidenceToAdd": [
             "metal_button"
