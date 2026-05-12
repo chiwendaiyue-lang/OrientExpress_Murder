@@ -2,6 +2,33 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum NotebookRevealKind
+{
+    Evidence,
+    Testimony,
+    Doubt
+}
+
+public enum NotebookRevealType
+{
+    NewEntry,
+    StageUpdate
+}
+
+public struct NotebookRevealEvent
+{
+    public NotebookRevealKind Kind;
+    public string ItemId;
+    public NotebookRevealType RevealType;
+
+    public NotebookRevealEvent(NotebookRevealKind kind, string itemId, NotebookRevealType revealType)
+    {
+        Kind = kind;
+        ItemId = itemId;
+        RevealType = revealType;
+    }
+}
+
 public class DetectiveNotebookManager : MonoBehaviour
 {
     public static DetectiveNotebookManager Instance;
@@ -19,6 +46,7 @@ public class DetectiveNotebookManager : MonoBehaviour
     private readonly Dictionary<string, NotebookItemState> doubtStates = new Dictionary<string, NotebookItemState>();
 
     public event Action OnNotebookUpdated;
+    public event Action<NotebookRevealEvent> OnNotebookItemRevealed;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void AutoBootstrap()
@@ -62,6 +90,11 @@ public class DetectiveNotebookManager : MonoBehaviour
     public bool AddEvidence(string itemId)
     {
         bool changed = AddItem(itemId, evidenceLookup, evidenceStates, "物证");
+        if (changed)
+        {
+            NotifyReveal(NotebookRevealKind.Evidence, itemId, NotebookRevealType.NewEntry);
+        }
+
         NotifyIfChanged(changed);
         return changed;
     }
@@ -69,6 +102,11 @@ public class DetectiveNotebookManager : MonoBehaviour
     public bool AddTestimony(string itemId)
     {
         bool changed = AddItem(itemId, testimonyLookup, testimonyStates, "证词");
+        if (changed)
+        {
+            NotifyReveal(NotebookRevealKind.Testimony, itemId, NotebookRevealType.NewEntry);
+        }
+
         NotifyIfChanged(changed);
         return changed;
     }
@@ -76,6 +114,11 @@ public class DetectiveNotebookManager : MonoBehaviour
     public bool AddDoubt(string itemId)
     {
         bool changed = AddItem(itemId, doubtLookup, doubtStates, "疑点");
+        if (changed)
+        {
+            NotifyReveal(NotebookRevealKind.Doubt, itemId, NotebookRevealType.NewEntry);
+        }
+
         NotifyIfChanged(changed);
         return changed;
     }
@@ -83,6 +126,11 @@ public class DetectiveNotebookManager : MonoBehaviour
     public bool UpdateEvidenceStage(string itemId, string stageId)
     {
         bool changed = UpdateItemStage(itemId, stageId, evidenceLookup, evidenceStates, EvidenceStageExists, "物证");
+        if (changed)
+        {
+            NotifyReveal(NotebookRevealKind.Evidence, itemId, NotebookRevealType.StageUpdate);
+        }
+
         NotifyIfChanged(changed);
         return changed;
     }
@@ -90,6 +138,11 @@ public class DetectiveNotebookManager : MonoBehaviour
     public bool UpdateTestimonyStage(string itemId, string stageId)
     {
         bool changed = UpdateItemStage(itemId, stageId, testimonyLookup, testimonyStates, TestimonyStageExists, "证词");
+        if (changed)
+        {
+            NotifyReveal(NotebookRevealKind.Testimony, itemId, NotebookRevealType.StageUpdate);
+        }
+
         NotifyIfChanged(changed);
         return changed;
     }
@@ -97,6 +150,11 @@ public class DetectiveNotebookManager : MonoBehaviour
     public bool UpdateDoubtStage(string itemId, string stageId)
     {
         bool changed = UpdateItemStage(itemId, stageId, doubtLookup, doubtStates, DoubtStageExists, "疑点");
+        if (changed)
+        {
+            NotifyReveal(NotebookRevealKind.Doubt, itemId, NotebookRevealType.StageUpdate);
+        }
+
         NotifyIfChanged(changed);
         return changed;
     }
@@ -157,13 +215,158 @@ public class DetectiveNotebookManager : MonoBehaviour
         }
 
         bool changed = false;
-        changed |= AddItems(rewards.evidenceToAdd, evidenceLookup, evidenceStates, "物证");
-        changed |= AddItems(rewards.testimonyToAdd, testimonyLookup, testimonyStates, "证词");
-        changed |= AddItems(rewards.doubtToAdd, doubtLookup, doubtStates, "疑点");
-        changed |= UpdateItemStages(rewards.evidenceStageToUpdate, evidenceLookup, evidenceStates, EvidenceStageExists, "物证");
-        changed |= UpdateItemStages(rewards.testimonyStageToUpdate, testimonyLookup, testimonyStates, TestimonyStageExists, "证词");
-        changed |= UpdateItemStages(rewards.doubtStageToUpdate, doubtLookup, doubtStates, DoubtStageExists, "疑点");
+        changed |= AddEvidenceBatch(rewards.evidenceToAdd);
+        changed |= AddTestimonyBatch(rewards.testimonyToAdd);
+        changed |= AddDoubtBatch(rewards.doubtToAdd);
+        changed |= UpdateEvidenceStagesWithNotify(rewards.evidenceStageToUpdate);
+        changed |= UpdateTestimonyStagesWithNotify(rewards.testimonyStageToUpdate);
+        changed |= UpdateDoubtStagesWithNotify(rewards.doubtStageToUpdate);
         NotifyIfChanged(changed);
+    }
+
+    private void NotifyReveal(NotebookRevealKind kind, string itemId, NotebookRevealType revealType)
+    {
+        if (OnNotebookItemRevealed == null)
+        {
+            return;
+        }
+
+        OnNotebookItemRevealed.Invoke(new NotebookRevealEvent(kind, itemId, revealType));
+    }
+
+    private bool AddEvidenceBatch(List<string> itemIds)
+    {
+        if (itemIds == null)
+        {
+            return false;
+        }
+
+        bool changed = false;
+        foreach (string itemId in itemIds)
+        {
+            if (AddItem(itemId, evidenceLookup, evidenceStates, "物证"))
+            {
+                NotifyReveal(NotebookRevealKind.Evidence, itemId, NotebookRevealType.NewEntry);
+                changed = true;
+            }
+        }
+
+        return changed;
+    }
+
+    private bool AddTestimonyBatch(List<string> itemIds)
+    {
+        if (itemIds == null)
+        {
+            return false;
+        }
+
+        bool changed = false;
+        foreach (string itemId in itemIds)
+        {
+            if (AddItem(itemId, testimonyLookup, testimonyStates, "证词"))
+            {
+                NotifyReveal(NotebookRevealKind.Testimony, itemId, NotebookRevealType.NewEntry);
+                changed = true;
+            }
+        }
+
+        return changed;
+    }
+
+    private bool AddDoubtBatch(List<string> itemIds)
+    {
+        if (itemIds == null)
+        {
+            return false;
+        }
+
+        bool changed = false;
+        foreach (string itemId in itemIds)
+        {
+            if (AddItem(itemId, doubtLookup, doubtStates, "疑点"))
+            {
+                NotifyReveal(NotebookRevealKind.Doubt, itemId, NotebookRevealType.NewEntry);
+                changed = true;
+            }
+        }
+
+        return changed;
+    }
+
+    private bool UpdateEvidenceStagesWithNotify(List<NotebookStageUpdate> updates)
+    {
+        if (updates == null)
+        {
+            return false;
+        }
+
+        bool changed = false;
+        foreach (NotebookStageUpdate update in updates)
+        {
+            if (update == null)
+            {
+                continue;
+            }
+
+            if (UpdateItemStage(update.itemId, update.stageId, evidenceLookup, evidenceStates, EvidenceStageExists, "物证"))
+            {
+                NotifyReveal(NotebookRevealKind.Evidence, update.itemId, NotebookRevealType.StageUpdate);
+                changed = true;
+            }
+        }
+
+        return changed;
+    }
+
+    private bool UpdateTestimonyStagesWithNotify(List<NotebookStageUpdate> updates)
+    {
+        if (updates == null)
+        {
+            return false;
+        }
+
+        bool changed = false;
+        foreach (NotebookStageUpdate update in updates)
+        {
+            if (update == null)
+            {
+                continue;
+            }
+
+            if (UpdateItemStage(update.itemId, update.stageId, testimonyLookup, testimonyStates, TestimonyStageExists, "证词"))
+            {
+                NotifyReveal(NotebookRevealKind.Testimony, update.itemId, NotebookRevealType.StageUpdate);
+                changed = true;
+            }
+        }
+
+        return changed;
+    }
+
+    private bool UpdateDoubtStagesWithNotify(List<NotebookStageUpdate> updates)
+    {
+        if (updates == null)
+        {
+            return false;
+        }
+
+        bool changed = false;
+        foreach (NotebookStageUpdate update in updates)
+        {
+            if (update == null)
+            {
+                continue;
+            }
+
+            if (UpdateItemStage(update.itemId, update.stageId, doubtLookup, doubtStates, DoubtStageExists, "疑点"))
+            {
+                NotifyReveal(NotebookRevealKind.Doubt, update.itemId, NotebookRevealType.StageUpdate);
+                changed = true;
+            }
+        }
+
+        return changed;
     }
 
     public bool MeetsRequirements(NotebookRequirements requirements)
@@ -397,25 +600,6 @@ public class DetectiveNotebookManager : MonoBehaviour
         }
     }
 
-    private static bool AddItems<TDefinition>(
-        List<string> itemIds,
-        Dictionary<string, TDefinition> lookup,
-        Dictionary<string, NotebookItemState> states,
-        string label)
-    {
-        if (itemIds == null)
-        {
-            return false;
-        }
-
-        bool changed = false;
-        foreach (string itemId in itemIds)
-        {
-            changed |= AddItem(itemId, lookup, states, label);
-        }
-        return changed;
-    }
-
     private static bool AddItem<TDefinition>(
         string itemId,
         Dictionary<string, TDefinition> lookup,
@@ -442,30 +626,6 @@ public class DetectiveNotebookManager : MonoBehaviour
         state.unlocked = true;
         Debug.Log($"获得{label}：{itemId}");
         return true;
-    }
-
-    private static bool UpdateItemStages<TDefinition>(
-        List<NotebookStageUpdate> updates,
-        Dictionary<string, TDefinition> lookup,
-        Dictionary<string, NotebookItemState> states,
-        Func<TDefinition, string, bool> stageExists,
-        string label)
-    {
-        if (updates == null)
-        {
-            return false;
-        }
-
-        bool changed = false;
-        foreach (NotebookStageUpdate update in updates)
-        {
-            if (update == null)
-            {
-                continue;
-            }
-            changed |= UpdateItemStage(update.itemId, update.stageId, lookup, states, stageExists, label);
-        }
-        return changed;
     }
 
     private static bool UpdateItemStage<TDefinition>(
@@ -612,6 +772,7 @@ public class DetectiveNotebookManager : MonoBehaviour
             type = source.type,
             name = source.name,
             description = source.description,
+            unlockBrief = source.unlockBrief,
             foundLocation = source.foundLocation,
             icon = source.icon,
             updates = source.updates
@@ -625,6 +786,7 @@ public class DetectiveNotebookManager : MonoBehaviour
             id = source.id,
             type = source.type,
             name = source.name,
+            unlockBrief = source.unlockBrief,
             speakerCharacterId = source.speakerCharacterId,
             speakerName = source.speakerName,
             summary = source.summary,
@@ -642,6 +804,7 @@ public class DetectiveNotebookManager : MonoBehaviour
             id = source.id,
             type = source.type,
             name = source.name,
+            unlockBrief = source.unlockBrief,
             question = source.question,
             description = source.description,
             finalConclusion = source.finalConclusion,
@@ -654,6 +817,7 @@ public class DetectiveNotebookManager : MonoBehaviour
     {
         OverrideIfNotEmpty(ref target.name, update.name);
         OverrideIfNotEmpty(ref target.description, update.description);
+        OverrideIfNotEmpty(ref target.unlockBrief, update.unlockBrief);
         OverrideIfNotEmpty(ref target.foundLocation, update.foundLocation);
         OverrideIfNotEmpty(ref target.icon, update.icon);
     }
@@ -661,6 +825,7 @@ public class DetectiveNotebookManager : MonoBehaviour
     private static void ApplyTestimonyUpdate(TestimonyDefinition target, TestimonyUpdate update)
     {
         OverrideIfNotEmpty(ref target.name, update.name);
+        OverrideIfNotEmpty(ref target.unlockBrief, update.unlockBrief);
         OverrideIfNotEmpty(ref target.summary, update.summary);
         OverrideIfNotEmpty(ref target.originalText, update.originalText);
         OverrideIfNotEmpty(ref target.source, update.source);
@@ -670,6 +835,7 @@ public class DetectiveNotebookManager : MonoBehaviour
     private static void ApplyDoubtUpdate(DoubtDefinition target, DoubtUpdate update)
     {
         OverrideIfNotEmpty(ref target.name, update.name);
+        OverrideIfNotEmpty(ref target.unlockBrief, update.unlockBrief);
         OverrideIfNotEmpty(ref target.question, update.question);
         OverrideIfNotEmpty(ref target.description, update.description);
         OverrideIfNotEmpty(ref target.finalConclusion, update.finalConclusion);

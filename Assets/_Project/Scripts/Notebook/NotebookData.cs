@@ -27,6 +27,10 @@ public class PhysicalEvidenceDefinition
     public string type;
     public string name;
     public string description;
+
+    /// <summary>获得/更新线索弹窗 Body 用短句；空则仍用 description + 发现地点。</summary>
+    public string unlockBrief;
+
     public string foundLocation;
     public string icon;
     public List<PhysicalEvidenceUpdate> updates;
@@ -38,6 +42,9 @@ public class PhysicalEvidenceUpdate
     public string stageId;
     public string name;
     public string description;
+
+    public string unlockBrief;
+
     public string foundLocation;
     public string icon;
 }
@@ -48,6 +55,10 @@ public class TestimonyDefinition
     public string id;
     public string type;
     public string name;
+
+    /// <summary>弹窗摘要；空则用 summary / 原文等组合。</summary>
+    public string unlockBrief;
+
     public string speakerCharacterId;
     public string speakerName;
     public string summary;
@@ -62,6 +73,7 @@ public class TestimonyUpdate
 {
     public string stageId;
     public string name;
+    public string unlockBrief;
     public string summary;
     public string originalText;
     public string source;
@@ -74,6 +86,10 @@ public class DoubtDefinition
     public string id;
     public string type;
     public string name;
+
+    /// <summary>弹窗摘要；空则用 question + description。</summary>
+    public string unlockBrief;
+
     public string question;
     public string description;
     public string finalConclusion;
@@ -86,6 +102,7 @@ public class DoubtUpdate
 {
     public string stageId;
     public string name;
+    public string unlockBrief;
     public string question;
     public string description;
     public string finalConclusion;

@@ -5,6 +5,7 @@
       "type": "physical",
       "name": "凶器匕首",
       "description": "一把带血的厨房用刀，刀刃上有血迹。",
+      "unlockBrief": "带血的厨房刀，疑为凶器。",
       "foundLocation": "雷切特包厢·地板上",
       "icon": "",
       "updates": []
@@ -14,12 +15,14 @@
       "type": "physical",
       "name": "烧焦纸条",
       "description": "在雷切特包厢的烟灰缸里发现的烧焦纸片。",
+      "unlockBrief": "烟灰缸里拾得的焦黑纸片。",
       "foundLocation": "雷切特包厢·烟灰缸",
       "icon": "",
       "updates": [
         {
           "stageId": "mentions_daisy_armstrong",
-          "description": "纸片残留文字中可以辨认出“黛西·阿姆斯特朗”。"
+          "description": "纸片残留文字中可以辨认出“黛西·阿姆斯特朗”。",
+          "unlockBrief": "残字可辨「黛西·阿姆斯特朗」。"
         }
       ]
     },
@@ -28,6 +31,7 @@
       "type": "physical",
       "name": "十二处刀伤",
       "description": "尸体身上有多处深浅不一的刺伤，疑似多人参与行凶。",
+      "unlockBrief": "尸体上有多处刺伤。",
       "foundLocation": "雷切特包厢·尸体",
       "icon": "",
       "updates": []
@@ -37,6 +41,7 @@
       "type": "physical",
       "name": "手帕",
       "description": "地板上发现的女士手帕，角落绣有字母 H。",
+      "unlockBrief": "女士手帕，角上绣有字母 H。",
       "foundLocation": "雷切特包厢·地板",
       "icon": "",
       "updates": []
@@ -46,6 +51,7 @@
       "type": "physical",
       "name": "列车员钮扣",
       "description": "哈伯德太太声称在自己的包厢里发现了一颗金属钮扣。鲍克认出这是列车员制服上的钮扣。",
+      "unlockBrief": "金属钮扣，似列车员制服上脱落。",
       "foundLocation": "哈伯德太太包厢·杂志上",
       "icon": "icon_metal_button",
       "updates": []
@@ -86,6 +92,7 @@
       "id": "french_answer",
       "type": "testimony",
       "name": "法语回答",
+      "unlockBrief": "列车员叩门时，屋内有人以法语称无事。",
       "speakerCharacterId": "unknown_voice",
       "speakerName": "未知男声",
       "summary": "00:37左右，波洛听到有人喊叫。列车员敲门后，包厢内有人用法语回答没事",
@@ -98,6 +105,7 @@
       "id": "red_sleepwear_person",
       "type": "testimony",
       "name": "红睡衣人",
+      "unlockBrief": "夜里有人穿红色睡衣掠过过道。",
       "speakerCharacterId": "poirot",
       "speakerName": "波洛",
       "summary": "波洛在夜里看见一个身穿红色睡衣的人远去。",
@@ -107,6 +115,7 @@
       "updates": [
         {
           "stageId": "macqueen_saw_red_silk_person",
+          "unlockBrief": "麦克昆也见过一名穿鲜红缎衣的人走过。",
           "summary": "波洛夜里看见红睡衣人远去；麦克昆也称曾看见一个穿鲜红丝料衣服的人沿过道朝餐车方向走去，但没有看清脸，也没见她回来。",
           "originalText": "偶然看到一个穿鲜红丝料衣服的人从门口过去……她总得要回来的呀。",
           "source": "询问麦克昆时补充"
@@ -117,6 +126,7 @@
       "id": "macqueen_alibi",
       "type": "testimony",
       "name": "麦克昆的不在场证明",
+      "unlockBrief": "餐车后去雷切特区信，再与上校对饮至凌晨。",
       "speakerCharacterId": "macqueen",
       "speakerName": "麦克昆",
       "summary": "麦克昆称离开餐车后先去雷切特包厢整理信件提要，随后与阿巴思诺特上校在自己包房喝酒聊天，直到大约两点。",
@@ -129,6 +139,7 @@
       "id": "mrs_hubbard_man_in_room",
       "type": "testimony",
       "name": "房间里的男人",
+      "unlockBrief": "哈伯德称有男人闯入包厢，按铃后人已不见。",
       "speakerCharacterId": "mrs_hubbard",
       "speakerName": "哈伯德太太",
       "summary": "哈伯德太太声称案发夜有个男人进入过她的包厢。她按铃叫来列车员后，房间里已经没有人影。",
@@ -138,6 +149,7 @@
       "updates": [
         {
           "stageId": "latch_position_contradiction",
+          "unlockBrief": "其对门闩与提包的说法与包厢结构矛盾。",
           "summary": "哈伯德太太声称案发夜有男人进入她的包厢，但她关于提包挡住门闩、自己看不见门是否闩上的说法与包厢结构不符。",
           "originalText": "因为我已经上了床，我的提包也挂在门把上，我看不见门有没有闩上。",
           "source": "哈伯德太太包厢结构察觉后更新"
@@ -150,6 +162,7 @@
       "id": "ratchett_enemy",
       "type": "doubt",
       "name": "雷切特的敌人",
+      "unlockBrief": "死者自认有仇家，随身佩枪。",
       "question": "雷切特为什么认为自己正处于危险之中？他的敌人是谁？",
       "description": "雷切特声称自己受到威胁，并含糊地说自己有敌人，因此随身带着手枪。",
       "finalConclusion": "",
@@ -160,6 +173,7 @@
       "id": "armstrong_case_connection",
       "type": "doubt",
       "name": "阿姆斯特朗案关联",
+      "unlockBrief": "本案是否牵扯阿姆斯特朗旧事？",
       "question": "雷切特与阿姆斯特朗案是否有关？",
       "description": "目前只有零散迹象指向阿姆斯特朗案，还不足以形成结论。",
       "finalConclusion": "",
@@ -167,6 +181,7 @@
       "updates": [
         {
           "stageId": "paper_mentions_daisy",
+          "unlockBrief": "焦纸上出现黛西之名，仇杀疑云转向旧案。",
           "question": "烧焦纸片为什么提到黛西·阿姆斯特朗？",
           "description": "烧焦纸片上的名字说明雷切特遇害可能并非普通仇杀，而与阿姆斯特朗案有关。",
           "finalConclusion": "雷切特的真实身份和阿姆斯特朗案之间很可能存在关键联系。",

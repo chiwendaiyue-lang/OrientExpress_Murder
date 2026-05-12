@@ -21,15 +21,6 @@ public class RatchettTableSceneController : MonoBehaviour
         EvidenceManager evidenceManager = EvidenceManager.EnsureInstance();
         DetectiveNotebookManager notebookManager = DetectiveNotebookManager.EnsureInstance();
 
-        if (evidenceManager == null)
-        {
-            Debug.LogWarning("RatchettTableSceneController: EvidenceManager 不存在，无法记录证据。");
-        }
-        else
-        {
-            evidenceManager.AddClue(EvidenceIds.BURNED_PAPER);
-        }
-
         if (notebookManager == null)
         {
             Debug.LogWarning("RatchettTableSceneController: DetectiveNotebookManager 不存在，无法记录侦探笔记。");
@@ -37,6 +28,15 @@ public class RatchettTableSceneController : MonoBehaviour
         else
         {
             notebookManager.AddEvidence(EvidenceIds.BURNED_PAPER);
+        }
+
+        if (evidenceManager == null)
+        {
+            Debug.LogWarning("RatchettTableSceneController: EvidenceManager 不存在，无法记录证据。");
+        }
+        else
+        {
+            evidenceManager.AddClue(EvidenceIds.BURNED_PAPER);
         }
 
         TryMarkCrimeSceneFinished();

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class InteractableItem : MonoBehaviour
@@ -24,24 +22,26 @@ public class InteractableItem : MonoBehaviour
 
     void OnInteract()
     {
-        // 添加线索
-        EvidenceManager.Instance.AddClue(clueId);
+        DetectiveNotebookManager notebookManager = DetectiveNotebookManager.EnsureInstance();
+        if (notebookManager != null)
+        {
+            notebookManager.AddEvidence(clueId);
+        }
 
-        // 显示提示
-        ShowTooltip();
+        EvidenceManager evidenceManager = EvidenceManager.EnsureInstance();
+        if (evidenceManager != null)
+        {
+            evidenceManager.AddClue(clueId);
+        }
 
-        // 禁用物品（防止重复获取）
-        interactButton.interactable = false;
+        if (interactButton != null)
+        {
+            interactButton.interactable = false;
+        }
         if (highlightEffect != null) highlightEffect.SetActive(false);
 
         // 可选：播放音效
         // AudioManager.Instance.Play("clue_found");
-    }
-
-    void ShowTooltip()
-    {
-        // 简单起见，用Debug，后续可接入弹窗
-        Debug.Log($"🔍 获得【{clueId}】：{clueDescription}");
     }
 
     void OnMouseEnter()

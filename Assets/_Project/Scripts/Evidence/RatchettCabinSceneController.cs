@@ -77,6 +77,15 @@ public class RatchettCabinSceneController : MonoBehaviour
         EvidenceManager evidenceManager = EvidenceManager.EnsureInstance();
         DetectiveNotebookManager notebookManager = DetectiveNotebookManager.EnsureInstance();
 
+        if (notebookManager != null)
+        {
+            notebookManager.AddEvidence(evidenceId);
+        }
+        else
+        {
+            Debug.LogWarning("RatchettCabinSceneController: DetectiveNotebookManager 不存在，无法记录侦探笔记。");
+        }
+
         if (evidenceManager == null)
         {
             Debug.LogWarning("RatchettCabinSceneController: EvidenceManager 不存在，无法记录证据。");
@@ -84,15 +93,6 @@ public class RatchettCabinSceneController : MonoBehaviour
         else
         {
             evidenceManager.AddClue(evidenceId);
-        }
-
-        if (notebookManager == null)
-        {
-            Debug.LogWarning("RatchettCabinSceneController: DetectiveNotebookManager 不存在，无法记录侦探笔记。");
-        }
-        else
-        {
-            notebookManager.AddEvidence(evidenceId);
         }
     }
 

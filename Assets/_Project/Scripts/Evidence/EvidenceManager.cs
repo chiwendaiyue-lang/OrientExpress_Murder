@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,13 @@ using UnityEngine;
 public class EvidenceManager : MonoBehaviour
 {
     public static EvidenceManager Instance;
+
+    public System.Action OnEvidenceUpdated;
+
+    /// <summary>
+    /// 首次通过 <see cref="AddClue"/> 收集到该 id 时触发（与侦探笔记解锁分离，供仅走旧线索系统的路径弹窗）。
+    /// </summary>
+    public event System.Action<string> OnClueFirstCollected;
 
     [SerializeField] private List<string> collectedClues = new List<string>();
     private readonly HashSet<string> collectedSet = new HashSet<string>();
@@ -68,10 +76,7 @@ public class EvidenceManager : MonoBehaviour
         collectedClues.Add(clueId);
         string clueName = GetClueDisplayName(clueId);
         Debug.Log($"获得线索：{clueName}");
-        if (HoverHintUI.Instance != null)
-        {
-            HoverHintUI.Instance.ShowTemporaryHint($"获得证据：{clueName}", 1.5f);
-        }
+        OnClueFirstCollected?.Invoke(clueId);
 
         TryApplySynthesisRules();
         OnEvidenceUpdated?.Invoke();
@@ -294,17 +299,12 @@ public class EvidenceManager : MonoBehaviour
                 collectedClues.Add(rule.outputId);
                 string mergedName = GetClueDisplayName(rule.outputId);
                 Debug.Log($"线索自动整理为：{mergedName}");
-                if (HoverHintUI.Instance != null)
-                {
-                    HoverHintUI.Instance.ShowTemporaryHint($"自动整理：{mergedName}", 1.8f);
-                }
+                NotebookUnlockOverlayPresenter.NotifySynthesisClue(rule.outputId);
                 changed = true;
                 break;
             }
         }
     }
-
-    public System.Action OnEvidenceUpdated;
 }
 
 [System.Serializable]
@@ -314,6 +314,10 @@ public class ClueDefinition
     public string type;
     public string name;
     public string description;
+
+    /// <summary>弹窗短句（旧 clues.json）；空则用 description。</summary>
+    public string unlockBrief;
+
     public string icon;
     public string foundLocation;
 }
