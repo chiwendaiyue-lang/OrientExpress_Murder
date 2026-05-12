@@ -105,6 +105,32 @@ public class EvidenceManager : MonoBehaviour
         return new List<string>(collectedClues);
     }
 
+    /// <summary>
+    /// 用给定列表整体替换已收集线索（用于读档）；不触发 <see cref="OnClueFirstCollected"/>。
+    /// </summary>
+    public void ReplaceCollectedClues(IReadOnlyList<string> clueIds)
+    {
+        collectedSet.Clear();
+        collectedClues.Clear();
+
+        if (clueIds != null)
+        {
+            foreach (string clueId in clueIds)
+            {
+                if (string.IsNullOrEmpty(clueId) || collectedSet.Contains(clueId))
+                {
+                    continue;
+                }
+
+                collectedSet.Add(clueId);
+                collectedClues.Add(clueId);
+            }
+        }
+
+        TryApplySynthesisRules();
+        OnEvidenceUpdated?.Invoke();
+    }
+
     public List<string> GetCluesByType(string type)
     {
         List<string> result = new List<string>();

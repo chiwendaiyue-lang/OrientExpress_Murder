@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class EvidencePanelUI : MonoBehaviour
@@ -108,6 +109,13 @@ public class EvidencePanelUI : MonoBehaviour
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     private static void AutoBootstrap()
     {
+        SceneManager.sceneLoaded -= OnSceneLoadedEnsureNotebookInstance;
+        SceneManager.sceneLoaded += OnSceneLoadedEnsureNotebookInstance;
+        EnsureRuntimeInstance();
+    }
+
+    private static void OnSceneLoadedEnsureNotebookInstance(Scene scene, LoadSceneMode mode)
+    {
         EnsureRuntimeInstance();
     }
 
@@ -121,12 +129,18 @@ public class EvidencePanelUI : MonoBehaviour
         EvidencePanelUI existingOfficial = FindExistingOfficialInstance();
         if (existingOfficial != null)
         {
+            persistentInstance = existingOfficial;
             return existingOfficial;
         }
 
         EvidencePanelUI prefabInstance = InstantiateNotebookPrefab();
         if (prefabInstance != null)
         {
+            if (persistentInstance == null)
+            {
+                persistentInstance = prefabInstance;
+            }
+
             return prefabInstance;
         }
 

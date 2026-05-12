@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -8,6 +6,7 @@ using TMPro;
 public class MainMenuManager : MonoBehaviour
 {
     public Button startButton;
+    public Button continueButton;
     public Button quitButton;
     [SerializeField] private string startSceneName = SceneLoader.SCENE_TRAIN_CORRIDOR;
 
@@ -21,9 +20,18 @@ public class MainMenuManager : MonoBehaviour
         }
         else
         {
-            // 防止重复绑定
             startButton.onClick.RemoveListener(OnStartClick);
             startButton.onClick.AddListener(OnStartClick);
+        }
+
+        if (continueButton == null)
+        {
+            Debug.LogWarning("MainMenuManager: 未找到继续按钮，可在 Canvas 上添加名为 Continue/继续 的按钮并绑定 continueButton。");
+        }
+        else
+        {
+            continueButton.onClick.RemoveListener(OnContinueClick);
+            continueButton.onClick.AddListener(OnContinueClick);
         }
 
         if (quitButton == null)
@@ -39,14 +47,74 @@ public class MainMenuManager : MonoBehaviour
 
     public void OnStartClick()
     {
+        Canvas canvas = FindObjectOfType<Canvas>();
+        if (canvas == null)
+        {
+            Debug.LogError("MainMenuManager: 找不到 Canvas，无法显示存档槽。");
+            return;
+        }
+
+        SaveSlotModalUI.Show(
+            canvas.transform,
+            SaveSlotModalUI.PickMode.NewGame,
+            OnNewGameSlotPicked,
+            null);
+    }
+
+    public void OnContinueClick()
+    {
+        Canvas canvas = FindObjectOfType<Canvas>();
+        if (canvas == null)
+        {
+            Debug.LogError("MainMenuManager: 找不到 Canvas。");
+            return;
+        }
+
+        SaveSlotModalUI.Show(
+            canvas.transform,
+            SaveSlotModalUI.PickMode.Continue,
+            OnContinueSlotPicked,
+            null);
+    }
+
+    private void OnNewGameSlotPicked(int slot)
+    {
+        GameSaveService.DeleteSlot(slot);
+        GameSaveService.ResetAllProgressForNewGame();
+        GameSaveService.ActiveSaveSlot = slot;
+        GameResumeCoordinator.PendingResume = null;
+        GameResumeCoordinator.SuppressOpeningFlowOnce = false;
+
         if (SceneLoader.Instance != null)
         {
             SceneLoader.Instance.LoadScene(startSceneName);
         }
         else
         {
-            // 兜底：即使 SceneLoader 没挂载，也可进入车厢场景
             SceneManager.LoadScene(startSceneName);
+        }
+    }
+
+    private void OnContinueSlotPicked(int slot)
+    {
+        SaveGameData data = GameSaveService.TryLoadSlot(slot);
+        if (data == null)
+        {
+            Debug.LogWarning($"MainMenuManager: 槽位 {slot + 1} 没有存档。");
+            return;
+        }
+
+        GameSaveService.ActiveSaveSlot = slot;
+        GameResumeCoordinator.PendingResume = data;
+        GameResumeCoordinator.SuppressOpeningFlowOnce = false;
+
+        if (SceneLoader.Instance != null)
+        {
+            SceneLoader.Instance.LoadScene(data.activeSceneName);
+        }
+        else
+        {
+            SceneManager.LoadScene(data.activeSceneName);
         }
     }
 
@@ -61,11 +129,6 @@ public class MainMenuManager : MonoBehaviour
 
     void AutoBindButtonsIfNeeded()
     {
-        if (startButton != null && quitButton != null)
-        {
-            return;
-        }
-
         Button[] buttons = FindObjectsOfType<Button>(true);
         foreach (Button btn in buttons)
         {
@@ -85,10 +148,15 @@ public class MainMenuManager : MonoBehaviour
 
             bool isStart = objName.Contains("start") || labelText.Contains("开始");
             bool isQuit = objName.Contains("quit") || objName.Contains("exit") || labelText.Contains("退出");
+            bool isContinue = objName.Contains("continue") || labelText.Contains("继续");
 
             if (startButton == null && isStart)
             {
                 startButton = btn;
+            }
+            else if (continueButton == null && isContinue)
+            {
+                continueButton = btn;
             }
             else if (quitButton == null && isQuit)
             {

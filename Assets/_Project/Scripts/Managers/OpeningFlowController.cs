@@ -10,6 +10,13 @@ public class OpeningFlowController : MonoBehaviour
 
     void Start()
     {
+        if (GameResumeCoordinator.SuppressOpeningFlowOnce)
+        {
+            GameResumeCoordinator.SuppressOpeningFlowOnce = false;
+            hasStarted = true;
+            return;
+        }
+
         if (!autoStartOnSceneLoaded || hasStarted)
         {
             return;

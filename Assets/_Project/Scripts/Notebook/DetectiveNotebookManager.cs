@@ -881,4 +881,88 @@ public class DetectiveNotebookManager : MonoBehaviour
             OnNotebookUpdated.Invoke();
         }
     }
+
+    public NotebookRuntimeState CaptureRuntimeState()
+    {
+        NotebookRuntimeState snapshot = new NotebookRuntimeState();
+        CopyStatesToList(evidenceStates, snapshot.evidenceStates);
+        CopyStatesToList(testimonyStates, snapshot.testimonyStates);
+        CopyStatesToList(doubtStates, snapshot.doubtStates);
+        return snapshot;
+    }
+
+    public void RestoreRuntimeState(NotebookRuntimeState snapshot)
+    {
+        if (snapshot == null)
+        {
+            ResetAllNotebookProgress();
+            return;
+        }
+
+        evidenceStates.Clear();
+        testimonyStates.Clear();
+        doubtStates.Clear();
+
+        RestoreStatesFromList(snapshot.evidenceStates, evidenceStates);
+        RestoreStatesFromList(snapshot.testimonyStates, testimonyStates);
+        RestoreStatesFromList(snapshot.doubtStates, doubtStates);
+
+        OnNotebookUpdated?.Invoke();
+    }
+
+    public void ResetAllNotebookProgress()
+    {
+        evidenceStates.Clear();
+        testimonyStates.Clear();
+        doubtStates.Clear();
+        OnNotebookUpdated?.Invoke();
+    }
+
+    private static void CopyStatesToList(
+        Dictionary<string, NotebookItemState> source,
+        List<NotebookItemState> destination)
+    {
+        destination.Clear();
+        if (source == null)
+        {
+            return;
+        }
+
+        foreach (KeyValuePair<string, NotebookItemState> pair in source)
+        {
+            if (pair.Value == null || !pair.Value.unlocked)
+            {
+                continue;
+            }
+
+            destination.Add(new NotebookItemState
+            {
+                itemId = pair.Value.itemId,
+                unlocked = pair.Value.unlocked,
+                currentStageId = pair.Value.currentStageId ?? string.Empty
+            });
+        }
+    }
+
+    private static void RestoreStatesFromList(
+        List<NotebookItemState> source,
+        Dictionary<string, NotebookItemState> destination)
+    {
+        if (source == null)
+        {
+            return;
+        }
+
+        foreach (NotebookItemState entry in source)
+        {
+            if (entry == null || string.IsNullOrEmpty(entry.itemId) || !entry.unlocked)
+            {
+                continue;
+            }
+
+            NotebookItemState state = GetOrCreateState(entry.itemId, destination);
+            state.unlocked = true;
+            state.currentStageId = entry.currentStageId ?? string.Empty;
+        }
+    }
 }

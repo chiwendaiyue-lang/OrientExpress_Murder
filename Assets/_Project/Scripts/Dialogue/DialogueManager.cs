@@ -51,6 +51,36 @@ public class DialogueManager : MonoBehaviour
 
     private NotebookRewards pendingDeferredNotebookRewards;
 
+    private string currentDialogueResourceId = string.Empty;
+
+    public string GetCurrentDialogueResourceId()
+    {
+        return currentDialogueResourceId ?? string.Empty;
+    }
+
+    public string GetCurrentNodeId()
+    {
+        return currentNodeId ?? string.Empty;
+    }
+
+    public bool IsDialogueUiActive()
+    {
+        return dialoguePanel != null && dialoguePanel.activeSelf;
+    }
+
+    public NotebookRewards GetPendingDeferredNotebookRewards()
+    {
+        return pendingDeferredNotebookRewards;
+    }
+
+    public void ForceEndDialogueIfAny()
+    {
+        if (dialoguePanel != null && dialoguePanel.activeSelf)
+        {
+            EndDialogue();
+        }
+    }
+
     void Awake()
     {
         Instance = this;
@@ -87,6 +117,11 @@ public class DialogueManager : MonoBehaviour
             return;
         }
 
+        if (InGamePauseMenuController.IsBlockingGameInput())
+        {
+            return;
+        }
+
         if (waitMouseReleaseAfterEnter)
         {
             if (!Input.GetMouseButton(0) && !Input.GetMouseButton(1))
@@ -117,6 +152,22 @@ public class DialogueManager : MonoBehaviour
 
     public void StartDialogue(string characterId)
     {
+        StartDialogueInternal(characterId, null);
+    }
+
+    /// <param name="restoredPendingRewards">读档时恢复未收录的延迟奖励；平常传 null。</param>
+    public void StartDialogueAtNode(string characterId, string nodeId, NotebookRewards restoredPendingRewards = null)
+    {
+        StartDialogueInternal(characterId, string.IsNullOrEmpty(nodeId) ? null : nodeId);
+        if (restoredPendingRewards != null && NotebookRewardsHasAny(restoredPendingRewards))
+        {
+            pendingDeferredNotebookRewards = restoredPendingRewards;
+            RefreshDialogueBodyForDeferredHints();
+        }
+    }
+
+    private void StartDialogueInternal(string characterId, string overrideStartNodeId)
+    {
         if (!ValidateUIBindings())
         {
             return;
@@ -144,8 +195,12 @@ public class DialogueManager : MonoBehaviour
         }
 
         currentDialogue.BuildLookup();
-        currentNodeId = currentDialogue.startNodeId;
+        currentDialogueResourceId = characterId ?? string.Empty;
         AbandonPendingDeferredNotebookRewards();
+
+        currentNodeId = string.IsNullOrEmpty(overrideStartNodeId)
+            ? currentDialogue.startNodeId
+            : overrideStartNodeId;
 
         if (currentDialogue.nodeLookup == null || !currentDialogue.nodeLookup.ContainsKey(currentNodeId))
         {
@@ -191,7 +246,8 @@ public class DialogueManager : MonoBehaviour
         }
 
         speakerNameText.text = GetDisplaySpeakerName(node);
-        dialogueText.text = BuildDialogueDisplayText(node, deferNotebook);
+        bool showPickupHintRow = pendingDeferredNotebookRewards != null;
+        dialogueText.text = BuildDialogueDisplayText(node, deferNotebook, showPickupHintRow);
         ApplyFontIfNeeded(speakerNameText);
         ApplyFontIfNeeded(dialogueText);
         ApplyPresentedImage(node.presentedImage);
@@ -839,11 +895,33 @@ public class DialogueManager : MonoBehaviour
         return deferNotebookRewardsByDefaultWhenRewardsPresent;
     }
 
-    private string BuildDialogueDisplayText(DialogueNode node, bool deferNotebook)
+    private void RefreshDialogueBodyForDeferredHints()
+    {
+        if (dialogueText == null || currentDialogue == null || currentDialogue.nodeLookup == null)
+        {
+            return;
+        }
+
+        if (!currentDialogue.nodeLookup.TryGetValue(currentNodeId, out DialogueNode node))
+        {
+            return;
+        }
+
+        bool noticeHotspotNav = IsNoticeNode(node)
+            && node.hotspots != null
+            && node.hotspots.Count > 0;
+        bool ruleDefer = ShouldDeferNotebookRewards(node) && !noticeHotspotNav;
+        bool showPickupHintRow = pendingDeferredNotebookRewards != null;
+        speakerNameText.text = GetDisplaySpeakerName(node);
+        dialogueText.text = BuildDialogueDisplayText(node, ruleDefer, showPickupHintRow);
+        ApplyFontIfNeeded(dialogueText);
+    }
+
+    private string BuildDialogueDisplayText(DialogueNode node, bool wrapHighlightPhrase, bool showPickupHintRow)
     {
         string raw = GetDisplayText(node) ?? string.Empty;
 
-        if (deferNotebook && !string.IsNullOrEmpty(node.dialogueHighlightPhrase))
+        if (wrapHighlightPhrase && !string.IsNullOrEmpty(node.dialogueHighlightPhrase))
         {
             string phrase = node.dialogueHighlightPhrase;
             int idx = raw.IndexOf(phrase, StringComparison.Ordinal);
@@ -853,7 +931,7 @@ public class DialogueManager : MonoBehaviour
             }
         }
 
-        if (deferNotebook)
+        if (showPickupHintRow)
         {
             string hintLine;
             if (string.IsNullOrWhiteSpace(node.dialogueRewardInteractHint))
@@ -900,6 +978,7 @@ public class DialogueManager : MonoBehaviour
         }
 
         pendingDeferredNotebookRewards = null;
+        RefreshDialogueBodyForDeferredHints();
     }
 
     private void AbandonPendingDeferredNotebookRewards()
