@@ -16,6 +16,11 @@
               "slotId": "right",
               "characterId": "ratchett",
               "portrait": "ratchett_neutral"
+            },
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
             }
           ]
         },
@@ -295,7 +300,8 @@
         "nextNodeId": "node15",
         "rewards": {
           "doubtToAdd": [
-            "ratchett_enemy"
+            "ratchett_enemy",
+            "armstrong_case_connection"
           ]
         },
         "options": []

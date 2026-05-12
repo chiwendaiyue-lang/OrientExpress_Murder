@@ -29,7 +29,11 @@ public class EvidenceSlotUI : MonoBehaviour
 
     private void ApplyDisplay()
     {
-        EnsureTextBindings();
+        bool showText = itemTab != EvidencePanelUI.EvidenceTab.Physical;
+        if (showText)
+        {
+            EnsureTextBindings();
+        }
         ConfigureLayoutForPreview();
 
         DetectiveNotebookManager notebook = DetectiveNotebookManager.EnsureInstance();
@@ -69,13 +73,30 @@ public class EvidenceSlotUI : MonoBehaviour
             }
         }
 
-        if (previewText != null && previewText != titleText)
+        if (!showText)
         {
+            if (titleText != null)
+            {
+                titleText.text = string.Empty;
+                titleText.gameObject.SetActive(false);
+            }
+
+            if (previewText != null && previewText != titleText)
+            {
+                previewText.text = string.Empty;
+                previewText.gameObject.SetActive(false);
+            }
+        }
+        else if (previewText != null && previewText != titleText)
+        {
+            titleText.gameObject.SetActive(true);
+            previewText.gameObject.SetActive(true);
             titleText.text = title;
             previewText.text = preview;
         }
         else if (titleText != null)
         {
+            titleText.gameObject.SetActive(true);
             titleText.richText = true;
             titleText.text = string.IsNullOrEmpty(preview)
                 ? title
