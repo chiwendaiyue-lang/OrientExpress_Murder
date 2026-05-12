@@ -38,6 +38,7 @@ public class EvidencePanelUI : MonoBehaviour
     public Transform testimonyList;
     public Transform leftDoubtList;
     public Transform rightDoubtList;
+    public GameObject physicalDetailPanel;
     public TMP_Text clueDetailText;
     public Image clueDetailIcon;
 
@@ -411,6 +412,11 @@ public class EvidencePanelUI : MonoBehaviour
             }
         }
 
+        if (physicalDetailPanel == null)
+        {
+            physicalDetailPanel = FindChildGameObject("DetailPanel");
+        }
+
         if (evidenceSlotPrefab == null)
         {
             Debug.LogWarning("EvidencePanelUI: evidenceSlotPrefab 未指定，请在 Prefab 上拖入 EvidenceSlot.prefab。");
@@ -595,15 +601,10 @@ public class EvidencePanelUI : MonoBehaviour
         if (normalizedTab == EvidenceTab.Physical)
         {
             ShowEvidenceDetail(itemId);
+            return;
         }
-        else if (normalizedTab == EvidenceTab.Testimony)
-        {
-            ShowTestimonyDetail(itemId);
-        }
-        else
-        {
-            ShowDoubtDetail(itemId);
-        }
+
+        HideClueDetail();
     }
 
     private void SetTab(EvidenceTab tab)
@@ -655,6 +656,8 @@ public class EvidencePanelUI : MonoBehaviour
 
     private void ShowEvidenceDetail(string itemId)
     {
+        TrySetPhysicalDetailPanelActive(true);
+
         PhysicalEvidenceDefinition item = notebookManager.GetCurrentEvidence(itemId);
         if (clueDetailText != null)
         {
@@ -789,6 +792,8 @@ public class EvidencePanelUI : MonoBehaviour
 
     private void HideClueDetail()
     {
+        TrySetPhysicalDetailPanelActive(false);
+
         if (clueDetailText != null)
         {
             clueDetailText.text = "";
@@ -1036,9 +1041,10 @@ public class EvidencePanelUI : MonoBehaviour
             doubtPanel.SetActive(false);
         }
 
+        bool hasDetailText = clueDetailText != null && !string.IsNullOrEmpty(clueDetailText.text);
         if (clueDetailText != null)
         {
-            clueDetailText.gameObject.SetActive(!string.IsNullOrEmpty(clueDetailText.text));
+            clueDetailText.gameObject.SetActive(hasDetailText);
         }
 
         if (clueDetailIcon != null)
@@ -1046,6 +1052,11 @@ public class EvidencePanelUI : MonoBehaviour
             bool hasIcon = clueDetailIcon.sprite != null;
             clueDetailIcon.enabled = hasIcon;
             clueDetailIcon.gameObject.SetActive(hasIcon);
+            TrySetPhysicalDetailPanelActive(hasDetailText || hasIcon);
+        }
+        else
+        {
+            TrySetPhysicalDetailPanelActive(hasDetailText);
         }
 
         if (notebookManager == null || evidenceContainer == null)
@@ -1083,6 +1094,47 @@ public class EvidencePanelUI : MonoBehaviour
         }
     }
 
+    private GameObject ResolvePhysicalDetailPanel()
+    {
+        try
+        {
+            if (physicalDetailPanel != null)
+            {
+                return physicalDetailPanel;
+            }
+        }
+        catch (MissingReferenceException)
+        {
+            physicalDetailPanel = null;
+        }
+
+        physicalDetailPanel = FindChildGameObject("DetailPanel");
+        return physicalDetailPanel;
+    }
+
+    private void TrySetPhysicalDetailPanelActive(bool active)
+    {
+        GameObject detailPanel = ResolvePhysicalDetailPanel();
+        if (detailPanel == null)
+        {
+            return;
+        }
+
+        try
+        {
+            detailPanel.SetActive(active);
+        }
+        catch (MissingReferenceException)
+        {
+            physicalDetailPanel = null;
+            detailPanel = ResolvePhysicalDetailPanel();
+            if (detailPanel != null)
+            {
+                detailPanel.SetActive(active);
+            }
+        }
+    }
+
     private void RefreshTestimonyPanel()
     {
         if (testimonyPanel == null || testimonyCharacterList == null || testimonyList == null)
@@ -1103,6 +1155,7 @@ public class EvidencePanelUI : MonoBehaviour
         }
 
         HideClueDetail();
+        EnsureTestimonyListUsesVerticalLayout();
 
         foreach (Transform child in testimonyCharacterList)
         {
@@ -1163,6 +1216,39 @@ public class EvidencePanelUI : MonoBehaviour
         {
             CreateTestimonyCard(testimony);
         }
+    }
+
+    private void EnsureTestimonyListUsesVerticalLayout()
+    {
+        if (testimonyList == null)
+        {
+            return;
+        }
+
+        GridLayoutGroup grid = testimonyList.GetComponent<GridLayoutGroup>();
+        VerticalLayoutGroup vertical = testimonyList.GetComponent<VerticalLayoutGroup>();
+        if (vertical == null && grid != null)
+        {
+            DestroyImmediate(grid);
+        }
+
+        if (vertical == null)
+        {
+            vertical = testimonyList.gameObject.AddComponent<VerticalLayoutGroup>();
+        }
+
+        if (vertical == null)
+        {
+            return;
+        }
+
+        vertical.spacing = 14f;
+        vertical.padding = new RectOffset(8, 8, 8, 8);
+        vertical.childAlignment = TextAnchor.UpperLeft;
+        vertical.childControlWidth = true;
+        vertical.childControlHeight = true;
+        vertical.childForceExpandWidth = true;
+        vertical.childForceExpandHeight = false;
     }
 
     private void RefreshDoubtPanel()
@@ -1318,7 +1404,7 @@ public class EvidencePanelUI : MonoBehaviour
         characterFitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
         characterFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
-        GameObject testimonyListObject = CreateLayoutContainer("TestimonyList", panel, new Vector2(0.32f, 0.04f), new Vector2(0.98f, 0.96f));
+        GameObject testimonyListObject = CreateLayoutContainer("TestimonyList", panel, new Vector2(0.30f, 0.04f), new Vector2(0.98f, 0.96f));
         VerticalLayoutGroup testimonyLayout = testimonyListObject.AddComponent<VerticalLayoutGroup>();
         testimonyLayout.spacing = 12f;
         testimonyLayout.padding = new RectOffset(8, 8, 8, 8);
@@ -1375,7 +1461,12 @@ public class EvidencePanelUI : MonoBehaviour
         rect.offsetMax = Vector2.zero;
 
         Image image = container.GetComponent<Image>();
-        image.color = generatedPanelColor;
+        bool useTransparentBackground =
+            name == "CharacterList" ||
+            name == "TestimonyList" ||
+            name == "LeftDoubtList" ||
+            name == "RightDoubtList";
+        image.color = useTransparentBackground ? new Color(1f, 1f, 1f, 0f) : generatedPanelColor;
         image.raycastTarget = true;
         return container;
     }
@@ -1451,9 +1542,12 @@ public class EvidencePanelUI : MonoBehaviour
 
         Image image = buttonObject.GetComponent<Image>();
         image.color = selected ? generatedSelectedColor : generatedPanelColor;
-        Outline outline = buttonObject.AddComponent<Outline>();
-        outline.effectColor = generatedOutlineColor;
-        outline.effectDistance = new Vector2(2f, -2f);
+        if (selected)
+        {
+            Outline outline = buttonObject.AddComponent<Outline>();
+            outline.effectColor = generatedOutlineColor;
+            outline.effectDistance = new Vector2(2f, -2f);
+        }
 
         LayoutElement layout = buttonObject.GetComponent<LayoutElement>();
         layout.preferredHeight = 74f;
@@ -1471,11 +1565,12 @@ public class EvidencePanelUI : MonoBehaviour
         labelObject.transform.SetParent(buttonObject.transform, false);
         TextMeshProUGUI label = labelObject.GetComponent<TextMeshProUGUI>();
         ApplyGeneratedTextStyle(label);
-        label.text = $"{character.displayName}\n<size=60%>{character.role}</size>";
+        label.fontSize = 28f;
+        label.text = $"<b>{character.displayName}</b>\n<size=60%>{character.role}</size>";
         label.color = generatedTextColor;
         label.alignment = TextAlignmentOptions.MidlineLeft;
         label.enableWordWrapping = false;
-        label.margin = new Vector4(18f, 8f, 12f, 8f);
+        label.margin = new Vector4(18f, 18f, 12f, 8f);
 
         RectTransform labelRect = label.rectTransform;
         labelRect.anchorMin = Vector2.zero;
@@ -1496,8 +1591,9 @@ public class EvidencePanelUI : MonoBehaviour
         outline.effectDistance = new Vector2(1.5f, -1.5f);
 
         LayoutElement layout = cardObject.GetComponent<LayoutElement>();
-        layout.preferredHeight = testimonyCardHeight.y;
+        layout.minHeight = testimonyCardHeight.y;
         layout.flexibleWidth = 1f;
+        layout.flexibleHeight = 0f;
 
         GameObject accentObject = new GameObject("Accent", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
         accentObject.transform.SetParent(cardObject.transform, false);
@@ -1524,6 +1620,13 @@ public class EvidencePanelUI : MonoBehaviour
         textRect.anchorMax = Vector2.one;
         textRect.offsetMin = Vector2.zero;
         textRect.offsetMax = Vector2.zero;
+
+        RectTransform testimonyListRect = testimonyList as RectTransform;
+        float availableWidth = testimonyListRect != null && testimonyListRect.rect.width > 0f
+            ? testimonyListRect.rect.width - 56f
+            : 560f;
+        float preferredTextHeight = text.GetPreferredValues(text.text, availableWidth, 0f).y;
+        layout.preferredHeight = Mathf.Max(testimonyCardHeight.y, preferredTextHeight + 24f);
     }
 
     private void CreateDoubtButton(Transform parent, string doubtId, bool selected)
@@ -1536,9 +1639,12 @@ public class EvidencePanelUI : MonoBehaviour
 
         Image image = buttonObject.GetComponent<Image>();
         image.color = selected ? generatedSelectedColor : generatedPanelColor;
-        Outline outline = buttonObject.AddComponent<Outline>();
-        outline.effectColor = generatedOutlineColor;
-        outline.effectDistance = new Vector2(2f, -2f);
+        if (selected)
+        {
+            Outline outline = buttonObject.AddComponent<Outline>();
+            outline.effectColor = generatedOutlineColor;
+            outline.effectDistance = new Vector2(2f, -2f);
+        }
 
         LayoutElement layout = buttonObject.GetComponent<LayoutElement>();
         layout.preferredHeight = doubtItemHeight.y;
@@ -1555,7 +1661,7 @@ public class EvidencePanelUI : MonoBehaviour
         textObject.transform.SetParent(buttonObject.transform, false);
         TextMeshProUGUI text = textObject.GetComponent<TextMeshProUGUI>();
         ApplyGeneratedTextStyle(text);
-        text.text = display;
+        text.text = $"<b>{display}</b>";
         text.color = generatedTextColor;
         text.alignment = TextAlignmentOptions.MidlineLeft;
         text.enableWordWrapping = true;
