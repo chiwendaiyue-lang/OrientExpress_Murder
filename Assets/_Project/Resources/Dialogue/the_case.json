@@ -1,0 +1,923 @@
+{
+  "sceneId": "crime_scene",
+  "startNodeId": "node1",
+  "nodes": [
+    {
+      "id": "node1",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "还有其他信息吗",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextNodeId": "node2"
+      }
+    },
+    {
+      "id": "node2",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "bouc",
+        "speakerName": "鲍克",
+        "text": "当然，康斯坦丁大夫──我忘了，我还没有给你介绍──康斯坦丁大夫，波洛先生。",
+        "stage": {
+          "focusCharacterId": "doctor",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextNodeId": "node3"
+      }
+    },
+    {
+      "id": "node3",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "doctor",
+        "speakerName": "大夫",
+        "text": "你好。",
+        "stage": {
+          "focusCharacterId": "doctor",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextNodeId": "node4"
+      }
+    },
+    {
+      "id": "node4",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "你好，大夫，你一定有什么发现。",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextNodeId": "node5"
+      }
+    },
+    {
+      "id": "node5",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "doctor",
+        "speakerName": "大夫",
+        "text": "我可以明确地说，死亡发生在半夜十二点到凌晨两点之间。",
+        "stage": {
+          "focusCharacterId": "doctor",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "rewards": {
+          "testimonyToAdd": [
+            "death_window"
+          ]
+        },
+        "nextNodeId": "node6"
+      }
+    },
+    {
+      "id": "node6",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "我有几个问题。",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        },
+        "options": [
+          {
+            "text": "最后看到这位雷切特先生还活着，是在什么时候？",
+            "nextNodeId": "node7"
+          },
+          {
+            "text": "我们什么时候陷入雪堆的？",
+            "nextNodeId": "node11"
+          },
+          {
+            "text": "你们是什么时候发现他死了的？",
+            "nextNodeId": "node13"
+          },
+          {
+            "text": "没有别的问题了",
+            "nextNodeId": "node26"
+          }
+        ]
+      }
+    },
+    {
+      "id": "node7",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "最后看到这位雷切特先生还活着，是在什么时候？",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        },
+        "nextNodeId": "node8"
+      }
+    },
+    {
+      "id": "node8",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "bouc",
+        "speakerName": "鲍克",
+        "text": "据说在一点差二十分左右，他还活着，当时他和列车员说过话。",
+        "stage": {
+          "focusCharacterId": "bouc",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "bouc",
+              "portrait": "bouc_serious"
+            }
+          ]
+        },
+        "nextNodeId": "node9"
+      }
+    },
+    {
+      "id": "node9",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "嗯，这个情况我亲自听到过，之后就没有他的消息了吗？",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        },
+        "nextNodeId": "node10"
+      }
+    },
+    {
+      "id": "node10",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "doctor",
+        "speakerName": "大夫",
+        "text": "没了。",
+        "stage": {
+          "focusCharacterId": "doctor",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextNodeId": "node6"
+      }
+    },
+    {
+      "id": "node11",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "我们什么时候陷入雪堆的？",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        },
+        "nextNodeId": "node12"
+      }
+    },
+    {
+      "id": "node12",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "doctor",
+        "speakerName": "大夫",
+        "text": "在晚上十二点半的时候。",
+        "stage": {
+          "focusCharacterId": "doctor",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "rewards": {
+          "testimonyToAdd": [
+            "trapped_in_snow_time"
+          ]
+        },
+        "nextNodeId": "node6"
+      }
+    },
+    {
+      "id": "node13",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "你们是什么时候发现他死了的？",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        },
+        "nextNodeId": "node14"
+      }
+    },
+    {
+      "id": "node14",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "bouc",
+        "speakerName": "鲍克",
+        "text": "米歇尔！把发生的事情如实告诉这位先生。",
+        "stage": {
+          "focusCharacterId": "bouc",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "bouc",
+              "portrait": "bouc_serious"
+            }
+          ]
+        },
+        "nextNodeId": "node15"
+      }
+    },
+    {
+      "id": "node15",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "pierre",
+        "speakerName": "列车员皮埃尔",
+        "text": "雷切特先生的佣人，今天早上去敲了几次门。都没有答应。",
+        "stage": {
+          "focusCharacterId": "pierre",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "pierre",
+              "portrait": "pierre_anxious"
+            }
+          ]
+        },
+        "nextNodeId": "node16"
+      }
+    },
+    {
+      "id": "node16",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "pierre",
+        "speakerName": "列车员皮埃尔",
+        "text": "后来，也就是半小时以前，餐车侍者来了。他想要知道先生要不要午餐。这时候是十一点钟。",
+        "stage": {
+          "focusCharacterId": "pierre",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "pierre",
+              "portrait": "pierre_anxious"
+            }
+          ]
+        },
+        "nextNodeId": "node17"
+      }
+    },
+    {
+      "id": "node17",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "pierre",
+        "speakerName": "列车员皮埃尔",
+        "text": "我用我的钥匙为他开门。可是里面的链条搭上了，而且还上了锁。没有人答应，里面很静，很冷──可是很冷。窗开着，飘进了雪花。",
+        "stage": {
+          "focusCharacterId": "pierre",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "pierre",
+              "portrait": "pierre_anxious"
+            }
+          ]
+        },
+        "nextNodeId": "node18"
+      }
+    },
+    {
+      "id": "node18",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "pierre",
+        "speakerName": "列车员皮埃尔",
+        "text": "我想，也许先生晕过去了。我去叫来了列车长。我们敲开链条进去一看。他已经──啊！真可怕！",
+        "stage": {
+          "focusCharacterId": "pierre",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "pierre",
+              "portrait": "pierre_panicked"
+            }
+          ]
+        },
+        "nextNodeId": "node19"
+      }
+    },
+    {
+      "id": "node19",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "是锁着的，里面还用链条搭住，那么会不会是自杀？",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        },
+        "nextNodeId": "node20"
+      }
+    },
+    {
+      "id": "node20",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "doctor",
+        "speakerName": "大夫",
+        "text": "哼。",
+        "stage": {
+          "focusCharacterId": "doctor",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextNodeId": "node21"
+      }
+    },
+    {
+      "id": "node21",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "怎么？",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextNodeId": "node22"
+      }
+    },
+    {
+      "id": "node22",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "doctor",
+        "speakerName": "大夫",
+        "text": "有朝自己身上捅十几刀自杀的人吗？",
+        "stage": {
+          "focusCharacterId": "doctor",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextNodeId": "node23"
+      }
+    },
+    {
+      "id": "node23",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "看来，凶手很残忍。",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        },
+        "nextNodeId": "node24"
+      }
+    },
+    {
+      "id": "node24",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "doctor",
+        "speakerName": "大夫",
+        "text": "其中有一、两刀是戳得很有力的，戳穿了骨头和肌肉上坚硬的韧带。",
+        "stage": {
+          "focusCharacterId": "doctor",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextNodeId": "node25"
+      }
+    },
+    {
+      "id": "node25",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "doctor",
+        "speakerName": "大夫",
+        "text": "有几刀却只是一擦而过，几乎没什么损伤。这些刀好象都是乱戳的。",
+        "stage": {
+          "focusCharacterId": "doctor",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextNodeId": "node25a"
+      }
+    },
+    {
+      "id": "node25a",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "显然，这不是一种科学的作案。",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        },
+        "nextNodeId": "node6"
+      }
+    },
+    {
+      "id": "node26",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "system",
+        "speakerName": "系统",
+        "text": "鲍克不停地打量着你。",
+        "stage": {
+          "focusCharacterId": "bouc",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "bouc",
+              "portrait": "bouc_serious"
+            }
+          ]
+        },
+        "nextNodeId": "node27"
+      }
+    },
+    {
+      "id": "node27",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "bouc",
+        "speakerName": "鲍克",
+        "text": "我的朋友，你一定理解我即将请求你做的事。我知道你的才干。你来担任这一调查的指挥吧！",
+        "stage": {
+          "focusCharacterId": "bouc",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "bouc",
+              "portrait": "bouc_serious"
+            }
+          ]
+        },
+        "nextNodeId": "node28"
+      }
+    },
+    {
+      "id": "node28",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "bouc",
+        "speakerName": "鲍克",
+        "text": "现在列车困在南斯拉夫的境内，在南斯拉夫警察到来的时候，如果我们能找到凶手，那么清白无辜的人都不会被打扰，否则就会增加麻烦，增加数不清的麻烦。",
+        "stage": {
+          "focusCharacterId": "bouc",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "bouc",
+              "portrait": "bouc_serious"
+            }
+          ]
+        },
+        "nextNodeId": "node29"
+      }
+    },
+    {
+      "id": "node29",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "bouc",
+        "speakerName": "鲍克",
+        "text": "所以，我代表国际列车公司，希望你，大侦探波洛，帮我们查清真相。",
+        "stage": {
+          "focusCharacterId": "bouc",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "bouc",
+              "portrait": "bouc_serious"
+            }
+          ]
+        },
+        "nextNodeId": "node30"
+      }
+    },
+    {
+      "id": "node30",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "好吧，我会尽力的。",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        },
+        "nextNodeId": "node31"
+      }
+    },
+    {
+      "id": "node31",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "bouc",
+        "speakerName": "鲍克",
+        "text": "太好了！我们大家都听你的吩咐。",
+        "stage": {
+          "focusCharacterId": "bouc",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "bouc",
+              "portrait": "bouc_serious"
+            }
+          ]
+        },
+        "nextNodeId": "node32"
+      }
+    },
+    {
+      "id": "node32",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "嗯……列车上还有些什么旅客？",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        },
+        "nextNodeId": "node33"
+      }
+    },
+    {
+      "id": "node33",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "bouc",
+        "speakerName": "鲍克",
+        "text": "除了你知道的伊斯坦布尔──加来车厢，在这节车厢里，康斯坦丁大夫和我是仅有的旅客。",
+        "stage": {
+          "focusCharacterId": "bouc",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "bouc",
+              "portrait": "bouc_serious"
+            }
+          ]
+        },
+        "nextNodeId": "node34"
+      }
+    },
+    {
+      "id": "node34",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "bouc",
+        "speakerName": "鲍克",
+        "text": "后面是普通客车，可是那些车厢和我们无关，因为昨天晚上供应过晚餐以后，就都锁上了。伊斯坦布尔──加来车厢的前面，只有一节餐车。",
+        "stage": {
+          "focusCharacterId": "bouc",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "bouc",
+              "portrait": "bouc_serious"
+            }
+          ]
+        },
+        "nextNodeId": "node35"
+      }
+    },
+    {
+      "id": "node35",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "这么说来，在伊斯坦布尔──加来的车厢的乘客有很大的嫌疑。",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        },
+        "nextNodeId": "node36"
+      }
+    },
+    {
+      "id": "node36",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "bouc",
+        "speakerName": "鲍克",
+        "text": "凶手就在我们身边──现在还在车上……",
+        "stage": {
+          "focusCharacterId": "bouc",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "bouc",
+              "portrait": "bouc_serious"
+            }
+          ]
+        },
+        "nextNodeId": "node37"
+      }
+    },
+    {
+      "id": "node37",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "我需要查看一下现场。",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        },
+        "nextNodeId": "END"
+      }
+    }
+  ]
+}

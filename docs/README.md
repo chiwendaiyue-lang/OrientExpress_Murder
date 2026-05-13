@@ -102,6 +102,7 @@ MeetsRequirements(NotebookRequirements requirements)
   "id": "mrs_hubbard_man_in_room",
   "type": "testimony",
   "name": "房间里的男人",
+  "isConfirmed": false,
   "speakerCharacterId": "mrs_hubbard",
   "speakerName": "哈伯德太太",
   "summary": "哈伯德太太声称，昨夜有个男人进入过她的包厢。",
@@ -115,6 +116,7 @@ MeetsRequirements(NotebookRequirements requirements)
 规则：
 
 - 不使用 `reliability` 字段。
+- `isConfirmed` 表示该证词在获得当下是否已可视为确证事实，例如法医判断、调查者亲见、多人共同确认的发现过程。后续 UI 可直接显示“确证”标签。
 - 证词是否矛盾、是否被修正，写进后续 `summary` 更新里。
 - `topic` 暂时作为内部分类标签保留。
 
@@ -241,6 +243,26 @@ MeetsRequirements(NotebookRequirements requirements)
 - 只显示 `slots` 中列出的角色。
 - `slots` 为空表示清空舞台。
 - `focusCharacterId` 为空时，默认高亮当前说话人。
+
+默认补全规则：
+
+- 左侧默认放 `poirot`。
+- 如果当前 `speakerCharacterId` 是 `poirot`，右侧不放人物，只保留左侧 `poirot`。
+- 如果当前 `speakerCharacterId` 不是 `poirot`，右侧放当前说话人。
+- 没有特殊标注时，不额外引入第三人，只按“左波洛 / 右说话人”处理。
+
+立绘规则：
+
+- 左侧波洛使用波洛对应立绘。
+- 右侧人物使用该说话人的对应立绘。
+- 如果 `speakerCharacterId` 不等于立绘资源名，优先沿用项目中已出现过的命名模式。
+
+聚焦规则：
+
+- 默认 `focusCharacterId = speakerCharacterId`。
+- 特殊标注可以覆盖左右站位。
+- 特殊标注也可以覆盖聚焦对象。
+- 除特殊标注外，全部按默认规则处理。
 
 ### 展示图片 `presentedImage`
 

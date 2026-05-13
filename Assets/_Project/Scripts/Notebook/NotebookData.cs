@@ -55,6 +55,7 @@ public class TestimonyDefinition
     public string id;
     public string type;
     public string name;
+    public bool isConfirmed;
 
     /// <summary>弹窗摘要；空则用 summary / 原文等组合。</summary>
     public string unlockBrief;
