@@ -10,13 +10,46 @@ using UnityEditor;
 
 /// <summary>
 /// 游戏内设置：保存、退出主菜单、退出游戏；音量占位。
-/// 首次场景加载后即常驻 DontDestroyOnLoad；仅在非主菜单场景显示「设置」按钮。
-/// 也可在场景里手动放按钮并拖到 <see cref="settingsButton"/>；按 ESC 可打开/关闭设置面板。
-/// 设置界面优先从 Resources 路径 <c>UI/InGameSettingsOverlay</c> 加载 Prefab（根物体挂 <see cref="InGameSettingsOverlayView"/>）。
+/// 常驻 DontDestroyOnLoad；非主菜单场景会显示「设置」入口。
+/// <para><b>自定义设置按钮（推荐）</b>：在关卡 UI 的 Canvas 下放一个 <see cref="Button"/>，
+/// 在 Inspector 里调好 <see cref="RectTransform"/> 与 <see cref="Image.sprite"/>（背景图），
+/// 物体命名为 <c>InGameSettingsButton</c> 或 <c>Btn_InGameSettings</c>（或名称含 <c>设置</c>/<c>Settings</c>），
+/// 运行时即可自动绑定，且<b>不会</b>再生成代码里的占位按钮。</para>
+/// <para>也可在任意脚本的 <c>Awake</c>/<c>Start</c> 里调用
+/// <see cref="UseManualSettingsButton"/>，并设 <see cref="DisableAutoSpawnSettingsButton"/> 为 <c>true</c>，
+/// 表示完全由你提供按钮（未绑定时不再自动生成）。</para>
+/// <para>若存在 <c>Resources/UI/InGameSettingsButton</c> 预制体，且场景里尚未摆放同名按钮，则会<b>自动实例化</b>到当前游戏 Canvas（你在 Prefab 里摆好的 RectTransform / 图即可）。</para>
 /// </summary>
 public class InGamePauseMenuController : MonoBehaviour
 {
     public static InGamePauseMenuController Instance { get; private set; }
+
+    /// <summary>为 <c>true</c> 时，若未绑定任何设置按钮，则不再自动生成左上角占位按钮（便于纯手动布置）。</summary>
+    public static bool DisableAutoSpawnSettingsButton { get; set; }
+
+    private static Button s_PendingManualSettingsButton;
+
+    /// <summary>最近一次「应挂载关卡 HUD」的场景（来自 sceneLoaded 或当前 ActiveScene），供 <see cref="FindPreferredGameCanvas"/> 优先选择该场景内的 Canvas。</summary>
+    private static Scene s_PreferredHudCanvasScene;
+
+    /// <summary>
+    /// 由你的场景脚本显式指定设置按钮（可拖到 Inspector 再传入）。在 <see cref="Instance"/> 尚未创建时会排队，稍晚自动挂上。
+    /// </summary>
+    public static void UseManualSettingsButton(Button button)
+    {
+        if (button == null)
+        {
+            return;
+        }
+
+        if (Instance != null)
+        {
+            Instance.AssignAndWireSettingsButton(button);
+            return;
+        }
+
+        s_PendingManualSettingsButton = button;
+    }
 
     /// <summary>设置面板打开时，阻止对话等用 Input 监听左键的逻辑误触。</summary>
     public static bool IsBlockingGameInput()
@@ -25,6 +58,7 @@ public class InGamePauseMenuController : MonoBehaviour
     }
 
     private const string SettingsOverlayResourcesPath = "UI/InGameSettingsOverlay";
+    private const string SettingsEntryButtonResourcesPath = "UI/InGameSettingsButton";
 
     [Header("可选：在场景 Canvas 上绑定一个「设置」按钮")]
     [SerializeField] private Button settingsButton;
@@ -34,6 +68,7 @@ public class InGamePauseMenuController : MonoBehaviour
 
     private GameObject overlayRoot;
     private Coroutine saveFeedbackRoutine;
+    private GameObject customSettingsEntryRoot;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     private static void Bootstrap()
@@ -46,6 +81,7 @@ public class InGamePauseMenuController : MonoBehaviour
         GameObject go = new GameObject(nameof(InGamePauseMenuController));
         DontDestroyOnLoad(go);
         go.AddComponent<InGamePauseMenuController>();
+        Debug.LogWarning("[InGamePause] Bootstrap：已创建 DontDestroyOnLoad 上的 InGamePauseMenuController（用此条确认脚本已编译进当前运行）。");
     }
 
     private void Awake()
@@ -58,12 +94,14 @@ public class InGamePauseMenuController : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
+        ApplyPendingManualSettingsButton();
     }
 
     private void Start()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
-        RefreshForCurrentScene();
+        ApplyPendingManualSettingsButton();
+        RefreshForSceneContext(SceneManager.GetActiveScene());
     }
 
     private void Update()
@@ -103,7 +141,7 @@ public class InGamePauseMenuController : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         ClearRuntimeUiRefs();
-        RefreshForCurrentScene();
+        RefreshForSceneContext(scene);
     }
 
     private void ClearRuntimeUiRefs()
@@ -113,34 +151,189 @@ public class InGamePauseMenuController : MonoBehaviour
             settingsButton = null;
         }
 
+        if (settingsButton != null && !settingsButton)
+        {
+            settingsButton = null;
+        }
+
+        if (customSettingsEntryRoot != null && !customSettingsEntryRoot)
+        {
+            customSettingsEntryRoot = null;
+        }
+
         if (overlayRoot != null && !overlayRoot)
         {
             overlayRoot = null;
         }
     }
 
-    private void RefreshForCurrentScene()
+    /// <param name="contextScene">用 <see cref="SceneManager.sceneLoaded"/> 传入的「刚加载的场景」判断主菜单，避免加载体场景时 <see cref="SceneManager.GetActiveScene"/> 仍指向旧场景。</param>
+    private void RefreshForSceneContext(Scene contextScene)
     {
-        if (IsMainMenuScene())
+        Scene hudContext = contextScene.IsValid() ? contextScene : SceneManager.GetActiveScene();
+
+        if (!hudContext.IsValid() || IsMainMenuSceneName(hudContext.name))
         {
+            s_PreferredHudCanvasScene = default;
+            DestroyCustomInstantiatedSettingsEntryIfAny();
             DestroyRuntimeSettingsButtonIfAny();
+            // 主菜单 EventSystem 上的 Binder 可能把「预制体资源上的 Button」登记进来；该引用在切关卡后仍会“非空”，
+            // 但已不在任何加载场景中，会导致 TrainCorridor 误判已绑定而跳过实例化。
+            if (settingsButton != null)
+            {
+                settingsButton.onClick.RemoveListener(OpenSettingsOverlay);
+                settingsButton = null;
+            }
+
             if (overlayRoot != null && overlayRoot)
             {
                 overlayRoot.SetActive(false);
             }
 
+            Debug.LogWarning(
+                $"[InGamePause] Refresh：按主菜单或无效场景处理，已跳过关卡设置入口（scene='{hudContext.name}' valid={hudContext.IsValid()}）。");
             return;
         }
 
+        s_PreferredHudCanvasScene = hudContext;
+        InvalidateSettingsButtonIfNotInHudContext(hudContext);
+        Debug.LogWarning($"[InGamePause] Refresh：进入关卡分支（scene='{hudContext.name}'），将尝试绑定/实例化设置入口。");
         TryBindSettingsButton();
         EnsureFloatingSettingsButton();
+        DestroyOrphanRuntimeSettingsButtonIfUnused();
+        StartCoroutine(DeferEnsureHudIfNeeded());
+    }
+
+    /// <summary>
+    /// 清掉「预制体资源上的 Button」或「已卸载场景里」的绑定；否则会一直 <c>settingsButton != null</c>，关卡里误判已绑定而不再实例化。
+    /// </summary>
+    private void InvalidateSettingsButtonIfNotInHudContext(Scene hudContext)
+    {
+        if (settingsButton == null || !settingsButton)
+        {
+            settingsButton = null;
+            return;
+        }
+
+        Scene btnScene = settingsButton.gameObject.scene;
+        if (!btnScene.IsValid())
+        {
+            settingsButton.onClick.RemoveListener(OpenSettingsOverlay);
+            settingsButton = null;
+            return;
+        }
+
+        bool sameGameplay = hudContext.IsValid() && btnScene == hudContext;
+        bool ddol = string.Equals(btnScene.name, "DontDestroyOnLoad", StringComparison.Ordinal);
+        if (sameGameplay || ddol)
+        {
+            return;
+        }
+
+        settingsButton.onClick.RemoveListener(OpenSettingsOverlay);
+        settingsButton = null;
+    }
+
+    private IEnumerator DeferEnsureHudIfNeeded()
+    {
+        yield return null;
+        if (!s_PreferredHudCanvasScene.IsValid() || IsMainMenuSceneName(s_PreferredHudCanvasScene.name))
+        {
+            yield break;
+        }
+
+        if (IsMainMenuScene())
+        {
+            yield break;
+        }
+
+        if (settingsButton != null && settingsButton)
+        {
+            yield break;
+        }
+
+        InvalidateSettingsButtonIfNotInHudContext(s_PreferredHudCanvasScene);
+        TryBindSettingsButton();
+        EnsureFloatingSettingsButton();
+        DestroyOrphanRuntimeSettingsButtonIfUnused();
+    }
+
+    private void DestroyOrphanRuntimeSettingsButtonIfUnused()
+    {
+        GameObject found = GameObject.Find("RuntimeSettingsButton");
+        if (found == null)
+        {
+            return;
+        }
+
+        Button runtimeBtn = found.GetComponent<Button>();
+        if (runtimeBtn == null)
+        {
+            return;
+        }
+
+        if (settingsButton != null && settingsButton == runtimeBtn)
+        {
+            return;
+        }
+
+        Destroy(found);
+    }
+
+    private void ApplyPendingManualSettingsButton()
+    {
+        if (s_PendingManualSettingsButton == null)
+        {
+            return;
+        }
+
+        Button b = s_PendingManualSettingsButton;
+        s_PendingManualSettingsButton = null;
+        AssignAndWireSettingsButton(b);
+    }
+
+    private void AssignAndWireSettingsButton(Button button)
+    {
+        if (button == null)
+        {
+            return;
+        }
+
+        if (settingsButton != null && settingsButton != button)
+        {
+            settingsButton.onClick.RemoveListener(OpenSettingsOverlay);
+        }
+
+        // Button 在预制体根上与 customSettingsEntryRoot 为同一 Transform 时，IsChildOf(自身) 为 false，
+        // 不能误判为「外来按钮」而销毁刚实例化的 Resources 入口。
+        if (customSettingsEntryRoot != null && button != null && button.transform != null)
+        {
+            Transform ct = customSettingsEntryRoot.transform;
+            Transform bt = button.transform;
+            bool belongsToCustomEntry = bt == ct || bt.IsChildOf(ct);
+            if (!belongsToCustomEntry)
+            {
+                DestroyCustomInstantiatedSettingsEntryIfAny();
+            }
+        }
+
+        settingsButton = button;
+        DestroyRuntimeSettingsButtonIfAny();
+
+        settingsButton.onClick.RemoveListener(OpenSettingsOverlay);
+        settingsButton.onClick.AddListener(OpenSettingsOverlay);
+    }
+
+    private static bool IsMainMenuSceneName(string sceneName)
+    {
+        return !string.IsNullOrEmpty(sceneName)
+            && string.Equals(sceneName, SceneLoader.SCENE_MAIN_MENU, StringComparison.OrdinalIgnoreCase);
     }
 
     private static bool IsMainMenuScene()
     {
         Scene s = SceneManager.GetActiveScene();
-        return s.IsValid()
-            && string.Equals(s.name, SceneLoader.SCENE_MAIN_MENU, StringComparison.OrdinalIgnoreCase);
+        return s.IsValid() && IsMainMenuSceneName(s.name);
     }
 
     private void DestroyRuntimeSettingsButtonIfAny()
@@ -155,6 +348,34 @@ public class InGamePauseMenuController : MonoBehaviour
         {
             settingsButton = null;
         }
+    }
+
+    private void DestroyCustomInstantiatedSettingsEntryIfAny()
+    {
+        if (customSettingsEntryRoot == null)
+        {
+            return;
+        }
+
+        if (settingsButton != null
+            && settingsButton.transform != null
+            && customSettingsEntryRoot != null)
+        {
+            Transform st = settingsButton.transform;
+            Transform ct = customSettingsEntryRoot.transform;
+            if (st == ct || st.IsChildOf(ct))
+            {
+                settingsButton.onClick.RemoveListener(OpenSettingsOverlay);
+                settingsButton = null;
+            }
+        }
+
+        if (customSettingsEntryRoot)
+        {
+            Destroy(customSettingsEntryRoot);
+        }
+
+        customSettingsEntryRoot = null;
     }
 
     private void TryBindSettingsButton()
@@ -177,8 +398,19 @@ public class InGamePauseMenuController : MonoBehaviour
                 continue;
             }
 
+            Canvas btnCanvas = btn.GetComponentInParent<Canvas>(true);
+            if (!CanvasIsUsableForHud(btnCanvas))
+            {
+                continue;
+            }
+
+            if (string.Equals(btn.gameObject.name, "RuntimeSettingsButton", StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+
             string n = btn.gameObject.name.ToLowerInvariant();
-            if (n.Contains("setting") || n.Contains("设置"))
+            if (IsPreferredSettingsButtonName(n))
             {
                 settingsButton = btn;
                 break;
@@ -186,10 +418,150 @@ public class InGamePauseMenuController : MonoBehaviour
         }
     }
 
+    private static bool IsPreferredSettingsButtonName(string lowerName)
+    {
+        if (string.IsNullOrEmpty(lowerName))
+        {
+            return false;
+        }
+
+        // 代码生成的占位按钮名含 "settings"，必须排除，否则会永远绑到占位按钮上。
+        if (lowerName == "runtimesettingsbutton")
+        {
+            return false;
+        }
+
+        if (lowerName == "ingamesettingsbutton" || lowerName == "btn_ingamesettings")
+        {
+            return true;
+        }
+
+        if (lowerName.Contains("btn_settings") || lowerName.Contains("gamesettingsbutton"))
+        {
+            return true;
+        }
+
+        if (lowerName.Contains("setting") || lowerName.Contains("设置"))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// 在指定根节点下查找第一个符合「手动设置按钮」命名的 <see cref="Button"/>（不含代码占位、不含侦探笔记 UI）。
+    /// 供 <see cref="InGameSettingsButtonBinder"/> 等在未拖引用时自动绑定。
+    /// </summary>
+    public static Button FindPreferredSettingsButtonUnder(Transform root)
+    {
+        if (root == null)
+        {
+            return null;
+        }
+
+        foreach (Button btn in root.GetComponentsInChildren<Button>(true))
+        {
+            if (btn == null)
+            {
+                continue;
+            }
+
+            if (IsButtonUnderDetectiveNotebookUi(btn))
+            {
+                continue;
+            }
+
+            Canvas btnCanvas = btn.GetComponentInParent<Canvas>(true);
+            if (!CanvasIsUsableForHud(btnCanvas))
+            {
+                continue;
+            }
+
+            if (string.Equals(btn.gameObject.name, "RuntimeSettingsButton", StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+
+            string n = btn.gameObject.name.ToLowerInvariant();
+            if (IsPreferredSettingsButtonName(n))
+            {
+                return btn;
+            }
+        }
+
+        return null;
+    }
+
+    private void TryInstantiateCustomSettingsEntryFromResources()
+    {
+        if (customSettingsEntryRoot != null && customSettingsEntryRoot)
+        {
+            Button existing = customSettingsEntryRoot.GetComponent<Button>()
+                ?? customSettingsEntryRoot.GetComponentInChildren<Button>(true);
+            if (existing != null)
+            {
+                AssignAndWireSettingsButton(existing);
+                return;
+            }
+
+            Destroy(customSettingsEntryRoot);
+            customSettingsEntryRoot = null;
+        }
+
+        GameObject prefab = Resources.Load<GameObject>(SettingsEntryButtonResourcesPath);
+        if (prefab == null)
+        {
+            Debug.LogWarning(
+                $"[InGamePause] 未找到 Resources/{SettingsEntryButtonResourcesPath}，无法自动放置设置入口按钮。",
+                this);
+            return;
+        }
+
+        Canvas canvas = FindPreferredGameCanvas();
+        if (canvas == null)
+        {
+            Debug.LogWarning(
+                "[InGamePause] 未找到可用的游戏 UI Canvas（需 Screen Space、已激活、非侦探笔记/淡入淡出层，且 RectTransform 缩放不能为 0）。"
+                + " 请检查场景里主 Canvas 的 Scale 是否为 1。",
+                this);
+            return;
+        }
+
+        GameObject inst = Instantiate(prefab, canvas.transform, false);
+        inst.name = prefab.name;
+        customSettingsEntryRoot = inst;
+        inst.transform.SetAsLastSibling();
+
+        Button btn = inst.GetComponent<Button>() ?? inst.GetComponentInChildren<Button>(true);
+        if (btn == null)
+        {
+            Debug.LogWarning(
+                $"[InGamePause] Resources/{SettingsEntryButtonResourcesPath} 预制体上未找到 Button，已销毁实例。",
+                inst);
+            Destroy(inst);
+            customSettingsEntryRoot = null;
+            return;
+        }
+
+        foreach (Image img in inst.GetComponentsInChildren<Image>(true))
+        {
+            InGameSettingsOverlayView.EnsureSolidSprite(img);
+        }
+
+        AssignAndWireSettingsButton(btn);
+        Debug.LogWarning(
+            $"[InGamePause] 已从 Resources 实例化设置入口：父 Canvas「{canvas.name}」场景「{canvas.gameObject.scene.name}」，实例「{inst.name}」。",
+            inst);
+    }
+
     private void EnsureFloatingSettingsButton()
     {
         if (settingsButton != null)
         {
+            Debug.LogWarning(
+                $"[InGamePause] EnsureFloating：已存在设置按钮「{settingsButton.name}」，跳过 Resources 实例化与占位生成。",
+                settingsButton);
             if (settingsButton.name == "RuntimeSettingsButton")
             {
                 ReparentRuntimeSettingsButtonToPreferredCanvas();
@@ -200,9 +572,28 @@ public class InGamePauseMenuController : MonoBehaviour
             return;
         }
 
+        TryInstantiateCustomSettingsEntryFromResources();
+        if (settingsButton != null)
+        {
+            settingsButton.onClick.RemoveListener(OpenSettingsOverlay);
+            settingsButton.onClick.AddListener(OpenSettingsOverlay);
+            return;
+        }
+
+        if (DisableAutoSpawnSettingsButton)
+        {
+            Debug.LogWarning(
+                "[InGamePause] DisableAutoSpawnSettingsButton=true，且未绑定设置按钮：不会生成 RuntimeSettingsButton 占位。",
+                this);
+            return;
+        }
+
         Canvas canvas = FindPreferredGameCanvas();
         if (canvas == null)
         {
+            Debug.LogWarning(
+                "[InGamePause] 未找到可用 Canvas，无法生成左上角占位「设置」按钮。",
+                this);
             return;
         }
 
@@ -277,74 +668,93 @@ public class InGamePauseMenuController : MonoBehaviour
     private static Canvas FindPreferredGameCanvas()
     {
         Canvas[] canvases = FindObjectsOfType<Canvas>(true);
-        Canvas best = null;
-        int bestOrder = int.MinValue;
+        Scene primary = SceneManager.GetActiveScene();
+        if (s_PreferredHudCanvasScene.IsValid() && !IsMainMenuSceneName(s_PreferredHudCanvasScene.name))
+        {
+            primary = s_PreferredHudCanvasScene;
+        }
+
+        Canvas bestInPrimary = null;
+        int bestOrderInPrimary = int.MinValue;
         foreach (Canvas c in canvases)
         {
-            if (c == null || !c.isActiveAndEnabled || c.renderMode == RenderMode.WorldSpace)
+            if (!CanvasIsUsableForHud(c))
             {
                 continue;
             }
 
-            if (IsDetectiveNotebookCanvas(c))
+            if (!primary.IsValid() || c.gameObject.scene != primary)
             {
                 continue;
             }
 
-            if (IsScreenFaderCanvas(c))
+            if (c.sortingOrder >= bestOrderInPrimary)
             {
-                continue;
-            }
-
-            if (IsNotebookUnlockPresenterCanvas(c))
-            {
-                continue;
-            }
-
-            if (c.sortingOrder >= bestOrder)
-            {
-                best = c;
-                bestOrder = c.sortingOrder;
+                bestInPrimary = c;
+                bestOrderInPrimary = c.sortingOrder;
             }
         }
 
-        if (best != null)
+        if (bestInPrimary != null)
         {
-            return best;
+            return bestInPrimary;
         }
 
+        Canvas bestAny = null;
+        int bestOrderAny = int.MinValue;
         foreach (Canvas c in canvases)
         {
-            if (c == null || !c.isActiveAndEnabled || c.renderMode == RenderMode.WorldSpace)
+            if (!CanvasIsUsableForHud(c))
             {
                 continue;
             }
 
-            if (IsDetectiveNotebookCanvas(c))
+            if (c.sortingOrder >= bestOrderAny)
             {
-                continue;
+                bestAny = c;
+                bestOrderAny = c.sortingOrder;
             }
-
-            if (IsScreenFaderCanvas(c))
-            {
-                continue;
-            }
-
-            if (IsNotebookUnlockPresenterCanvas(c))
-            {
-                continue;
-            }
-
-            return c;
         }
 
-        return null;
+        return bestAny;
     }
 
-    /// <summary>侦探笔记根物体自带高 sorting 的 Canvas；不能把设置按钮或设置遮罩挂到该 Canvas 上，否则会盖住/抢占笔记入口按钮。</summary>
+    /// <summary>用于挂载 HUD 类 UI：排除笔记/淡入淡出层，且父级链须激活、Canvas 可用、整体缩放不能接近 0。</summary>
+    private static bool CanvasIsUsableForHud(Canvas canvas)
+    {
+        if (canvas == null || !canvas.enabled)
+        {
+            return false;
+        }
+
+        if (!canvas.gameObject.activeInHierarchy)
+        {
+            return false;
+        }
+
+        if (canvas.renderMode == RenderMode.WorldSpace)
+        {
+            return false;
+        }
+
+        if (IsDetectiveNotebookCanvas(canvas) || IsScreenFaderCanvas(canvas) || IsNotebookUnlockPresenterCanvas(canvas))
+        {
+            return false;
+        }
+
+        Vector3 s = canvas.transform.lossyScale;
+        if (s.sqrMagnitude < 1e-8f || Mathf.Abs(s.x * s.y * s.z) < 1e-8f)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>侦探笔记 UI 树内任意 Canvas（含子物体上的 Canvas）均不可挂 HUD。</summary>
     private static bool IsDetectiveNotebookCanvas(Canvas canvas)
     {
-        return canvas != null && canvas.GetComponent<EvidencePanelUI>() != null;
+        return canvas != null && canvas.GetComponentInParent<EvidencePanelUI>(true) != null;
     }
 
     private static bool IsScreenFaderCanvas(Canvas canvas)

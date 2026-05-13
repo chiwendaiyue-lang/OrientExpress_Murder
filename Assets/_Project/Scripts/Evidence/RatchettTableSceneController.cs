@@ -1,4 +1,3 @@
-using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -112,28 +111,11 @@ public class RatchettTableSceneController : MonoBehaviour
 
     private void ConfigureBackButton(GameObject buttonObject)
     {
-        RectTransform rect = buttonObject.GetComponent<RectTransform>();
-        if (rect != null)
-        {
-            rect.anchorMin = new Vector2(0f, 1f);
-            rect.anchorMax = new Vector2(0f, 1f);
-            rect.pivot = new Vector2(0f, 1f);
-            rect.anchoredPosition = new Vector2(24f, -24f);
-            rect.sizeDelta = new Vector2(120f, 48f);
-        }
-
+        // 布局、文案、颜色均以场景 / Prefab 为准；仅保证可点击。
         Image image = buttonObject.GetComponent<Image>();
         if (image != null)
         {
-            image.color = new Color(1f, 1f, 1f, 0.85f);
             image.raycastTarget = true;
-        }
-
-        TMP_Text text = buttonObject.GetComponentInChildren<TMP_Text>(true);
-        if (text != null)
-        {
-            text.text = "返回";
-            text.fontSize = 24f;
         }
     }
 
