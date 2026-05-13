@@ -390,8 +390,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 48
-  m_fontSizeBase: 48
+  m_fontSize: 50
+  m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -426,7 +426,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: -102.76901, w: -25.513}
+  m_margin: {x: 0, y: 0, z: 5.6350403, w: -0.21850586}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -778,6 +778,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cabinSceneName: CrimeScene
+  exhaustedHint: "\u6CA1\u6709\u4EC0\u4E48\u503C\u5F97\u6CE8\u610F\u7684\u4E86"
 --- !u!4 &493407297
 Transform:
   m_ObjectHideFlags: 0
@@ -950,8 +951,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -869.27344, y: 471.66187}
-  m_SizeDelta: {x: 117.6258, y: 69.9562}
+  m_AnchoredPosition: {x: -727, y: 450}
+  m_SizeDelta: {x: 146.7217, y: 97.0121}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1323135904
 MonoBehaviour:
@@ -1010,7 +1011,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.03137255}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
