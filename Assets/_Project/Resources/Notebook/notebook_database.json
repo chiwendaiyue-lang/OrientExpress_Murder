@@ -80,6 +80,27 @@
       "sortOrder": 30
     },
     {
+      "id": "doctor",
+      "displayName": "康斯坦丁大夫",
+      "role": "医生",
+      "portrait": "",
+      "sortOrder": 40
+    },
+    {
+      "id": "bouc",
+      "displayName": "鲍克",
+      "role": "国际列车公司董事",
+      "portrait": "",
+      "sortOrder": 50
+    },
+    {
+      "id": "pierre",
+      "displayName": "列车员皮埃尔",
+      "role": "列车员",
+      "portrait": "",
+      "sortOrder": 60
+    },
+    {
       "id": "unknown_voice",
       "displayName": "未知人物",
       "role": "待确认身份",
@@ -89,9 +110,38 @@
   ],
   "testimonies": [
     {
+      "id": "death_window",
+      "type": "testimony",
+      "name": "死亡时间判断",
+      "isConfirmed": true,
+      "unlockBrief": "康斯坦丁大夫确认，死者死于凌晨十二点到两点。",
+      "speakerCharacterId": "doctor",
+      "speakerName": "康斯坦丁大夫",
+      "summary": "康斯坦丁大夫依据尸体状况判断，雷切特死于半夜十二点到凌晨两点之间。",
+      "originalText": "我可以明确地说，死亡发生在半夜十二点到凌晨两点之间。",
+      "source": "案发现场初步询问",
+      "topic": "night_timeline",
+      "updates": []
+    },
+    {
+      "id": "trapped_in_snow_time",
+      "type": "testimony",
+      "name": "陷入雪堆时间",
+      "isConfirmed": true,
+      "unlockBrief": "据康斯坦丁大夫所说，列车在昨晚十二点半的时候陷入了雪堆。",
+      "speakerCharacterId": "doctor",
+      "speakerName": "大夫",
+      "summary": "列车在昨晚十二点半的时候陷入了雪堆。",
+      "originalText": "在晚上十二点半的时候。",
+      "source": "案发现场初步询问",
+      "topic": "night_timeline",
+      "updates": []
+    },
+    {
       "id": "french_answer",
       "type": "testimony",
       "name": "法语回答",
+      "isConfirmed": false,
       "unlockBrief": "列车员叩门时，屋内有人以法语称无事。",
       "speakerCharacterId": "unknown_voice",
       "speakerName": "未知男声",
@@ -105,6 +155,7 @@
       "id": "red_sleepwear_person",
       "type": "testimony",
       "name": "红睡衣人",
+      "isConfirmed": false,
       "unlockBrief": "夜里有人穿红色睡衣掠过过道。",
       "speakerCharacterId": "poirot",
       "speakerName": "波洛",
@@ -126,6 +177,7 @@
       "id": "macqueen_alibi",
       "type": "testimony",
       "name": "麦克昆的不在场证明",
+      "isConfirmed": false,
       "unlockBrief": "餐车后去雷切特区信，再与上校对饮至凌晨。",
       "speakerCharacterId": "macqueen",
       "speakerName": "麦克昆",
@@ -139,6 +191,7 @@
       "id": "mrs_hubbard_man_in_room",
       "type": "testimony",
       "name": "房间里的男人",
+      "isConfirmed": false,
       "unlockBrief": "哈伯德称有男人闯入包厢，按铃后人已不见。",
       "speakerCharacterId": "mrs_hubbard",
       "speakerName": "哈伯德太太",

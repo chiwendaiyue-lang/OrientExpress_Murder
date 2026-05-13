@@ -786,6 +786,7 @@ public class DetectiveNotebookManager : MonoBehaviour
             id = source.id,
             type = source.type,
             name = source.name,
+            isConfirmed = source.isConfirmed,
             unlockBrief = source.unlockBrief,
             speakerCharacterId = source.speakerCharacterId,
             speakerName = source.speakerName,

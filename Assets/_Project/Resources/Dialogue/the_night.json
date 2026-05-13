@@ -384,56 +384,11 @@
             }
           ]
         },
-        "nextNodeId": "node27"
-      }
-    },
-    {
-      "id": "node27",
-      "node": {
-        "nodeType": "dialogue",
-        "speakerCharacterId": "bouc",
-        "speakerName": "鲍克",
-        "text": "现在列车困在南斯拉夫的境内，在南斯拉夫警察到来的时候，如果我们能找到凶手，那就简单多了，否则就会拖延时间，增加麻烦，增加数不清的麻烦。",
-        "stage": {
-          "focusCharacterId": "bouc",
-          "slots": [
-            {
-              "slotId": "right",
-              "characterId": "bouc",
-              "portrait": "bouc_serious"
-            }
-          ]
-        },
-        "nextNodeId": "node28"
-      }
-    },
-    {
-      "id": "node28",
-      "node": {
-        "nodeType": "dialogue",
-        "speakerCharacterId": "bouc",
-        "speakerName": "鲍克",
-        "text": "所以，我代表国际列车公司，希望你，大侦探波洛，帮我们查清真相",
-        "stage": {
-          "focusCharacterId": "bouc",
-          "slots": [
-            {
-              "slotId": "right",
-              "characterId": "bouc",
-              "portrait": "bouc_serious"
-            }
-          ]
-        },
         "options": [
           {
-            "text": "包在我身上",
+            "text": "继续",
             "nextNodeId": "END",
-            "nextSceneName": "CrimeScene"
-          },
-          {
-            "text": "我会尽力的...",
-            "nextNodeId": "END",
-            "nextSceneName": "CrimeScene"
+            "nextDialogueId": "the_case"
           }
         ]
       }
