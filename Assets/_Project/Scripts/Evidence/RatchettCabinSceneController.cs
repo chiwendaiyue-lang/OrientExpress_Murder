@@ -5,51 +5,74 @@ using UnityEngine.UI;
 public class RatchettCabinSceneController : MonoBehaviour
 {
     [SerializeField] private string tableSceneName = SceneLoader.SCENE_RATCHETT_TABLE;
+    [SerializeField] private string windowSceneName = SceneLoader.SCENE_RATCHETT_WINDOW;
+    [SerializeField] private string bodySceneName = SceneLoader.SCENE_RATCHETT_BODY;
     [SerializeField] private string postInvestigationSceneName = SceneLoader.SCENE_TRAIN_CORRIDOR;
     [SerializeField] private string postInvestigationDialogueId = "mr_MacQueen";
     [SerializeField] private string exhaustedHint = "没有什么值得注意的了";
     [SerializeField] private string cannotLeaveHint = "好像还有什么值得注意的地方";
 
     [Header("场景热点（Hierarchy 中物体名，需带 Button）")]
-    [SerializeField] private string bodyHotspotObjectName = "Hotspot_Body_Button";
+    [SerializeField] private string bodyKnifeWoundHotspotObjectName = "Hotspot_Body1_Button";
+    [SerializeField] private string bodyCloseUpHotspotObjectName = "Hotspot_Body2_Button";
+    [SerializeField] private string windowHotspotObjectName = "Hotspot_Window_Button";
     [SerializeField] private string floorHotspotObjectName = "Hotspot_Floor_Button";
     [SerializeField] private string tableHotspotObjectName = "Hotspot_Table_Button";
-    [SerializeField] private string daggerHotspotObjectName = "Hotspot_Dagger_Button";
+    [SerializeField] private string pipeCleanerHotspotObjectName = "Hotspot_Dagger_Button";
     [SerializeField] private string leaveHotspotObjectName = "Hotspot_Leave_Button";
 
-    private HoverHintTrigger bodyHintTrigger;
+    [Header("二级近景悬停")]
+    [SerializeField] private string tableCloseUpHint = "凑近查看桌子";
+    [SerializeField] private string bodyCloseUpHint = "凑近查看尸体";
+    [SerializeField] private string windowCloseUpHint = "凑近查看窗户";
+
+    private HoverHintTrigger bodyKnifeWoundHintTrigger;
+    private HoverHintTrigger bodyCloseUpHintTrigger;
+    private HoverHintTrigger windowHintTrigger;
     private HoverHintTrigger floorHintTrigger;
     private HoverHintTrigger tableHintTrigger;
-    private HoverHintTrigger daggerHintTrigger;
+    private HoverHintTrigger pipeCleanerHintTrigger;
 
     void Start()
     {
-        bodyHintTrigger = AutoBindButton(bodyHotspotObjectName, OnBodyClicked, "点击查看");
+        bodyKnifeWoundHintTrigger = AutoBindButton(bodyKnifeWoundHotspotObjectName, OnBodyKnifeWoundClicked, "点击查看");
+        bodyCloseUpHintTrigger = AutoBindButton(bodyCloseUpHotspotObjectName, OnBodyCloseUpClicked, bodyCloseUpHint);
+        windowHintTrigger = AutoBindButton(windowHotspotObjectName, OnWindowClicked, windowCloseUpHint, false);
         floorHintTrigger = AutoBindButton(floorHotspotObjectName, OnFloorClicked, "点击查看");
-        tableHintTrigger = AutoBindButton(tableHotspotObjectName, OnTableClicked, "点击查看");
-        daggerHintTrigger = AutoBindButton(daggerHotspotObjectName, OnDaggerClicked, "点击查看");
+        tableHintTrigger = AutoBindButton(tableHotspotObjectName, OnTableClicked, tableCloseUpHint);
+        pipeCleanerHintTrigger = AutoBindButton(pipeCleanerHotspotObjectName, OnPipeCleanerClicked, "点击查看");
         AutoBindButton(leaveHotspotObjectName, OnLeaveCabinClicked, "离开房间", false);
         RefreshHintStates();
     }
 
-    public void OnBodyClicked()
+    public void OnBodyKnifeWoundClicked()
     {
         AddEvidence(EvidenceIds.KNIFE_WOUND);
-        TryMarkCrimeSceneFinished();
+        RatchettCrimeSceneProgress.TryMarkFinished();
         RefreshHintStates();
+    }
+
+    public void OnBodyCloseUpClicked()
+    {
+        LoadScene(bodySceneName);
+    }
+
+    public void OnWindowClicked()
+    {
+        LoadScene(windowSceneName);
     }
 
     public void OnFloorClicked()
     {
         AddEvidence(EvidenceIds.H_HANDKERCHIEF);
-        TryMarkCrimeSceneFinished();
+        RatchettCrimeSceneProgress.TryMarkFinished();
         RefreshHintStates();
     }
 
-    public void OnDaggerClicked()
+    public void OnPipeCleanerClicked()
     {
-        AddEvidence(EvidenceIds.DAGGER);
-        TryMarkCrimeSceneFinished();
+        AddEvidence(EvidenceIds.PIPE_CLEANER);
+        RatchettCrimeSceneProgress.TryMarkFinished();
         RefreshHintStates();
     }
 
@@ -66,7 +89,13 @@ public class RatchettCabinSceneController : MonoBehaviour
             {
                 HoverHintUI.Instance.ShowTemporaryHint(cannotLeaveHint, 1.6f);
             }
+
             return;
+        }
+
+        if (!string.IsNullOrEmpty(postInvestigationDialogueId))
+        {
+            DialogueProgressBridge.PendingDialogueId = postInvestigationDialogueId;
         }
 
         LoadScene(postInvestigationSceneName);
@@ -96,24 +125,6 @@ public class RatchettCabinSceneController : MonoBehaviour
         }
     }
 
-    private void TryMarkCrimeSceneFinished()
-    {
-        if (GameManager.Instance == null)
-        {
-            return;
-        }
-
-        DetectiveNotebookManager notebookManager = DetectiveNotebookManager.EnsureInstance();
-
-        bool done = IsCrimeSceneFinished(notebookManager);
-
-        if (done)
-        {
-            GameManager.Instance.HasInvestigatedCrimeScene = true;
-            Debug.Log("案发包厢证据已收集完毕。");
-        }
-    }
-
     private void LoadScene(string sceneName)
     {
         if (SceneLoader.Instance != null)
@@ -123,11 +134,6 @@ public class RatchettCabinSceneController : MonoBehaviour
         else
         {
             SceneManager.LoadScene(sceneName);
-        }
-
-        if (!string.IsNullOrEmpty(postInvestigationDialogueId))
-        {
-            DialogueProgressBridge.PendingDialogueId = postInvestigationDialogueId;
         }
     }
 
@@ -140,6 +146,7 @@ public class RatchettCabinSceneController : MonoBehaviour
             {
                 Debug.LogWarning($"RatchettCabinSceneController: 找不到按钮 {buttonName}");
             }
+
             return null;
         }
 
@@ -150,6 +157,7 @@ public class RatchettCabinSceneController : MonoBehaviour
             {
                 Debug.LogWarning($"RatchettCabinSceneController: 对象 {buttonName} 没有 Button 组件");
             }
+
             return null;
         }
 
@@ -161,6 +169,7 @@ public class RatchettCabinSceneController : MonoBehaviour
         {
             trigger = buttonObject.AddComponent<HoverHintTrigger>();
         }
+
         trigger.hint = hint;
         return trigger;
     }
@@ -170,55 +179,55 @@ public class RatchettCabinSceneController : MonoBehaviour
         EvidenceManager evidenceManager = EvidenceManager.EnsureInstance();
         DetectiveNotebookManager notebookManager = DetectiveNotebookManager.EnsureInstance();
 
-        bool bodyDone = HasOldClue(evidenceManager, EvidenceIds.KNIFE_WOUND)
-            || HasNotebookEvidence(notebookManager, EvidenceIds.KNIFE_WOUND);
-        bool floorDone = HasOldClue(evidenceManager, EvidenceIds.H_HANDKERCHIEF)
-            || HasNotebookEvidence(notebookManager, EvidenceIds.H_HANDKERCHIEF);
-        bool tableDone = HasOldClue(evidenceManager, EvidenceIds.BURNED_PAPER)
-            || HasNotebookEvidence(notebookManager, EvidenceIds.BURNED_PAPER);
-        bool daggerDone = HasOldClue(evidenceManager, EvidenceIds.DAGGER)
-            || HasNotebookEvidence(notebookManager, EvidenceIds.DAGGER);
+        bool bodyKnifeWoundDone = HasEvidence(evidenceManager, notebookManager, EvidenceIds.KNIFE_WOUND);
+        bool bodyCloseUpDone = HasEvidence(evidenceManager, notebookManager, EvidenceIds.GOLD_WATCH)
+            && HasEvidence(evidenceManager, notebookManager, EvidenceIds.PISTOL);
+        bool windowDone = HasEvidence(evidenceManager, notebookManager, EvidenceIds.WINDOW_FRAME)
+            && HasEvidence(evidenceManager, notebookManager, EvidenceIds.SNOW_NO_FOOTPRINTS);
+        bool floorDone = HasEvidence(evidenceManager, notebookManager, EvidenceIds.H_HANDKERCHIEF);
+        bool tableDone = HasEvidence(evidenceManager, notebookManager, EvidenceIds.BURNED_PAPER);
+        bool pipeCleanerDone = HasEvidence(evidenceManager, notebookManager, EvidenceIds.PIPE_CLEANER);
 
-        if (bodyHintTrigger != null)
+        if (bodyKnifeWoundHintTrigger != null)
         {
-            bodyHintTrigger.SetHint(bodyDone ? exhaustedHint : "点击查看");
+            bodyKnifeWoundHintTrigger.SetHint(bodyKnifeWoundDone ? exhaustedHint : "点击查看");
         }
+
+        if (bodyCloseUpHintTrigger != null)
+        {
+            bodyCloseUpHintTrigger.SetHint(bodyCloseUpDone ? exhaustedHint : bodyCloseUpHint);
+        }
+
+        if (windowHintTrigger != null)
+        {
+            windowHintTrigger.SetHint(windowDone ? exhaustedHint : windowCloseUpHint);
+        }
+
         if (floorHintTrigger != null)
         {
             floorHintTrigger.SetHint(floorDone ? exhaustedHint : "点击查看");
         }
+
         if (tableHintTrigger != null)
         {
-            tableHintTrigger.SetHint(tableDone ? exhaustedHint : "点击查看");
+            tableHintTrigger.SetHint(tableDone ? exhaustedHint : tableCloseUpHint);
         }
-        if (daggerHintTrigger != null)
+
+        if (pipeCleanerHintTrigger != null)
         {
-            daggerHintTrigger.SetHint(daggerDone ? exhaustedHint : "点击查看");
+            pipeCleanerHintTrigger.SetHint(pipeCleanerDone ? exhaustedHint : "点击查看");
         }
     }
 
-    private bool HasOldClue(EvidenceManager evidenceManager, string evidenceId)
+    private static bool HasEvidence(EvidenceManager evidenceManager, DetectiveNotebookManager notebookManager, string evidenceId)
     {
-        return evidenceManager != null && evidenceManager.HasClue(evidenceId);
-    }
-
-    private bool HasNotebookEvidence(DetectiveNotebookManager notebookManager, string evidenceId)
-    {
-        return notebookManager != null && notebookManager.HasEvidence(evidenceId);
+        return (evidenceManager != null && evidenceManager.HasClue(evidenceId))
+            || (notebookManager != null && notebookManager.HasEvidence(evidenceId));
     }
 
     private bool IsCrimeSceneFinished()
     {
         DetectiveNotebookManager notebookManager = DetectiveNotebookManager.EnsureInstance();
-        return IsCrimeSceneFinished(notebookManager);
-    }
-
-    private bool IsCrimeSceneFinished(DetectiveNotebookManager notebookManager)
-    {
-        return notebookManager != null
-            && notebookManager.HasEvidence(EvidenceIds.KNIFE_WOUND)
-            && notebookManager.HasEvidence(EvidenceIds.H_HANDKERCHIEF)
-            && notebookManager.HasEvidence(EvidenceIds.DAGGER)
-            && notebookManager.HasEvidence(EvidenceIds.BURNED_PAPER);
+        return RatchettCrimeSceneProgress.IsInvestigationComplete(notebookManager);
     }
 }

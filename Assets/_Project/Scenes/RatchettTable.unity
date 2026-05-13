@@ -779,6 +779,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cabinSceneName: CrimeScene
   exhaustedHint: "\u6CA1\u6709\u4EC0\u4E48\u503C\u5F97\u6CE8\u610F\u7684\u4E86"
+  backButtonObjectName: Hotspot_Back_Button
+  backButtonHint: "\u8FD4\u56DE\u5305\u5ECA"
+  collectionHotspots:
+  - buttonObjectName: Hotspot_BurnedPaper_Button
+    evidenceId: burned_paper_fragment
+    availableHint: "\u70B9\u51FB\u67E5\u770B"
 --- !u!4 &493407297
 Transform:
   m_ObjectHideFlags: 0

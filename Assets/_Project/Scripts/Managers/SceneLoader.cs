@@ -12,6 +12,8 @@ public class SceneLoader : MonoBehaviour
     public const string SCENE_TRAIN_CORRIDOR = "TrainCorridor";
     public const string SCENE_CRIME_SCENE = "CrimeScene";
     public const string SCENE_RATCHETT_TABLE = "RatchettTable";
+    public const string SCENE_RATCHETT_WINDOW = "RatchettWindow";
+    public const string SCENE_RATCHETT_BODY = "RatchettBody";
     public const string SCENE_MRS_HUBBARD = "MrsHubbardRoom";
     public const string SCENE_COUNT_ANDRENYI = "CountAndrenyiRoom";
     public const string SCENE_POIROT_ROOM = "PoirotRoom";
@@ -27,6 +29,8 @@ public class SceneLoader : MonoBehaviour
     public void LoadTrainCorridor() => LoadScene(SCENE_TRAIN_CORRIDOR);
     public void LoadCrimeScene() => LoadScene(SCENE_CRIME_SCENE);
     public void LoadRatchettTable() => LoadScene(SCENE_RATCHETT_TABLE);
+    public void LoadRatchettWindow() => LoadScene(SCENE_RATCHETT_WINDOW);
+    public void LoadRatchettBody() => LoadScene(SCENE_RATCHETT_BODY);
     public void LoadMrsHubbardRoom() => LoadScene(SCENE_MRS_HUBBARD);
     public void LoadCountAndrenyiRoom() => LoadScene(SCENE_COUNT_ANDRENYI);
     public void LoadPoirotRoom() => LoadScene(SCENE_POIROT_ROOM);

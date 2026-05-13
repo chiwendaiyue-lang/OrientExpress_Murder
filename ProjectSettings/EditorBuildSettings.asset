@@ -18,6 +18,12 @@ EditorBuildSettings:
     path: Assets/_Project/Scenes/RatchettTable.unity
     guid: d021187390444da4e8469e3b8cd753d9
   - enabled: 1
+    path: Assets/_Project/Scenes/RatchettWindow.unity
+    guid: f1a2b3c4d5e64789a0b1c2d3e4f5a6b7
+  - enabled: 1
+    path: Assets/_Project/Scenes/RatchettBody.unity
+    guid: a2b3c4d5e6f74890b1c2d3e4f5a6b7c8
+  - enabled: 1
     path: Assets/_Project/Scenes/CrimeScene.unity
     guid: e382e1c98ca60a04eb15b76d559db5df
   m_configObjects: {}

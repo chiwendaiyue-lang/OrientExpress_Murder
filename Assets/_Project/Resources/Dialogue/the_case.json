@@ -916,7 +916,7 @@
             }
           ]
         },
-        "nextNodeId": "END"
+        "nextSceneName": "CrimeScene"
       }
     }
   ]

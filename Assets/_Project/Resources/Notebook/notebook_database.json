@@ -1,12 +1,12 @@
 {
   "evidence": [
     {
-      "id": "ratchett_dagger",
+      "id": "ratchett_pipe_cleaner",
       "type": "physical",
-      "name": "凶器匕首",
-      "description": "一把带血的厨房用刀，刀刃上有血迹。",
-      "unlockBrief": "带血的厨房刀，疑为凶器。",
-      "foundLocation": "雷切特包厢·地板上",
+      "name": "烟斗通条",
+      "description": "地板上遗落的烟斗通条，金属头端沾有血迹。",
+      "unlockBrief": "带血迹的烟斗通条。",
+      "foundLocation": "雷切特包厢·地板",
       "icon": "",
       "updates": []
     },
@@ -43,6 +43,46 @@
       "description": "地板上发现的女士手帕，角落绣有字母 H。",
       "unlockBrief": "女士手帕，角上绣有字母 H。",
       "foundLocation": "雷切特包厢·地板",
+      "icon": "",
+      "updates": []
+    },
+    {
+      "id": "ratchett_window_frame",
+      "type": "physical",
+      "name": "窗框",
+      "description": "窗户内侧的木框上有新鲜刮擦痕迹，像是有人从外面试图打开。",
+      "unlockBrief": "窗框内侧有刮擦痕迹。",
+      "foundLocation": "雷切特包厢·窗户",
+      "icon": "",
+      "updates": []
+    },
+    {
+      "id": "snow_no_footprints_outside",
+      "type": "physical",
+      "name": "窗外无脚印",
+      "description": "窗外积雪平整，未见有人离开或进入的痕迹。",
+      "unlockBrief": "窗外雪地未见脚印。",
+      "foundLocation": "雷切特包厢·窗外",
+      "icon": "",
+      "updates": []
+    },
+    {
+      "id": "ratchett_gold_watch",
+      "type": "physical",
+      "name": "金表",
+      "description": "尸体身旁的金质怀表，表盖内侧刻有姓名缩写。",
+      "unlockBrief": "尸体旁的金质怀表。",
+      "foundLocation": "雷切特包厢·尸体",
+      "icon": "",
+      "updates": []
+    },
+    {
+      "id": "ratchett_pistol",
+      "type": "physical",
+      "name": "手枪",
+      "description": "尸体衣物下藏着一把小型手枪，未被使用。",
+      "unlockBrief": "尸体衣物下的小型手枪。",
+      "foundLocation": "雷切特包厢·尸体",
       "icon": "",
       "updates": []
     },
