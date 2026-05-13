@@ -48,6 +48,8 @@ public class DialogueManager : MonoBehaviour
     private string pendingNextDialogueId;
     private string pendingNextSceneName;
     private readonly List<GameObject> activeHotspots = new List<GameObject>();
+    private readonly HashSet<string> noticeIntroPlayedNodeIds = new HashSet<string>();
+    private Coroutine noticeMomentRoutine;
 
     private NotebookRewards pendingDeferredNotebookRewards;
 
@@ -113,6 +115,11 @@ public class DialogueManager : MonoBehaviour
         }
         
         if (NotebookUnlockOverlayPresenter.IsBlockingInput)
+        {
+            return;
+        }
+
+        if (PerceptionMomentPresenter.IsBlockingInput)
         {
             return;
         }
@@ -196,6 +203,7 @@ public class DialogueManager : MonoBehaviour
 
         currentDialogue.BuildLookup();
         currentDialogueResourceId = characterId ?? string.Empty;
+        ResetNoticeIntroPlaybackState();
         AbandonPendingDeferredNotebookRewards();
 
         currentNodeId = string.IsNullOrEmpty(overrideStartNodeId)
@@ -247,7 +255,7 @@ public class DialogueManager : MonoBehaviour
 
         speakerNameText.text = GetDisplaySpeakerName(node);
         bool showPickupHintRow = pendingDeferredNotebookRewards != null;
-        dialogueText.text = BuildDialogueDisplayText(node, deferNotebook, showPickupHintRow);
+        dialogueText.text = BuildDialogueDisplayText(node, deferNotebook || noticeHotspotNav, showPickupHintRow);
         ApplyFontIfNeeded(speakerNameText);
         ApplyFontIfNeeded(dialogueText);
         ApplyPresentedImage(node.presentedImage);
@@ -277,16 +285,17 @@ public class DialogueManager : MonoBehaviour
                 {
                     speakerPortrait.sprite = portrait;
                     speakerPortrait.enabled = true;
+                    ApplySpeakerPortraitAnxiousShake(node.portrait);
                 }
             }
         }
         else
         {
-            // 节点明确没有头像时，清空上一个节点残留
             if (speakerPortrait != null)
             {
                 speakerPortrait.sprite = null;
                 speakerPortrait.enabled = false;
+                ApplySpeakerPortraitAnxiousShake(null);
             }
         }
 
@@ -304,6 +313,19 @@ public class DialogueManager : MonoBehaviour
         if (IsNoticeNode(node))
         {
             CreateHotspots(node.hotspots, true);
+            SetNoticeHotspotsInteractable(false);
+            StopNoticeMomentRoutineIfAny();
+            if (activeHotspots.Count > 0)
+            {
+                Debug.LogWarning($"[PerceptionMoment] notice 节点「{currentNodeId}」将播放察觉开场，热点数 {activeHotspots.Count}。");
+                noticeMomentRoutine = StartCoroutine(PlayNoticeMomentThenUnlock());
+            }
+            else
+            {
+                Debug.LogWarning(
+                    $"[PerceptionMoment] notice 节点「{currentNodeId}」没有 hotspots，不会播放察觉开场/立绘气泡。");
+            }
+
             if (activeHotspots.Count == 0)
             {
                 pendingNextNodeId = string.IsNullOrEmpty(node.nextNodeId) ? "END" : node.nextNodeId;
@@ -436,6 +458,23 @@ public class DialogueManager : MonoBehaviour
         ShowCurrentNode();
     }
 
+    private void ApplySpeakerPortraitAnxiousShake(string portraitName)
+    {
+        if (speakerPortrait == null)
+        {
+            return;
+        }
+
+        PortraitAnxiousShake shake = speakerPortrait.GetComponent<PortraitAnxiousShake>();
+        if (shake == null)
+        {
+            shake = speakerPortrait.gameObject.AddComponent<PortraitAnxiousShake>();
+        }
+
+        shake.CaptureBasePose();
+        shake.ApplyPortrait(portraitName);
+    }
+
     private void ApplyFontIfNeeded(TMP_Text textComponent)
     {
         if (dialogueFontOverride == null || textComponent == null)
@@ -449,6 +488,7 @@ public class DialogueManager : MonoBehaviour
     void EndDialogue()
     {
         AbandonPendingDeferredNotebookRewards();
+        ResetNoticeIntroPlaybackState();
 
         waitingForClickAdvance = false;
         pendingNextNodeId = null;
@@ -670,6 +710,11 @@ public class DialogueManager : MonoBehaviour
 
         if (IsNoticeNode(node) && !string.IsNullOrEmpty(node.prompt))
         {
+            if (!string.IsNullOrEmpty(node.text))
+            {
+                return node.text + "\n\n" + node.prompt;
+            }
+
             return node.prompt;
         }
 
@@ -778,8 +823,67 @@ public class DialogueManager : MonoBehaviour
         return new Vector2(0.5f + index * 0.08f, 0.55f);
     }
 
+    private IEnumerator PlayNoticeMomentThenUnlock()
+    {
+        string noticeNodeId = currentNodeId;
+        if (!noticeIntroPlayedNodeIds.Contains(noticeNodeId))
+        {
+            yield return PerceptionMomentPresenter.PlayIntroVideoRoutine();
+            noticeIntroPlayedNodeIds.Add(noticeNodeId);
+        }
+
+        PerceptionMomentPresenter.ShowNoticeChrome();
+        SetNoticeHotspotsInteractable(true);
+        noticeMomentRoutine = null;
+    }
+
+    private void ResetNoticeIntroPlaybackState()
+    {
+        noticeIntroPlayedNodeIds.Clear();
+    }
+
+    private void StopNoticeMomentRoutineIfAny()
+    {
+        if (noticeMomentRoutine == null)
+        {
+            return;
+        }
+
+        StopCoroutine(noticeMomentRoutine);
+        noticeMomentRoutine = null;
+        PerceptionMomentPresenter.DismissNoticeChrome();
+    }
+
+    private void SetNoticeHotspotsInteractable(bool interactable)
+    {
+        foreach (GameObject hotspot in activeHotspots)
+        {
+            if (hotspot == null)
+            {
+                continue;
+            }
+
+            Button button = hotspot.GetComponent<Button>();
+            if (button != null)
+            {
+                button.interactable = interactable;
+            }
+
+            Image image = hotspot.GetComponent<Image>();
+            if (image != null)
+            {
+                image.raycastTarget = interactable;
+            }
+        }
+    }
+
     private void OnHotspotClicked(DialogueHotspot hotspot, bool allowFailure)
     {
+        if (PerceptionMomentPresenter.IsBlockingInput)
+        {
+            return;
+        }
+
         if (NotebookUnlockOverlayPresenter.IsBlockingInput)
         {
             return;
@@ -807,11 +911,18 @@ public class DialogueManager : MonoBehaviour
             return;
         }
 
+        if (!allowFailure || hotspot.correct)
+        {
+            PerceptionMomentPresenter.DismissNoticeChrome();
+        }
+
         AdvanceToNode(nextNodeId);
     }
 
     private void ClearHotspots()
     {
+        StopNoticeMomentRoutineIfAny();
+        PerceptionMomentPresenter.DismissNoticeChrome();
         foreach (GameObject hotspot in activeHotspots)
         {
             if (hotspot != null)
@@ -913,7 +1024,7 @@ public class DialogueManager : MonoBehaviour
         bool ruleDefer = ShouldDeferNotebookRewards(node) && !noticeHotspotNav;
         bool showPickupHintRow = pendingDeferredNotebookRewards != null;
         speakerNameText.text = GetDisplaySpeakerName(node);
-        dialogueText.text = BuildDialogueDisplayText(node, ruleDefer, showPickupHintRow);
+        dialogueText.text = BuildDialogueDisplayText(node, ruleDefer || noticeHotspotNav, showPickupHintRow);
         ApplyFontIfNeeded(dialogueText);
     }
 

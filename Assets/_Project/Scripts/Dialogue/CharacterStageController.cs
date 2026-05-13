@@ -24,6 +24,7 @@ public class CharacterStageController : MonoBehaviour
     private readonly Dictionary<string, Coroutine> runningCoroutines = new Dictionary<string, Coroutine>();
     private readonly Dictionary<string, CharacterStageSlot> slotLookup = new Dictionary<string, CharacterStageSlot>();
     private readonly Dictionary<string, string> currentCharacterBySlot = new Dictionary<string, string>();
+    private readonly Dictionary<string, string> currentPortraitBySlot = new Dictionary<string, string>();
 
     void Awake()
     {
@@ -58,6 +59,7 @@ public class CharacterStageController : MonoBehaviour
             slot.image.enabled = false;
             slotLookup[slot.slotId] = slot;
             currentCharacterBySlot[slot.slotId] = string.Empty;
+            currentPortraitBySlot[slot.slotId] = string.Empty;
         }
     }
 
@@ -85,6 +87,7 @@ public class CharacterStageController : MonoBehaviour
             {
                 Hide(slot, defaultDuration);
                 currentCharacterBySlot[slot.slotId] = string.Empty;
+                currentPortraitBySlot[slot.slotId] = string.Empty;
                 continue;
             }
 
@@ -93,6 +96,7 @@ public class CharacterStageController : MonoBehaviour
                 Debug.LogWarning($"CharacterStageController: stage 槽位 {slot.slotId} 缺少 portrait");
                 Hide(slot, defaultDuration);
                 currentCharacterBySlot[slot.slotId] = string.Empty;
+                currentPortraitBySlot[slot.slotId] = string.Empty;
                 continue;
             }
 
@@ -235,16 +239,17 @@ public class CharacterStageController : MonoBehaviour
         {
             if (isSamePortrait)
             {
-                // 同一张立绘重复 show 时，不重复播放入场动画
+                currentPortraitBySlot[slot.slotId] = portraitName;
                 StartAlphaOnlyAnimation(slot, targetAlpha, duration * 0.5f);
                 return;
             }
 
-            // 同槽位切情绪：用淡变替代重新滑入，观感更自然
+            currentPortraitBySlot[slot.slotId] = portraitName;
             StartSwapAnimation(slot, portrait, duration, targetAlpha);
             return;
         }
 
+        currentPortraitBySlot[slot.slotId] = portraitName;
         slot.image.sprite = portrait;
         slot.image.enabled = true;
         StartSlotAnimation(slot, 0f, targetAlpha, slot.hiddenOffsetX, slot.shownOffsetX, duration, false);
@@ -252,15 +257,18 @@ public class CharacterStageController : MonoBehaviour
 
     private void Hide(CharacterStageSlot slot, float duration)
     {
+        StopSlotAnxiousShake(slot);
         StartSlotAnimation(slot, slot.canvasGroup.alpha, 0f, slot.shownOffsetX, slot.hiddenOffsetX, duration, true);
         if (slot != null && !string.IsNullOrEmpty(slot.slotId))
         {
             currentCharacterBySlot[slot.slotId] = string.Empty;
+            currentPortraitBySlot[slot.slotId] = string.Empty;
         }
     }
 
     private void StartAlphaOnlyAnimation(CharacterStageSlot slot, float targetAlpha, float duration)
     {
+        StopSlotAnxiousShake(slot);
         if (runningCoroutines.TryGetValue(slot.slotId, out Coroutine oldRoutine) && oldRoutine != null)
         {
             StopCoroutine(oldRoutine);
@@ -277,6 +285,7 @@ public class CharacterStageController : MonoBehaviour
 
     private void StartSwapAnimation(CharacterStageSlot slot, Sprite targetSprite, float duration, float targetAlpha)
     {
+        StopSlotAnxiousShake(slot);
         if (runningCoroutines.TryGetValue(slot.slotId, out Coroutine oldRoutine) && oldRoutine != null)
         {
             StopCoroutine(oldRoutine);
@@ -288,6 +297,7 @@ public class CharacterStageController : MonoBehaviour
 
     private void StartSlotAnimation(CharacterStageSlot slot, float fromAlpha, float toAlpha, float fromX, float toX, float duration, bool disableImageWhenDone)
     {
+        StopSlotAnxiousShake(slot);
         if (runningCoroutines.TryGetValue(slot.slotId, out Coroutine oldRoutine) && oldRoutine != null)
         {
             StopCoroutine(oldRoutine);
@@ -335,6 +345,8 @@ public class CharacterStageController : MonoBehaviour
         {
             slot.image.enabled = false;
         }
+
+        RefreshSlotAnxiousShake(slot);
     }
 
     private IEnumerator AnimateAlpha(CharacterStageSlot slot, float fromAlpha, float toAlpha, float duration)
@@ -347,6 +359,7 @@ public class CharacterStageController : MonoBehaviour
         if (duration <= 0f)
         {
             slot.canvasGroup.alpha = toAlpha;
+            RefreshSlotAnxiousShake(slot);
             yield break;
         }
 
@@ -359,6 +372,8 @@ public class CharacterStageController : MonoBehaviour
             slot.canvasGroup.alpha = Mathf.Lerp(fromAlpha, toAlpha, eased);
             yield return null;
         }
+
+        RefreshSlotAnxiousShake(slot);
     }
 
     private IEnumerator AnimateSwap(CharacterStageSlot slot, Sprite targetSprite, float duration, float targetAlpha)
@@ -394,6 +409,52 @@ public class CharacterStageController : MonoBehaviour
             slot.canvasGroup.alpha = Mathf.Lerp(midAlpha, targetAlpha, eased);
             yield return null;
         }
+
+        RefreshSlotAnxiousShake(slot);
+    }
+
+    private void RefreshSlotAnxiousShake(CharacterStageSlot slot)
+    {
+        if (slot == null || slot.image == null || !slot.image.enabled)
+        {
+            return;
+        }
+
+        if (string.IsNullOrEmpty(slot.slotId)
+            || !currentPortraitBySlot.TryGetValue(slot.slotId, out string portraitName))
+        {
+            StopSlotAnxiousShake(slot);
+            return;
+        }
+
+        PortraitAnxiousShake shake = GetOrAddAnxiousShake(slot);
+        shake.CaptureBasePose();
+        shake.ApplyPortrait(portraitName);
+    }
+
+    private static void StopSlotAnxiousShake(CharacterStageSlot slot)
+    {
+        if (slot?.image == null)
+        {
+            return;
+        }
+
+        PortraitAnxiousShake shake = slot.image.GetComponent<PortraitAnxiousShake>();
+        if (shake != null)
+        {
+            shake.SetShaking(false);
+        }
+    }
+
+    private static PortraitAnxiousShake GetOrAddAnxiousShake(CharacterStageSlot slot)
+    {
+        PortraitAnxiousShake shake = slot.image.GetComponent<PortraitAnxiousShake>();
+        if (shake == null)
+        {
+            shake = slot.image.gameObject.AddComponent<PortraitAnxiousShake>();
+        }
+
+        return shake;
     }
 
     private DialogueStageSlot GetStageSlot(DialogueStage stage, string slotId)

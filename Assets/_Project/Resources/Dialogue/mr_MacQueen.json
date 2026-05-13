@@ -144,12 +144,40 @@
             }
           ]
         },
+        "nextNodeId": "notice_macqueen_agitated"
+      }
+    },
+    {
+      "id": "notice_macqueen_agitated",
+      "node": {
+        "nodeType": "notice",
+        "speakerCharacterId": "system",
+        "speakerName": "系统",
+        "targetType": "portrait",
+        "text": "",
+        "prompt": "麦克昆的反应过于激烈。请留意他身上的何处不符合常理。",
+        "stage": {
+          "focusCharacterId": "macqueen",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot"
+            },
+            {
+              "slotId": "right",
+              "characterId": "macqueen",
+              "portrait": "macqueen_agitated"
+            }
+          ]
+        },
         "hotspots": [
           {
             "id": "macqueen_agitated_hotspot",
             "targetType": "portrait",
             "targetId": "macqueen",
             "label": "！",
+            "correct": true,
             "successNodeId": "notice_macqueen_agitated_success"
           }
         ]
@@ -377,12 +405,41 @@
             }
           ]
         },
+        "nextNodeId": "notice_macqueen_slip"
+      }
+    },
+    {
+      "id": "notice_macqueen_slip",
+      "node": {
+        "nodeType": "notice",
+        "speakerCharacterId": "macqueen",
+        "speakerName": "麦克昆",
+        "targetType": "dialogue_text",
+        "text": "但是，可以肯定……呃，我是说那老头儿是相当粗心的，是吗？",
+        "prompt": "刚才那句话里有一处停顿很可疑。请点出不自然之处。",
+        "dialogueHighlightPhrase": "呃，我是说",
+        "stage": {
+          "focusCharacterId": "macqueen",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot"
+            },
+            {
+              "slotId": "right",
+              "characterId": "macqueen",
+              "portrait": "macqueen_agitated"
+            }
+          ]
+        },
         "hotspots": [
           {
             "id": "macqueen_letter_slip_hotspot",
             "targetType": "dialogue_text",
             "targetId": "macqueen_letter_slip_text",
             "label": "！",
+            "correct": true,
             "successNodeId": "notice_macqueen_slip_success"
           }
         ]
