@@ -1,6 +1,16 @@
 {
   "evidence": [
     {
+      "id": "ratchett_dagger",
+      "type": "physical",
+      "name": "凶器匕首",
+      "description": "一把带血的厨房用刀，刀刃上有血迹。",
+      "unlockBrief": "带血的厨房刀，疑为凶器。",
+      "foundLocation": "雷切特包厢·地板上",
+      "icon": "",
+      "updates": []
+    },
+    {
       "id": "burned_paper_fragment",
       "type": "physical",
       "name": "烧焦纸条",
@@ -105,23 +115,13 @@
       ]
     },
     {
-      "id": "the_pistol",
-      "type": "physical",
-      "name": "雷切特枕头下的手枪",
-      "description": "雷切特枕头下发现的手枪",
-      "unlockBrief": "雷切特枕头下的手枪",
-      "foundLocation": "雷切特包厢·枕头下",
-      "icon": "icon_the_pistol"
-    },
-    {
       "id": "ratchett_pistol",
       "type": "physical",
       "name": "雷切特枕头下的手枪",
       "description": "雷切特枕头下发现的手枪",
       "unlockBrief": "雷切特枕头下的手枪",
       "foundLocation": "雷切特包厢·枕头下",
-      "icon": "icon_the_pistol",
-      "updates": []
+      "icon": "icon_the_pistol"
     },
     {
       "id": "ratchett_gold_watch",

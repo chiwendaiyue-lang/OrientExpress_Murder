@@ -29,11 +29,6 @@ public class EvidenceSlotUI : MonoBehaviour
 
     private void ApplyDisplay()
     {
-        bool showText = itemTab != EvidencePanelUI.EvidenceTab.Physical;
-        if (showText)
-        {
-            EnsureTextBindings();
-        }
         ConfigureLayoutForPreview();
 
         DetectiveNotebookManager notebook = DetectiveNotebookManager.EnsureInstance();
@@ -73,6 +68,15 @@ public class EvidenceSlotUI : MonoBehaviour
             }
         }
 
+        Sprite icon = itemTab == EvidencePanelUI.EvidenceTab.Physical
+            ? EvidencePanelUI.LoadEvidenceIcon(iconId, itemId)
+            : null;
+        bool showText = itemTab != EvidencePanelUI.EvidenceTab.Physical || icon == null;
+        if (showText)
+        {
+            EnsureTextBindings();
+        }
+
         if (!showText)
         {
             if (titleText != null)
@@ -103,20 +107,16 @@ public class EvidenceSlotUI : MonoBehaviour
                 : $"{title}\n<size=75%><color=#CFC6B2>{preview}</color></size>";
         }
 
-        SetIcon(iconId);
+        SetIcon(icon);
     }
 
-    private void SetIcon(string iconId)
+    private void SetIcon(Sprite icon)
     {
         if (iconImage == null)
         {
             return;
         }
 
-        // 仅 Physical 物证有图标，其它分类直接隐藏
-        Sprite icon = itemTab == EvidencePanelUI.EvidenceTab.Physical
-            ? EvidencePanelUI.LoadEvidenceIcon(iconId, itemId)
-            : null;
         iconImage.sprite = icon;
         iconImage.enabled = icon != null;
         iconImage.gameObject.SetActive(icon != null);

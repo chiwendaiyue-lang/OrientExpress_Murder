@@ -192,8 +192,9 @@ MeetsRequirements(NotebookRequirements requirements)
 - 有点击亮点时写 `hotspots`
 - 有获得或更新内容时写 `rewards`
 - 有分支选项时写 `options`
+- 有程序判定分支时写 `conditionalNext`
 
-字段省略是合法的。Unity 的 JSON 解析会把缺失字段读成 `null` 或默认值，当前代码已经对 `rewards`、`hotspots`、`options` 等字段做了空值处理。
+字段省略是合法的。Unity 的 JSON 解析会把缺失字段读成 `null` 或默认值，当前代码已经对 `rewards`、`hotspots`、`options`、`conditionalNext` 等字段做了空值处理。
 
 ### 普通对话节点最小写法
 
@@ -231,6 +232,44 @@ MeetsRequirements(NotebookRequirements requirements)
         }
       ]
     }
+  }
+}
+```
+
+### 普通对话节点：程序条件分支 `conditionalNext`
+
+用于这类场景：
+
+- 不是让玩家点选项。
+- 而是节点播放完后，由程序根据已获得的物证、证词、疑点自动决定跳到哪个后续节点。
+
+`conditionalNext` 是可选字段。
+
+- 不写 `conditionalNext` 时，仍按原有 `nextNodeId / nextDialogueId / nextSceneName` 逻辑推进。
+- 写了 `conditionalNext` 时，运行时会按数组顺序从上到下检查。
+- 命中第一条满足 `requirements` 的分支后立即跳转。
+- 可以在最后写一个不带 `requirements` 的兜底分支。
+- 如果所有分支都不命中，才回退到节点自身的 `nextNodeId / nextDialogueId / nextSceneName`。
+
+```json
+{
+  "id": "node2",
+  "node": {
+    "nodeType": "dialogue",
+    "speakerCharacterId": "poirot",
+    "speakerName": "波洛",
+    "text": "之前雷切特给我展示了他的手枪，看来它没能派上用场。",
+    "conditionalNext": [
+      {
+        "requirements": {
+          "requiredEvidenceIds": ["wine_glasses"]
+        },
+        "nextNodeId": "node_with_wine"
+      },
+      {
+        "nextNodeId": "node_without_wine"
+      }
+    ]
   }
 }
 ```

@@ -517,9 +517,7 @@ public class DialogueManager : MonoBehaviour
 
             if (activeHotspots.Count == 0)
             {
-                pendingNextNodeId = string.IsNullOrEmpty(node.nextNodeId) ? "END" : node.nextNodeId;
-                pendingNextDialogueId = node.nextDialogueId;
-                pendingNextSceneName = node.nextSceneName;
+                ResolveNextTarget(node, out pendingNextNodeId, out pendingNextDialogueId, out pendingNextSceneName);
                 waitingForClickAdvance = true;
                 waitMouseReleaseAfterEnter = Input.GetMouseButton(0) || Input.GetMouseButton(1);
             }
@@ -536,9 +534,7 @@ public class DialogueManager : MonoBehaviour
                 return;
             }
 
-            pendingNextNodeId = string.IsNullOrEmpty(node.nextNodeId) ? "END" : node.nextNodeId;
-            pendingNextDialogueId = node.nextDialogueId;
-            pendingNextSceneName = node.nextSceneName;
+            ResolveNextTarget(node, out pendingNextNodeId, out pendingNextDialogueId, out pendingNextSceneName);
             waitingForClickAdvance = true;
             // 防止由上一次点击带来的误触发
             waitMouseReleaseAfterEnter = Input.GetMouseButton(0) || Input.GetMouseButton(1);
@@ -651,6 +647,61 @@ public class DialogueManager : MonoBehaviour
 
         currentNodeId = nextNodeId;
         ShowCurrentNode();
+    }
+
+    private void ResolveNextTarget(DialogueNode node, out string nextNodeId, out string nextDialogueId, out string nextSceneName)
+    {
+        nextNodeId = null;
+        nextDialogueId = null;
+        nextSceneName = null;
+
+        DialogueConditionalNext conditionalBranch = GetMatchedConditionalNext(node);
+        if (conditionalBranch != null)
+        {
+            nextNodeId = conditionalBranch.nextNodeId;
+            nextDialogueId = conditionalBranch.nextDialogueId;
+            nextSceneName = conditionalBranch.nextSceneName;
+        }
+        else if (node != null)
+        {
+            nextNodeId = node.nextNodeId;
+            nextDialogueId = node.nextDialogueId;
+            nextSceneName = node.nextSceneName;
+        }
+
+        if (string.IsNullOrEmpty(nextNodeId))
+        {
+            nextNodeId = "END";
+        }
+    }
+
+    private DialogueConditionalNext GetMatchedConditionalNext(DialogueNode node)
+    {
+        if (node == null || node.conditionalNext == null || node.conditionalNext.Count == 0)
+        {
+            return null;
+        }
+
+        DetectiveNotebookManager notebookManager = DetectiveNotebookManager.Instance;
+        foreach (DialogueConditionalNext branch in node.conditionalNext)
+        {
+            if (branch == null)
+            {
+                continue;
+            }
+
+            if (branch.requirements == null)
+            {
+                return branch;
+            }
+
+            if (notebookManager != null && notebookManager.MeetsRequirements(branch.requirements))
+            {
+                return branch;
+            }
+        }
+
+        return null;
     }
 
     private void ApplySpeakerPortraitAnxiousShake(string portraitName)
