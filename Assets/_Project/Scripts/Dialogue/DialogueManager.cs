@@ -1045,8 +1045,9 @@ public class DialogueManager : MonoBehaviour
         hotspotObject.name = string.IsNullOrEmpty(hotspot.id) ? $"Hotspot_{index}" : $"Hotspot_{hotspot.id}";
         RectTransform rect = hotspotObject.GetComponent<RectTransform>();
         ApplyHotspotRect(rect, hotspot, index);
+        TryApplyHotspotImageFromResources(hotspotObject, hotspot);
 
-        TMP_Text tmpText = hotspotObject.GetComponentInChildren<TMP_Text>();
+        TMP_Text tmpText = hotspotObject.GetComponentInChildren<TMP_Text>(true);
         if (tmpText != null)
         {
             tmpText.text = string.IsNullOrEmpty(hotspot.label) ? "" : hotspot.label;
@@ -1060,6 +1061,58 @@ public class DialogueManager : MonoBehaviour
         }
 
         return hotspotObject;
+    }
+
+    private static void TryApplyHotspotImageFromResources(GameObject hotspotObject, DialogueHotspot hotspot)
+    {
+        if (hotspotObject == null || hotspot == null)
+        {
+            return;
+        }
+
+        Image image = hotspotObject.GetComponent<Image>();
+        if (image == null)
+        {
+            image = hotspotObject.GetComponentInChildren<Image>(true);
+        }
+
+        if (image == null)
+        {
+            return;
+        }
+
+        Sprite sprite = null;
+        string loadKey = null;
+
+        if (!string.IsNullOrWhiteSpace(hotspot.imageId))
+        {
+            loadKey = hotspot.imageId.Trim();
+            sprite = Resources.Load<Sprite>($"UI/{loadKey}");
+            if (sprite == null)
+            {
+                sprite = Resources.Load<Sprite>($"backgrounds/{loadKey}");
+            }
+        }
+        else if (!string.IsNullOrWhiteSpace(hotspot.id))
+        {
+            loadKey = hotspot.id.Trim();
+            sprite = Resources.Load<Sprite>($"UI/{loadKey}");
+        }
+
+        if (sprite == null)
+        {
+            if (!string.IsNullOrEmpty(loadKey))
+            {
+                Debug.LogWarning(
+                    $"DialogueManager: 热点 id「{hotspot.id}」未找到 Sprite（查找 key「{loadKey}」；"
+                    + (!string.IsNullOrWhiteSpace(hotspot.imageId) ? "imageId 会额外查 backgrounds）。" : "仅查 Resources/UI）。"));
+            }
+
+            return;
+        }
+
+        image.sprite = sprite;
+        image.color = Color.white;
     }
 
     private void ApplyHotspotRect(RectTransform rect, DialogueHotspot hotspot, int index)

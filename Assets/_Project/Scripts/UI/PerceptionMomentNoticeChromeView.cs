@@ -13,12 +13,18 @@ public class PerceptionMomentNoticeChromeView : MonoBehaviour
     [SerializeField] private TMP_Text noticeLineText;
     [SerializeField] private BlinkingTextTail lineBlink;
 
+    /// <summary>绑定气泡文案与可选立绘覆盖；<paramref name="portrait"/> 为 null 时不改立绘图。</summary>
+    /// <param name="portrait">非 null 时写入立绘；为 null 时保留预制体 / 场景中 <see cref="portraitImage"/> 原有 Sprite。</param>
     public void Apply(string line, Sprite portrait, int tailLength, float blinkInterval)
     {
         if (portraitImage != null)
         {
-            portraitImage.sprite = portrait;
-            portraitImage.enabled = portrait != null;
+            if (portrait != null)
+            {
+                portraitImage.sprite = portrait;
+            }
+
+            portraitImage.enabled = portraitImage.sprite != null;
         }
 
         if (noticeLineText == null)

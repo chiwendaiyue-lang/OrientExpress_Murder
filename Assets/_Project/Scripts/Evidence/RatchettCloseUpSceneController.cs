@@ -1,8 +1,10 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.Video;
 
 [Serializable]
 public class RatchettCloseUpHotspot
@@ -26,6 +28,11 @@ public class RatchettCloseUpSceneController : MonoBehaviour
     [SerializeField] private string backButtonObjectName = "Hotspot_Back_Button";
     [SerializeField] private string backButtonHint = "返回包厢";
     [SerializeField] private List<RatchettCloseUpHotspot> collectionHotspots = new List<RatchettCloseUpHotspot>();
+
+    private const string BurnedPaperFindVideoResourcesPath = "MOV/find";
+    private const float BurnedPaperVideoPrepareTimeoutSeconds = 8f;
+    private const float BurnedPaperVideoPlaybackPadSeconds = 0.75f;
+    private const int BurnedPaperVideoOverlaySortingOrder = 9650;
 
     private readonly Dictionary<string, HoverHintTrigger> hintTriggers = new Dictionary<string, HoverHintTrigger>();
 
@@ -98,13 +105,23 @@ public class RatchettCloseUpSceneController : MonoBehaviour
             CrimeSceneEvidenceGrantBridge.ClearPending();
             AddEvidence(hotspot.evidenceId);
             string capturedDialogueId = dialogueId;
-            NotebookUnlockOverlayPresenter.EnqueueContinuation(() =>
+            if (string.Equals(hotspot.evidenceId, EvidenceIds.BURNED_PAPER, StringComparison.Ordinal))
             {
-                if (!CrimeSceneEvidenceGrantBridge.TryStartCollectDialogue(capturedDialogueId))
+                NotebookUnlockOverlayPresenter.EnqueueContinuation(() =>
                 {
-                    Debug.LogWarning($"RatchettCloseUpSceneController: 搜证对话未能启动：{capturedDialogueId}");
-                }
-            });
+                    StartCoroutine(PlayBurnedPaperFindVideoThenDialogue(capturedDialogueId));
+                });
+            }
+            else
+            {
+                NotebookUnlockOverlayPresenter.EnqueueContinuation(() =>
+                {
+                    if (!CrimeSceneEvidenceGrantBridge.TryStartCollectDialogue(capturedDialogueId))
+                    {
+                        Debug.LogWarning($"RatchettCloseUpSceneController: 搜证对话未能启动：{capturedDialogueId}");
+                    }
+                });
+            }
 
             RatchettCrimeSceneProgress.TryMarkFinished();
             RefreshHintStates();
@@ -305,6 +322,139 @@ public class RatchettCloseUpSceneController : MonoBehaviour
         else
         {
             evidenceManager.AddClue(evidenceId);
+        }
+    }
+
+    /// <summary>
+    /// 烧焦纸条：在「获得物证」弹窗队列结束后全屏播放 <c>Resources/MOV/find</c>，再进入搜证对话。
+    /// </summary>
+    private IEnumerator PlayBurnedPaperFindVideoThenDialogue(string dialogueId)
+    {
+        VideoClip clip = Resources.Load<VideoClip>(BurnedPaperFindVideoResourcesPath);
+        if (clip == null)
+        {
+            Debug.LogWarning(
+                $"RatchettCloseUpSceneController: 未找到 VideoClip Resources/{BurnedPaperFindVideoResourcesPath}，将直接开始对话。");
+            TryStartBurnedPaperDialogue(dialogueId);
+            yield break;
+        }
+
+        GameObject overlayRoot = null;
+        VideoPlayer player = null;
+        RenderTexture rt = null;
+        try
+        {
+            overlayRoot = CreateBurnedPaperVideoOverlayRoot();
+            GameObject videoGo = new GameObject("BurnedPaperFindVideo", typeof(RectTransform));
+            videoGo.transform.SetParent(overlayRoot.transform, false);
+            RectTransform vrt = videoGo.GetComponent<RectTransform>();
+            vrt.anchorMin = Vector2.zero;
+            vrt.anchorMax = Vector2.one;
+            vrt.offsetMin = Vector2.zero;
+            vrt.offsetMax = Vector2.zero;
+            RawImage rawImage = videoGo.AddComponent<RawImage>();
+            rawImage.raycastTarget = true;
+            rawImage.color = Color.white;
+
+            rt = new RenderTexture(1920, 1080, 0);
+            player = overlayRoot.AddComponent<VideoPlayer>();
+            player.playOnAwake = false;
+            player.isLooping = false;
+            player.renderMode = VideoRenderMode.RenderTexture;
+            player.targetTexture = rt;
+            player.clip = clip;
+            player.audioOutputMode = VideoAudioOutputMode.Direct;
+            rawImage.texture = rt;
+
+            yield return WaitUntilVideoPrepared(player);
+            if (!player.isPrepared)
+            {
+                Debug.LogWarning("RatchettCloseUpSceneController: find.mov 未能 Prepare，将跳过视频。");
+            }
+            else
+            {
+                yield return WaitUntilVideoPlaybackEnds(player, (float)clip.length);
+            }
+        }
+        finally
+        {
+            if (player != null)
+            {
+                player.Stop();
+            }
+
+            if (rt != null)
+            {
+                rt.Release();
+                Destroy(rt);
+            }
+
+            if (overlayRoot != null)
+            {
+                Destroy(overlayRoot);
+            }
+        }
+
+        TryStartBurnedPaperDialogue(dialogueId);
+    }
+
+    private static void TryStartBurnedPaperDialogue(string dialogueId)
+    {
+        if (!CrimeSceneEvidenceGrantBridge.TryStartCollectDialogue(dialogueId))
+        {
+            Debug.LogWarning($"RatchettCloseUpSceneController: 搜证对话未能启动：{dialogueId}");
+        }
+    }
+
+    private static GameObject CreateBurnedPaperVideoOverlayRoot()
+    {
+        GameObject root = new GameObject("BurnedPaperFindVideoOverlay");
+        UnityEngine.Object.DontDestroyOnLoad(root);
+        RectTransform ort = root.AddComponent<RectTransform>();
+        ort.anchorMin = Vector2.zero;
+        ort.anchorMax = Vector2.one;
+        ort.offsetMin = Vector2.zero;
+        ort.offsetMax = Vector2.zero;
+
+        Canvas canvas = root.AddComponent<Canvas>();
+        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        canvas.overrideSorting = true;
+        canvas.sortingOrder = BurnedPaperVideoOverlaySortingOrder;
+        root.AddComponent<GraphicRaycaster>();
+
+        CanvasScaler scaler = root.AddComponent<CanvasScaler>();
+        scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+        scaler.referenceResolution = new Vector2(1920f, 1080f);
+        scaler.matchWidthOrHeight = 0.5f;
+
+        return root;
+    }
+
+    private static IEnumerator WaitUntilVideoPrepared(VideoPlayer player)
+    {
+        player.Prepare();
+        float elapsed = 0f;
+        while (!player.isPrepared && elapsed < BurnedPaperVideoPrepareTimeoutSeconds)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            yield return null;
+        }
+    }
+
+    private static IEnumerator WaitUntilVideoPlaybackEnds(VideoPlayer player, float clipLengthSeconds)
+    {
+        player.Play();
+        float maxWait = Mathf.Max(45f, clipLengthSeconds + BurnedPaperVideoPlaybackPadSeconds);
+        float elapsed = 0f;
+        while (player.isPlaying && elapsed < maxWait)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            yield return null;
+        }
+
+        if (player.isPlaying)
+        {
+            player.Stop();
         }
     }
 

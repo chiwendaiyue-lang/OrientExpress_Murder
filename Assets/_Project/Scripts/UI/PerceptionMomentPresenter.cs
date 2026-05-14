@@ -378,7 +378,7 @@ public class PerceptionMomentPresenter : MonoBehaviour
 
             if (chromeView != null)
             {
-                chromeView.Apply(noticeLineText, ResolvePortraitSprite(), blinkingTailLength, blinkingInterval);
+                chromeView.Apply(noticeLineText, ResolvePortraitOverrideOrNull(), blinkingTailLength, blinkingInterval);
             }
             else
             {
@@ -597,6 +597,16 @@ public class PerceptionMomentPresenter : MonoBehaviour
         rootCanvas = null;
     }
 
+    /// <summary>
+    /// 仅当在 Presenter 上显式指定 <see cref="defaultPortrait"/> 时用于覆盖预制体里的 Portrait；
+    /// 返回 null 时保留 <see cref="PerceptionMomentNoticeChromeView"/> 预制体中已配置的立绘。
+    /// </summary>
+    private Sprite ResolvePortraitOverrideOrNull()
+    {
+        return defaultPortrait;
+    }
+
+    /// <summary>无预制体、运行时生成察觉 UI 时使用（含 Resources 默认波洛立绘）。</summary>
     private Sprite ResolvePortraitSprite()
     {
         if (defaultPortrait != null)

@@ -152,6 +152,7 @@ public class PresentedImageData
 [Serializable]
 public class DialogueHotspot
 {
+    /// <summary>逻辑 id；未填 <see cref="imageId"/> 时，会用于 <c>Resources/UI/{id}</c> 加载热点图（Sprite 资源名与 id 一致）。</summary>
     public string id;
     public string targetType;
     public string targetId;
@@ -163,6 +164,12 @@ public class DialogueHotspot
     public float y;
     public float width;
     public float height;
+
+    /// <summary>
+    /// 可选。非空时优先用其作为 Resources 路径片段：先 <c>Resources/UI/{imageId}</c>，再 <c>Resources/backgrounds/{imageId}</c>。
+    /// 若为空，则用 <see cref="id"/> 尝试 <c>Resources/UI/{id}</c>（与 JSON 里热点 id 一致，如 <c>macqueen_agitated_hotspot</c>）。
+    /// </summary>
+    public string imageId;
 }
 
 [Serializable]

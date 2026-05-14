@@ -114,13 +114,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   optionalOverlayPrefab: {fileID: 0}
-  noticeChromePrefab: {fileID: 0}
+  noticeChromePrefab: {fileID: 6268031591839708388, guid: 0f5a70698ebf31c42b762c3a73cadabb, type: 3}
   introVideoPlayer: {fileID: 4661536965804258125}
   introFallbackDuration: 1
   videoPrepareTimeout: 3
   videoPlayTimeout: 6
   overlaySortingOrder: 9800
-  defaultPortrait: {fileID: 0}
+  defaultPortrait: {fileID: 21300000, guid: bb931efc26c695a48bed1ede817c508c, type: 3}
   noticeLineText: "\u6709\u732B\u817B...."
   blinkingTailLength: 1
   blinkingInterval: 0.45

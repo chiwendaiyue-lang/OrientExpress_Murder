@@ -1001,7 +1001,7 @@ MonoBehaviour:
   stageController: {fileID: 1644963132}
   presentedImageDisplay: {fileID: 0}
   hotspotContainer: {fileID: 0}
-  hotspotButtonPrefab: {fileID: 0}
+  hotspotButtonPrefab: {fileID: 2372245168819841017, guid: a3749fd586fd22a43bf9673337772010, type: 3}
   dialogueFontOverride: {fileID: 11400000, guid: 732ca041bcd2b1545b7d93121c542b17, type: 2}
   useLeftSpeakerPortrait: 0
   deferNotebookRewardsByDefaultWhenRewardsPresent: 1
@@ -1077,6 +1077,14 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!222 &2059912680
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2059912677}
+  m_CullTransparentMesh: 1
 --- !u!114 &2059912681
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1091,14 +1099,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetImage: {fileID: 2059912679}
   defaultSprite: {fileID: 21300000, guid: 5e00d34c36a76c94ba53599bfb450963, type: 3}
---- !u!222 &2059912680
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2059912677}
-  m_CullTransparentMesh: 1
 --- !u!1 &2060289793
 GameObject:
   m_ObjectHideFlags: 0

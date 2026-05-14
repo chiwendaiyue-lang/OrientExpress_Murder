@@ -662,8 +662,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294178279
-  m_fontColor: {r: 0.9047704, g: 0.9622642, b: 0.95427895, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -844,8 +844,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -193.807, y: 64.639}
-  m_SizeDelta: {x: 270.1727, y: 129.28}
+  m_AnchoredPosition: {x: 251.33606, y: 55.8199}
+  m_SizeDelta: {x: 316.8449, y: 137.0976}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &736653870
 MonoBehaviour:
@@ -904,7 +904,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.03137255}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1099,8 +1099,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 315, y: 64.639}
-  m_SizeDelta: {x: 270.1727, y: 129.28}
+  m_AnchoredPosition: {x: -446.2063, y: 7.532}
+  m_SizeDelta: {x: 367.7602, y: 749.94}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &904498705
 MonoBehaviour:
@@ -1159,7 +1159,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.03137255}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1362,7 +1362,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 134a75733cc79b24dbd649aa11b32cfc, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f7ebc46eedccee540ba33fcd67b3a830, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
