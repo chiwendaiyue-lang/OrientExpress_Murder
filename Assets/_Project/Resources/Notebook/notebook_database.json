@@ -74,7 +74,7 @@
       "description": "哈伯德太太声称在自己的包厢里发现了一颗金属钮扣。鲍克认出这是列车员制服上的钮扣。",
       "unlockBrief": "金属钮扣，似列车员制服上脱落。",
       "foundLocation": "哈伯德太太包厢·杂志上",
-      "icon": "icon_metal_button",
+      "icon": "",
       "updates": []
     },
     {
@@ -84,7 +84,7 @@
       "description": "窗外白茫茫的一片，除了雪什么都没有",
       "unlockBrief": "窗外白茫茫的一片，除了雪什么都没有",
       "foundLocation": "雷切特包厢·窗外",
-      "icon": "icon_snow_view",
+      "icon": "",
       "updates": [
         {
           "stageId": "climb_out_impossible",
@@ -100,7 +100,7 @@
       "description": "桌上发现的酒杯，里面什么也没有",
       "unlockBrief": "桌上发现的酒杯，里面什么也没有",
       "foundLocation": "雷切特包厢·桌上",
-      "icon": "icon_wine_glasses",
+      "icon": "",
       "updates": [
         {
           "stageId": "wine_glasses_2",

@@ -47,7 +47,7 @@ public class NotebookUnlockOverlayPresenter : MonoBehaviour
     [Tooltip("为 true：先显示 PrimerPanel +「查看详情」按钮，再显示下方详情面板；遮罩在此期间不可一点就关详情。")]
     [SerializeField] private bool requireConfirmBeforeReveal = false;
     [Tooltip("这些场景名里跳过“查看详情”步骤，直接显示详情弹窗。")]
-    [SerializeField] private List<string> skipConfirmSceneNames = new List<string> { "CrimeScene","RatchettTable" };
+    [SerializeField] private List<string> skipConfirmSceneNames = new List<string> { "CrimeScene", "RatchettTable", "RatchettWindow", "RatchettBody" };
     [Tooltip("{0}=弹窗大类标题（如「获得新线索」）")]
     [SerializeField] private string primerPromptFormat = "{0}\n点此查看详情";
     [SerializeField] private string primerRevealButtonLabel = "查看详情";

@@ -265,8 +265,9 @@ public class DialogueManager : MonoBehaviour
     }
 
     /// <summary>
-    /// CrimeScene 搜证对话：与 <see cref="DialogueData.mainStoryBlockDeferredRewardSkip"/> 相同，
-    /// 有待收录的笔记奖励时禁止左键跳过，须右键收录后方可继续。
+    /// 案发包厢 <see cref="SceneLoader.SCENE_CRIME_SCENE"/> 与二级近景（桌子 / 窗 / 尸体）搜证对话：
+    /// 与 <see cref="DialogueData.mainStoryBlockDeferredRewardSkip"/> 相同，有待收录的笔记奖励时禁止左键跳过，
+    /// 须右键收录后方可继续；否则左键会 <see cref="AbandonPendingDeferredNotebookRewards"/>，对话里的奖励不会进笔记也无弹窗。
     /// </summary>
     private bool TreatDeferredNotebookRewardsAsMandatoryCollect()
     {
@@ -275,7 +276,11 @@ public class DialogueManager : MonoBehaviour
             return true;
         }
 
-        return string.Equals(SceneManager.GetActiveScene().name, SceneLoader.SCENE_CRIME_SCENE, StringComparison.Ordinal);
+        string scene = SceneManager.GetActiveScene().name;
+        return string.Equals(scene, SceneLoader.SCENE_CRIME_SCENE, StringComparison.Ordinal)
+            || string.Equals(scene, SceneLoader.SCENE_RATCHETT_TABLE, StringComparison.Ordinal)
+            || string.Equals(scene, SceneLoader.SCENE_RATCHETT_WINDOW, StringComparison.Ordinal)
+            || string.Equals(scene, SceneLoader.SCENE_RATCHETT_BODY, StringComparison.Ordinal);
     }
 
     void Update()
@@ -301,6 +306,11 @@ public class DialogueManager : MonoBehaviour
         }
 
         if (PerceptionMomentPresenter.IsBlockingInput)
+        {
+            return;
+        }
+
+        if (DoubtInquiryOverlayPresenter.IsBlockingInput)
         {
             return;
         }
@@ -430,15 +440,19 @@ public class DialogueManager : MonoBehaviour
             && node.hotspots.Count > 0;
         bool deferNotebook = ShouldDeferNotebookRewards(node) && !noticeHotspotNav;
 
-        if (DetectiveNotebookManager.Instance != null && node.rewards != null)
+        if (node.rewards != null)
         {
-            if (!deferNotebook)
+            DetectiveNotebookManager notebookManager = DetectiveNotebookManager.EnsureInstance();
+            if (notebookManager != null)
             {
-                DetectiveNotebookManager.Instance.ApplyRewards(node.rewards);
-            }
-            else
-            {
-                pendingDeferredNotebookRewards = node.rewards;
+                if (!deferNotebook)
+                {
+                    notebookManager.ApplyRewards(node.rewards);
+                }
+                else
+                {
+                    pendingDeferredNotebookRewards = node.rewards;
+                }
             }
         }
 
@@ -581,11 +595,17 @@ public class DialogueManager : MonoBehaviour
             return;
         }
 
+        if (DoubtInquiryOverlayPresenter.IsBlockingInput)
+        {
+            return;
+        }
+
         AbandonPendingDeferredNotebookRewards();
 
-        if (DetectiveNotebookManager.Instance != null)
+        DetectiveNotebookManager notebookManager = DetectiveNotebookManager.EnsureInstance();
+        if (notebookManager != null)
         {
-            DetectiveNotebookManager.Instance.ApplyRewards(option.rewards);
+            notebookManager.ApplyRewards(option.rewards);
         }
 
         // ???????
@@ -1140,6 +1160,11 @@ public class DialogueManager : MonoBehaviour
             return;
         }
 
+        if (DoubtInquiryOverlayPresenter.IsBlockingInput)
+        {
+            return;
+        }
+
         if (EvidencePanelUI.IsNotebookOpen)
         {
             return;
@@ -1334,9 +1359,10 @@ public class DialogueManager : MonoBehaviour
             return;
         }
 
-        if (DetectiveNotebookManager.Instance != null)
+        DetectiveNotebookManager notebookManager = DetectiveNotebookManager.EnsureInstance();
+        if (notebookManager != null)
         {
-            DetectiveNotebookManager.Instance.ApplyRewards(pendingDeferredNotebookRewards);
+            notebookManager.ApplyRewards(pendingDeferredNotebookRewards);
         }
 
         pendingDeferredNotebookRewards = null;

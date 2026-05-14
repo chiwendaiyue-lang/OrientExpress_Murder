@@ -1851,6 +1851,7 @@ public class EvidencePanelUI : MonoBehaviour
         {
             selectedDoubtId = doubtId;
             RefreshDoubtPanel();
+            DoubtInquiryOverlayPresenter.ShowForDoubtId(doubtId);
         });
 
         GameObject textObject = new GameObject("Text", typeof(RectTransform), typeof(CanvasRenderer), typeof(TextMeshProUGUI));

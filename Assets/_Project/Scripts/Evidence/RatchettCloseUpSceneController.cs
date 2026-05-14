@@ -8,8 +8,10 @@ using UnityEngine.UI;
 public class RatchettCloseUpHotspot
 {
     public string buttonObjectName;
+    [Tooltip("同一热点绑定多个按钮（例如窗框四边），名称须与场景中 GameObject 一致。")]
+    public List<string> additionalButtonObjectNames = new List<string>();
     public string evidenceId;
-    [Tooltip("可选。若为空，则按证据 id 自动映射到 Resources/Dialogue 下的文件名（例如 ratchett_pistol → the_pistol）。")]
+    [Tooltip("可选。若为空，则按证据 id 自动映射到 Resources/Dialogue 下的文件名（须与 .json 文件名一致，如 ratchett_pistol → ratchett_pistol）。")]
     public string dialogueResourceId;
     public string availableHint = "点击查看";
 }
@@ -31,19 +33,28 @@ public class RatchettCloseUpSceneController : MonoBehaviour
     {
         foreach (RatchettCloseUpHotspot hotspot in collectionHotspots)
         {
-            if (hotspot == null || string.IsNullOrEmpty(hotspot.buttonObjectName))
+            if (hotspot == null)
+            {
+                continue;
+            }
+
+            List<string> names = CollectButtonNames(hotspot);
+            if (names.Count == 0)
             {
                 continue;
             }
 
             RatchettCloseUpHotspot captured = hotspot;
-            HoverHintTrigger trigger = AutoBindButton(
-                captured.buttonObjectName,
-                () => OnCollectionHotspotClicked(captured),
-                captured.availableHint);
-            if (trigger != null)
+            foreach (string btnName in names)
             {
-                hintTriggers[captured.buttonObjectName] = trigger;
+                HoverHintTrigger trigger = AutoBindButton(
+                    btnName,
+                    () => OnCollectionHotspotClicked(captured),
+                    captured.availableHint);
+                if (trigger != null)
+                {
+                    hintTriggers[btnName] = trigger;
+                }
             }
         }
 
@@ -202,7 +213,7 @@ public class RatchettCloseUpSceneController : MonoBehaviour
 
         if (string.Equals(evidenceId, EvidenceIds.PISTOL, StringComparison.Ordinal))
         {
-            return "the_pistol";
+            return "ratchett_pistol";
         }
 
         if (string.Equals(evidenceId, EvidenceIds.GOLD_WATCH, StringComparison.Ordinal))
@@ -337,19 +348,58 @@ public class RatchettCloseUpSceneController : MonoBehaviour
     {
         foreach (RatchettCloseUpHotspot hotspot in collectionHotspots)
         {
-            if (hotspot == null || string.IsNullOrEmpty(hotspot.buttonObjectName))
+            if (hotspot == null)
             {
                 continue;
             }
 
-            if (!hintTriggers.TryGetValue(hotspot.buttonObjectName, out HoverHintTrigger trigger) || trigger == null)
+            foreach (string name in CollectButtonNames(hotspot))
             {
-                continue;
-            }
+                if (!hintTriggers.TryGetValue(name, out HoverHintTrigger trigger) || trigger == null)
+                {
+                    continue;
+                }
 
-            bool done = IsHotspotExhausted(hotspot.evidenceId);
-            trigger.SetHint(done ? exhaustedHint : hotspot.availableHint);
+                bool done = IsHotspotExhausted(hotspot.evidenceId);
+                trigger.SetHint(done ? exhaustedHint : hotspot.availableHint);
+            }
         }
+    }
+
+    private static List<string> CollectButtonNames(RatchettCloseUpHotspot hotspot)
+    {
+        var names = new List<string>();
+        if (hotspot == null)
+        {
+            return names;
+        }
+
+        void AddIfValid(string s)
+        {
+            if (string.IsNullOrEmpty(s))
+            {
+                return;
+            }
+
+            s = s.Trim();
+            if (names.Contains(s))
+            {
+                return;
+            }
+
+            names.Add(s);
+        }
+
+        AddIfValid(hotspot.buttonObjectName);
+        if (hotspot.additionalButtonObjectNames != null)
+        {
+            foreach (string s in hotspot.additionalButtonObjectNames)
+            {
+                AddIfValid(s);
+            }
+        }
+
+        return names;
     }
 
     private static bool HasEvidence(EvidenceManager evidenceManager, DetectiveNotebookManager notebookManager, string evidenceId)
