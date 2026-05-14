@@ -114,6 +114,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   optionalOverlayPrefab: {fileID: 0}
+  noticeChromePrefab: {fileID: 0}
   introVideoPlayer: {fileID: 4661536965804258125}
   introFallbackDuration: 1
   videoPrepareTimeout: 3

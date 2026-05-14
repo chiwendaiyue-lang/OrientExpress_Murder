@@ -11,6 +11,15 @@ public class BlinkingTextTail : MonoBehaviour
 
     private string baseText = string.Empty;
 
+    public void BindLabel(TMP_Text text)
+    {
+        label = text;
+        if (label != null)
+        {
+            baseText = label.text;
+        }
+    }
+
     public void Configure(string text, int tailLen, float blinkInterval)
     {
         if (!string.IsNullOrEmpty(text))

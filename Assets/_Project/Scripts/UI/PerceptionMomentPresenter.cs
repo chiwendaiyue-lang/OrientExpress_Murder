@@ -17,8 +17,10 @@ public class PerceptionMomentPresenter : MonoBehaviour
     private const string IntroVideoResourcesPath = "test";
     private const string DefaultPortraitResourcesPath = "Characters/poirot_normal";
     private const string PresenterResourcesPath = "UI/PerceptionMomentPresenter";
+    private const string NoticeChromeResourcesPath = "UI/PerceptionMomentNoticeChrome";
 
     [SerializeField] private GameObject optionalOverlayPrefab;
+    [SerializeField] private GameObject noticeChromePrefab;
     [SerializeField] private VideoPlayer introVideoPlayer;
     [SerializeField, Min(0.05f)] private float introFallbackDuration = 1f;
     [SerializeField, Min(0.1f)] private float videoPrepareTimeout = 3f;
@@ -350,6 +352,38 @@ public class PerceptionMomentPresenter : MonoBehaviour
             return;
         }
 
+        GameObject chromePrefabSource = noticeChromePrefab != null
+            ? noticeChromePrefab
+            : Resources.Load<GameObject>(NoticeChromeResourcesPath);
+
+        if (chromePrefabSource != null)
+        {
+            chromeGroup = Instantiate(chromePrefabSource, overlayRoot.transform, false);
+            // 保留预制体根 RectTransform 的锚点/位置/尺寸，不在此处 StretchFull，否则会覆盖你在 Prefab 里的摆放。
+
+            PerceptionMomentNoticeChromeView chromeView = chromeGroup.GetComponent<PerceptionMomentNoticeChromeView>();
+            if (chromeView == null)
+            {
+                chromeView = chromeGroup.GetComponentInChildren<PerceptionMomentNoticeChromeView>(true);
+            }
+
+            if (chromeView != null)
+            {
+                chromeView.Apply(noticeLineText, ResolvePortraitSprite(), blinkingTailLength, blinkingInterval);
+            }
+            else
+            {
+                Debug.LogWarning(
+                    "[PerceptionMoment] 察觉气泡预制体上未找到 PerceptionMomentNoticeChromeView。"
+                    + " 请在预制体根或子物体上挂载该脚本，并绑定 Portrait Image 与 Notice Line (TMP)。");
+            }
+
+            EnsureChromeCanvasGroup();
+            SetOverlayRaycastBlocking(false);
+            Debug.Log("[PerceptionMoment] 已用预制体显示察觉立绘与气泡。");
+            return;
+        }
+
         chromeGroup = new GameObject("NoticeChrome", typeof(RectTransform));
         chromeGroup.transform.SetParent(overlayRoot.transform, false);
         StretchFull(chromeGroup.GetComponent<RectTransform>());
@@ -401,13 +435,27 @@ public class PerceptionMomentPresenter : MonoBehaviour
         BlinkingTextTail blink = textGo.AddComponent<BlinkingTextTail>();
         blink.Configure(noticeLineText, blinkingTailLength, blinkingInterval);
 
-        CanvasGroup chromeCg = chromeGroup.AddComponent<CanvasGroup>();
+        EnsureChromeCanvasGroup();
+        SetOverlayRaycastBlocking(false);
+        Debug.Log("[PerceptionMoment] 已显示察觉立绘与气泡。");
+    }
+
+    private void EnsureChromeCanvasGroup()
+    {
+        if (chromeGroup == null)
+        {
+            return;
+        }
+
+        CanvasGroup chromeCg = chromeGroup.GetComponent<CanvasGroup>();
+        if (chromeCg == null)
+        {
+            chromeCg = chromeGroup.AddComponent<CanvasGroup>();
+        }
+
         chromeCg.alpha = 1f;
         chromeCg.interactable = false;
         chromeCg.blocksRaycasts = false;
-
-        SetOverlayRaycastBlocking(false);
-        Debug.Log("[PerceptionMoment] 已显示察觉立绘与气泡。");
     }
 
     private void DismissNoticeChromeInternal()
