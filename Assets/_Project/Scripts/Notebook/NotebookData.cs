@@ -16,6 +16,7 @@ public class CharacterDefinition
     public string id;
     public string displayName;
     public string role;
+    public string detail;
     public string portrait;
     public int sortOrder;
 }

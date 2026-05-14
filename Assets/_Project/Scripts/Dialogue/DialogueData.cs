@@ -22,6 +22,15 @@ public class DialogueOption
 }
 
 [Serializable]
+public class DialogueConditionalNext
+{
+    public NotebookRequirements requirements;
+    public string nextNodeId;
+    public string nextDialogueId;
+    public string nextSceneName;
+}
+
+[Serializable]
 public class DialogueNode
 {
     public string nodeType;
@@ -44,6 +53,7 @@ public class DialogueNode
     // 当前说话者所在槽位（left/center/right），用于高亮
     public string focusSlotId;
     public List<DialogueOption> options;
+    public List<DialogueConditionalNext> conditionalNext;
     public List<StageCommand> stageCommands;
 
     /// <summary>为 true 时：本节点笔记奖励延迟到玩家在对话中右键收录；左键继续则跳过（弹丸式）。</summary>

@@ -9,6 +9,11 @@
         "speakerCharacterId": "system",
         "speakerName": "系统",
         "text": "窗外白茫茫的一片，除了雪什么都没有",
+        "rewards": {
+          "evidenceToAdd": [
+            "snow_view"
+        ]
+        },
         "nextNodeId": "node2"
       }
     },
@@ -201,6 +206,14 @@
             }
           ]
         },
+        "rewards": {
+          "evidenceStageToUpdate": [
+            {
+              "itemId": "snow_view",
+              "stageId": "climb_out_impossible"
+            }
+          ]
+        },
         "nextSceneName": "CrimeScene"
       }
     },
@@ -301,6 +314,14 @@
               "slotId": "right",
               "characterId": "doctor",
               "portrait": "doctor"
+            }
+          ]
+        },
+        "rewards": {
+          "evidenceStageToUpdate": [
+            {
+              "itemId": "snow_view",
+              "stageId": "climb_out_impossible"
             }
           ]
         },
