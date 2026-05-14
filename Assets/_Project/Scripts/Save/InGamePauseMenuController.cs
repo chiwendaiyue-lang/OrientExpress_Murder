@@ -789,7 +789,14 @@ public class InGamePauseMenuController : MonoBehaviour
     {
         if (overlayRoot != null && overlayRoot)
         {
-            overlayRoot.SetActive(!overlayRoot.activeSelf);
+            bool wasActive = overlayRoot.activeSelf;
+            overlayRoot.SetActive(!wasActive);
+            if (overlayRoot.activeSelf)
+            {
+                overlayRoot.transform.SetAsLastSibling();
+                overlayRoot.GetComponent<InGameSettingsOverlayView>()?.RefreshAudioVolumeSlidersFromManager();
+            }
+
             return;
         }
 
@@ -813,6 +820,8 @@ public class InGamePauseMenuController : MonoBehaviour
             {
                 overlayRoot.SetActive(true);
                 overlayRoot.transform.SetAsLastSibling();
+                InGameSettingsOverlayView existingView = overlayRoot.GetComponent<InGameSettingsOverlayView>();
+                existingView?.RefreshAudioVolumeSlidersFromManager();
                 return;
             }
         }
@@ -918,6 +927,7 @@ public class InGamePauseMenuController : MonoBehaviour
         if (view != null)
         {
             view.Wire(OnSaveClicked, OnExitToMenuClicked, OnQuitGameClicked, CloseSettingsOverlay);
+            view.BindAudioVolumeControls();
         }
     }
 

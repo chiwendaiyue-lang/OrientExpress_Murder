@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 /// <summary>
-/// 全局 BGM / UI 点击 / 证据弹窗 / 场景转场音效。Resources/MP3 下加载，不额外挂 AudioListener。
+/// 全局 BGM / UI 点击 / 证据弹窗 / 场景转场 / 察觉等音效。Resources/MP3 下加载；各通道音量见 <see cref="GameAudioChannel"/> 与 <see cref="GameAudioSettings"/>。
 /// </summary>
 [DefaultExecutionOrder(5000)]
 public class GameAudioManager : MonoBehaviour
@@ -13,9 +13,10 @@ public class GameAudioManager : MonoBehaviour
     private const string ResourceClick = "MP3/Click";
     private const string ResourceClueCollection = "MP3/ClueCollection";
     private const string ResourceTransition = "MP3/Transition";
+    private const string ResourcePerceive = "MP3/Perceive";
 
-    [SerializeField, Range(0f, 1f)] private float bgmVolume = 0.38f;
-    [SerializeField, Range(0f, 1f)] private float sfxVolume = 0.85f;
+    private const float DefaultBgmVolume = 0.38f;
+    private const float DefaultSfxVolume = 0.85f;
 
     private AudioSource bgmSource;
     private AudioSource sfxSource;
@@ -24,6 +25,42 @@ public class GameAudioManager : MonoBehaviour
     private AudioClip clipClick;
     private AudioClip clipClueCollection;
     private AudioClip clipTransition;
+    private AudioClip clipPerceive;
+
+    /// <summary>与 <see cref="GameAudioChannel"/> 枚举顺序一致，供设置 UI 遍历。</summary>
+    public static readonly GameAudioChannel[] AllChannels =
+    {
+        GameAudioChannel.BgmMainInterface,
+        GameAudioChannel.UiClick,
+        GameAudioChannel.ClueCollection,
+        GameAudioChannel.SceneTransition,
+        GameAudioChannel.Perceive
+    };
+
+    /// <summary>与 <see cref="GameAudioChannel"/> 与 Resources 路径对应，供 UI 显示名称。</summary>
+    public static string GetChannelDisplayName(GameAudioChannel channel)
+    {
+        switch (channel)
+        {
+            case GameAudioChannel.BgmMainInterface:
+                return "背景音乐（主界面）";
+            case GameAudioChannel.UiClick:
+                return "界面点击";
+            case GameAudioChannel.ClueCollection:
+                return "线索收录";
+            case GameAudioChannel.SceneTransition:
+                return "场景转场";
+            case GameAudioChannel.Perceive:
+                return "察觉时刻";
+            default:
+                return channel.ToString();
+        }
+    }
+
+    private static float DefaultLinearVolume(GameAudioChannel channel)
+    {
+        return channel == GameAudioChannel.BgmMainInterface ? DefaultBgmVolume : DefaultSfxVolume;
+    }
 
     /// <summary>与「证据收录」「转场」音效发生在同一帧的 UI 左键，不叠播通用点击音。</summary>
     private int suppressUiClickSoundOnFrame = -1;
@@ -67,20 +104,19 @@ public class GameAudioManager : MonoBehaviour
         bgmSource = gameObject.AddComponent<AudioSource>();
         bgmSource.loop = true;
         bgmSource.playOnAwake = false;
-        bgmSource.volume = bgmVolume;
-        // 资源若按「3D 音效」导入，而本物体在 (0,0,0)、监听器在摄像机上，距离衰减会导致几乎听不到。
         bgmSource.spatialBlend = 0f;
 
         sfxSource = gameObject.AddComponent<AudioSource>();
         sfxSource.playOnAwake = false;
         sfxSource.loop = false;
-        sfxSource.volume = sfxVolume;
+        sfxSource.volume = 1f;
         sfxSource.spatialBlend = 0f;
 
         clipBgm = Resources.Load<AudioClip>(ResourceBgm);
         clipClick = Resources.Load<AudioClip>(ResourceClick);
         clipClueCollection = Resources.Load<AudioClip>(ResourceClueCollection);
         clipTransition = Resources.Load<AudioClip>(ResourceTransition);
+        clipPerceive = Resources.Load<AudioClip>(ResourcePerceive);
 
         if (clipBgm == null)
         {
@@ -89,10 +125,6 @@ public class GameAudioManager : MonoBehaviour
         else
         {
             bgmSource.clip = clipBgm;
-            if (!bgmSource.isPlaying)
-            {
-                bgmSource.Play();
-            }
         }
 
         if (clipClick == null)
@@ -109,6 +141,56 @@ public class GameAudioManager : MonoBehaviour
         {
             Debug.LogWarning($"GameAudioManager: 未找到 Resources/{ResourceTransition}。");
         }
+
+        if (clipPerceive == null)
+        {
+            Debug.LogWarning($"GameAudioManager: 未找到 Resources/{ResourcePerceive}。");
+        }
+
+        ApplyAllSavedVolumes();
+        TryStartBgmIfReady();
+    }
+
+    public float GetLinearVolume(GameAudioChannel channel)
+    {
+        return GameAudioSettings.LoadVolume(channel, DefaultLinearVolume(channel));
+    }
+
+    public void SetLinearVolume(GameAudioChannel channel, float volume01)
+    {
+        volume01 = Mathf.Clamp01(volume01);
+        GameAudioSettings.SaveVolume(channel, volume01);
+        ApplyChannelVolume(channel);
+    }
+
+    private void ApplyAllSavedVolumes()
+    {
+        foreach (GameAudioChannel ch in AllChannels)
+        {
+            ApplyChannelVolume(ch);
+        }
+    }
+
+    private void ApplyChannelVolume(GameAudioChannel channel)
+    {
+        float v = GetLinearVolume(channel);
+        if (channel == GameAudioChannel.BgmMainInterface && bgmSource != null)
+        {
+            bgmSource.volume = v;
+        }
+    }
+
+    private void TryStartBgmIfReady()
+    {
+        if (bgmSource == null || clipBgm == null)
+        {
+            return;
+        }
+
+        if (!bgmSource.isPlaying)
+        {
+            bgmSource.Play();
+        }
     }
 
 #if UNITY_EDITOR
@@ -117,7 +199,7 @@ public class GameAudioManager : MonoBehaviour
     {
         Debug.Log(
             $"[GameAudioManager] BGM clip={(clipBgm != null ? clipBgm.name : "null")} playing={bgmSource != null && bgmSource.isPlaying} | "
-            + $"Click={(clipClick != null)} Clue={(clipClueCollection != null)} Transition={(clipTransition != null)} | "
+            + $"Click={(clipClick != null)} Clue={(clipClueCollection != null)} Transition={(clipTransition != null)} Perceive={(clipPerceive != null)} | "
             + $"spatialBlend bgm={bgmSource?.spatialBlend} sfx={sfxSource?.spatialBlend}");
     }
 #endif
@@ -155,7 +237,7 @@ public class GameAudioManager : MonoBehaviour
             return;
         }
 
-        sfxSource.PlayOneShot(clipClick);
+        sfxSource.PlayOneShot(clipClick, GetLinearVolume(GameAudioChannel.UiClick));
     }
 
     public void TryPlayClueCollectionSound()
@@ -166,7 +248,7 @@ public class GameAudioManager : MonoBehaviour
             return;
         }
 
-        sfxSource.PlayOneShot(clipClueCollection);
+        sfxSource.PlayOneShot(clipClueCollection, GetLinearVolume(GameAudioChannel.ClueCollection));
     }
 
     public void TryPlayTransitionSound()
@@ -177,6 +259,17 @@ public class GameAudioManager : MonoBehaviour
             return;
         }
 
-        sfxSource.PlayOneShot(clipTransition);
+        sfxSource.PlayOneShot(clipTransition, GetLinearVolume(GameAudioChannel.SceneTransition));
+    }
+
+    /// <summary>察觉等剧情用短音效；音量由「察觉时刻」滑条控制。</summary>
+    public void TryPlayPerceiveSound()
+    {
+        if (clipPerceive == null || sfxSource == null)
+        {
+            return;
+        }
+
+        sfxSource.PlayOneShot(clipPerceive, GetLinearVolume(GameAudioChannel.Perceive));
     }
 }
