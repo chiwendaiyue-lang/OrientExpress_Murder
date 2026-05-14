@@ -1,15 +1,11 @@
 using UnityEngine;
 
 /// <summary>
-/// 挂在「对话运行时」Prefab 根节点：在子物体 Awake 之前将整个对话 UI 树移入 DontDestroyOnLoad，
-/// 避免子节点上的 <see cref="DialogueManager"/> 单独 DDOL 导致从父级脱离、引用断裂。
+/// 挂在「对话运行时」Prefab 根节点：仅作身份标记（射线穿透、隐藏装饰底图等逻辑会识别该根）。
+/// 不再将整个树移入 DontDestroyOnLoad，以免把场景里摆好的 Canvas 从 TrainCorridor 等场景「挪走」；
+/// 需要对话时由 <see cref="DialogueManager.EnsureExists"/> 从 Resources 实例化，或随当前场景生命周期存在。
 /// </summary>
-[DefaultExecutionOrder(-200)]
 [DisallowMultipleComponent]
 public sealed class DialogueRuntimeRootMarker : MonoBehaviour
 {
-    private void Awake()
-    {
-        DontDestroyOnLoad(gameObject);
-    }
 }

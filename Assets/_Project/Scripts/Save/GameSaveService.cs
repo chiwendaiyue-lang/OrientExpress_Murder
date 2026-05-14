@@ -160,30 +160,38 @@ public static class GameSaveService
             DialogueProgressBridge.PendingDialogueId = null;
         }
 
-        if (!restoreDialogue || DialogueManager.Instance == null)
+        if (!restoreDialogue)
         {
             return;
         }
 
-        if (data.dialogueWasActive
-            && !string.IsNullOrEmpty(data.dialogueResourceId)
-            && !string.IsNullOrEmpty(data.dialogueNodeId))
+        if (!data.dialogueWasActive
+            || string.IsNullOrEmpty(data.dialogueResourceId)
+            || string.IsNullOrEmpty(data.dialogueNodeId))
         {
-            NotebookRewards restoredPending = null;
-            if (!string.IsNullOrWhiteSpace(data.pendingNotebookRewardsJson))
-            {
-                try
-                {
-                    restoredPending = JsonUtility.FromJson<NotebookRewards>(data.pendingNotebookRewardsJson);
-                }
-                catch (Exception e)
-                {
-                    Debug.LogWarning($"GameSaveService: 无法解析 pendingNotebookRewardsJson\n{e.Message}");
-                }
-            }
-
-            DialogueManager.Instance.StartDialogueAtNode(data.dialogueResourceId, data.dialogueNodeId, restoredPending);
+            return;
         }
+
+        DialogueManager.EnsureExists();
+        if (DialogueManager.Instance == null)
+        {
+            return;
+        }
+
+        NotebookRewards restoredPending = null;
+        if (!string.IsNullOrWhiteSpace(data.pendingNotebookRewardsJson))
+        {
+            try
+            {
+                restoredPending = JsonUtility.FromJson<NotebookRewards>(data.pendingNotebookRewardsJson);
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"GameSaveService: 无法解析 pendingNotebookRewardsJson\n{e.Message}");
+            }
+        }
+
+        DialogueManager.Instance.StartDialogueAtNode(data.dialogueResourceId, data.dialogueNodeId, restoredPending);
     }
 
     private static bool NotebookRewardsHasAny(NotebookRewards rewards)

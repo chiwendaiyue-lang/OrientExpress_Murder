@@ -143,12 +143,6 @@ public class DialogueManager : MonoBehaviour
         }
 
         Instance = this;
-        if (GetComponentInParent<DialogueRuntimeRootMarker>() == null)
-        {
-            DontDestroyOnLoad(gameObject);
-        }
-
-        PreserveDialogueUiRoots();
 
         if (dialoguePanel != null)
         {
@@ -161,6 +155,66 @@ public class DialogueManager : MonoBehaviour
         }
 
         EnsureDialogueCanvasesRenderOnTop();
+        PassThroughDecorativeCanvasImages();
+        HideRuntimeDialoguePrefabBackgroundLayer();
+    }
+
+    /// <summary>
+    /// DialogueRuntimeRoot 下部分工程里 Canvas 会带名为 <c>background</c> 的装饰底图；与场景里 CrimeScene 等自己摆的背景无关。
+    /// 进场景时若保留该物体，会盖住画面；与手动在运行时删掉该子物体效果一致，这里在 Awake 统一关掉。
+    /// </summary>
+    private void HideRuntimeDialoguePrefabBackgroundLayer()
+    {
+        Transform root = transform.root;
+        if (root.GetComponent<DialogueRuntimeRootMarker>() == null)
+        {
+            return;
+        }
+
+        foreach (Transform t in root.GetComponentsInChildren<Transform>(true))
+        {
+            if (t != null && string.Equals(t.name, "background", StringComparison.OrdinalIgnoreCase))
+            {
+                t.gameObject.SetActive(false);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 全屏底图 / 立绘槽位上的 <see cref="Image"/> 若开启 raycast，会在 <see cref="dialoguePanel"/> 关闭时仍挡住下层走廊等可点物体。
+    /// 这些层不负责接收输入，统一关闭射线目标。
+    /// </summary>
+    private void PassThroughDecorativeCanvasImages()
+    {
+        Transform root = dialoguePanel != null ? dialoguePanel.transform.root : transform.root;
+        SetImageRaycastOnNamedChild(root, "background", false);
+        SetImageRaycastOnNamedChild(root, "StageLeftImage", false);
+        SetImageRaycastOnNamedChild(root, "StageRightImage", false);
+        SetImageRaycastOnNamedChild(root, "StageCenterImage", false);
+    }
+
+    private static void SetImageRaycastOnNamedChild(Transform root, string objectName, bool raycastTarget)
+    {
+        if (root == null || string.IsNullOrEmpty(objectName))
+        {
+            return;
+        }
+
+        foreach (Transform t in root.GetComponentsInChildren<Transform>(true))
+        {
+            if (t == null || !string.Equals(t.name, objectName, StringComparison.Ordinal))
+            {
+                continue;
+            }
+
+            Image image = t.GetComponent<Image>();
+            if (image != null)
+            {
+                image.raycastTarget = raycastTarget;
+            }
+
+            return;
+        }
     }
 
     private void EnsureDialogueCanvasesRenderOnTop()
@@ -210,26 +264,18 @@ public class DialogueManager : MonoBehaviour
             || string.Equals(activeName, SceneLoader.SCENE_RATCHETT_BODY, StringComparison.Ordinal);
     }
 
-    private void PreserveDialogueUiRoots()
+    /// <summary>
+    /// CrimeScene 搜证对话：与 <see cref="DialogueData.mainStoryBlockDeferredRewardSkip"/> 相同，
+    /// 有待收录的笔记奖励时禁止左键跳过，须右键收录后方可继续。
+    /// </summary>
+    private bool TreatDeferredNotebookRewardsAsMandatoryCollect()
     {
-        HashSet<int> roots = new HashSet<int>();
-        if (dialoguePanel != null)
+        if (currentDialogue != null && currentDialogue.mainStoryBlockDeferredRewardSkip)
         {
-            GameObject root = dialoguePanel.transform.root.gameObject;
-            if (root != null && root != gameObject && roots.Add(root.GetInstanceID()))
-            {
-                DontDestroyOnLoad(root);
-            }
+            return true;
         }
 
-        if (stageController != null)
-        {
-            GameObject root = stageController.transform.root.gameObject;
-            if (root != null && root != gameObject && roots.Add(root.GetInstanceID()))
-            {
-                DontDestroyOnLoad(root);
-            }
-        }
+        return string.Equals(SceneManager.GetActiveScene().name, SceneLoader.SCENE_CRIME_SCENE, StringComparison.Ordinal);
     }
 
     void Update()
@@ -282,8 +328,7 @@ public class DialogueManager : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             if (pendingDeferredNotebookRewards != null
-                && currentDialogue != null
-                && currentDialogue.mainStoryBlockDeferredRewardSkip)
+                && TreatDeferredNotebookRewardsAsMandatoryCollect())
             {
                 return;
             }
@@ -345,6 +390,8 @@ public class DialogueManager : MonoBehaviour
         currentDialogueResourceId = characterId ?? string.Empty;
         ResetNoticeIntroPlaybackState();
         AbandonPendingDeferredNotebookRewards();
+
+        DialogueSceneBackdropBinder.ApplyIfAny(currentDialogue.backdropImageId);
 
         currentNodeId = string.IsNullOrEmpty(overrideStartNodeId)
             ? currentDialogue.startNodeId
@@ -670,6 +717,8 @@ public class DialogueManager : MonoBehaviour
 
         CrimeSceneEvidenceGrantBridge.GrantPendingIfAny();
         EvidencePanelUI.EnsureSingleEventSystem();
+        DialogueSceneBackdropBinder.ApplyIfAny(null);
+        PassThroughDecorativeCanvasImages();
     }
 
     private string GetCurrentDialogueKey()
@@ -1198,7 +1247,7 @@ public class DialogueManager : MonoBehaviour
             string hintLine;
             if (string.IsNullOrWhiteSpace(node.dialogueRewardInteractHint))
             {
-                bool mainStoryBlock = currentDialogue != null && currentDialogue.mainStoryBlockDeferredRewardSkip;
+                bool mainStoryBlock = TreatDeferredNotebookRewardsAsMandatoryCollect();
                 hintLine = mainStoryBlock
                     ? mainStoryDeferNotebookRewardsHintRichText
                     : deferNotebookRewardsHintRichText;
@@ -1206,7 +1255,7 @@ public class DialogueManager : MonoBehaviour
             else
             {
                 string custom = node.dialogueRewardInteractHint.Trim();
-                bool mainStoryBlock = currentDialogue != null && currentDialogue.mainStoryBlockDeferredRewardSkip;
+                bool mainStoryBlock = TreatDeferredNotebookRewardsAsMandatoryCollect();
                 if (custom.Length > 0 && custom[0] == '<')
                 {
                     hintLine = custom;
@@ -1257,9 +1306,7 @@ public class DialogueManager : MonoBehaviour
         }
         else
         {
-            EvidencePanelUI.DisableAllEventSystemComponentsBeforeSceneLoad();
-            SceneManager.LoadScene(sceneName);
-            EvidencePanelUI.EnsureSingleEventSystem();
+            ScreenFader.LoadSceneWithFade(sceneName);
         }
     }
 }

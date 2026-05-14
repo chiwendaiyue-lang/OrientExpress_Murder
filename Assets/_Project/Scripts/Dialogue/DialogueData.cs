@@ -75,6 +75,11 @@ public class DialogueData
     /// </summary>
     public bool mainStoryBlockDeferredRewardSkip;
 
+    /// <summary>
+    /// 可选：本段对话开始时切换场景中 <see cref="DialogueSceneBackdropBinder"/> 绑定的背景（见该脚本说明）。
+    /// </summary>
+    public string backdropImageId;
+
     public List<DialogueNodeEntry> nodes;
 
     [NonSerialized] public Dictionary<string, DialogueNode> nodeLookup;

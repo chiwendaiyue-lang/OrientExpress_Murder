@@ -906,6 +906,7 @@
         "speakerCharacterId": "poirot",
         "speakerName": "波洛",
         "text": "我需要查看一下现场。",
+        "nextNodeId": "END",
         "stage": {
           "focusCharacterId": "poirot",
           "slots": [

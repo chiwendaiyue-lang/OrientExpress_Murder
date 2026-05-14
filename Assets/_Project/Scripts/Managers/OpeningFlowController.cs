@@ -32,6 +32,7 @@ public class OpeningFlowController : MonoBehaviour
             return;
         }
 
+        DialogueManager.EnsureExists();
         if (DialogueManager.Instance == null)
         {
             Debug.LogWarning("OpeningFlowController: DialogueManager 未就绪，无法开始 opening 对话。");
