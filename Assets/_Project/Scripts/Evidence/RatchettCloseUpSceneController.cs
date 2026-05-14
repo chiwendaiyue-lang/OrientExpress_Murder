@@ -9,6 +9,8 @@ public class RatchettCloseUpHotspot
 {
     public string buttonObjectName;
     public string evidenceId;
+    [Tooltip("可选。若为空，则按证据 id 自动映射到 Resources/Dialogue 下的文件名（例如 ratchett_pistol → the_pistol）。")]
+    public string dialogueResourceId;
     public string availableHint = "点击查看";
 }
 
@@ -56,21 +58,203 @@ public class RatchettCloseUpSceneController : MonoBehaviour
             return;
         }
 
+        DialogueManager busyDm = CrimeSceneEvidenceGrantBridge.FindDialogueManager();
+        if (busyDm != null && busyDm.IsDialogueUiActive())
+        {
+            return;
+        }
+
+        if (IsDialogueOnlyWindowEvidence(hotspot.evidenceId))
+        {
+            if (IsWindowCollectionComplete(hotspot.evidenceId))
+            {
+                return;
+            }
+
+            if (!TryPlayWindowCollectionDialogue(hotspot.evidenceId))
+            {
+                return;
+            }
+
+            RatchettCrimeSceneProgress.TryMarkFinished();
+            RefreshHintStates();
+            return;
+        }
+
+        string dialogueId = ResolvePostCollectDialogueId(hotspot);
+        if (!string.IsNullOrEmpty(dialogueId) && CrimeSceneEvidenceGrantBridge.DialogueResourceExists(dialogueId))
+        {
+            CrimeSceneEvidenceGrantBridge.ClearPending();
+            AddEvidence(hotspot.evidenceId);
+            string capturedDialogueId = dialogueId;
+            NotebookUnlockOverlayPresenter.EnqueueContinuation(() =>
+            {
+                if (!CrimeSceneEvidenceGrantBridge.TryStartCollectDialogue(capturedDialogueId))
+                {
+                    Debug.LogWarning($"RatchettCloseUpSceneController: 搜证对话未能启动：{capturedDialogueId}");
+                }
+            });
+
+            RatchettCrimeSceneProgress.TryMarkFinished();
+            RefreshHintStates();
+            return;
+        }
+
         AddEvidence(hotspot.evidenceId);
         RatchettCrimeSceneProgress.TryMarkFinished();
         RefreshHintStates();
     }
 
+    private static bool IsDialogueOnlyWindowEvidence(string evidenceId)
+    {
+        return string.Equals(evidenceId, EvidenceIds.WINDOW_FRAME, StringComparison.Ordinal)
+            || string.Equals(evidenceId, EvidenceIds.SNOW_NO_FOOTPRINTS, StringComparison.Ordinal);
+    }
+
+    private bool IsWindowCollectionComplete(string evidenceId)
+    {
+        EvidenceManager evidenceManager = EvidenceManager.EnsureInstance();
+        DetectiveNotebookManager notebookManager = DetectiveNotebookManager.EnsureInstance();
+        GameManager gm = GameManager.Instance;
+
+        if (string.Equals(evidenceId, EvidenceIds.WINDOW_FRAME, StringComparison.Ordinal))
+        {
+            return (gm != null && gm.RatchettWindowFrameDialogueDone)
+                || HasEvidence(evidenceManager, notebookManager, evidenceId);
+        }
+
+        if (string.Equals(evidenceId, EvidenceIds.SNOW_NO_FOOTPRINTS, StringComparison.Ordinal))
+        {
+            return (gm != null && gm.RatchettWindowSnowDialogueDone)
+                || HasEvidence(evidenceManager, notebookManager, evidenceId);
+        }
+
+        return false;
+    }
+
+    private bool TryPlayWindowCollectionDialogue(string evidenceId)
+    {
+        string dialogueId = string.Equals(evidenceId, EvidenceIds.WINDOW_FRAME, StringComparison.Ordinal)
+            ? "window_frame"
+            : "lookout_window";
+
+        CrimeSceneEvidenceGrantBridge.ClearPending();
+
+        DialogueManager dm = CrimeSceneEvidenceGrantBridge.FindDialogueManager();
+        if (dm == null)
+        {
+            Debug.LogWarning("RatchettCloseUpSceneController: 找不到 DialogueManager，无法播放窗户相关对话（需已进入过列车走廊等已加载对话 UI 的流程）。");
+            return false;
+        }
+
+        if (!CrimeSceneEvidenceGrantBridge.DialogueResourceExists(dialogueId))
+        {
+            Debug.LogWarning($"RatchettCloseUpSceneController: 无对话资源 Dialogue/{dialogueId}。");
+            return false;
+        }
+
+        dm.StartDialogue(dialogueId);
+        if (!dm.IsDialogueUiActive())
+        {
+            Debug.LogWarning("RatchettCloseUpSceneController: 窗户对话未能启动（检查 DialogueManager UI 绑定）。");
+            return false;
+        }
+
+        GameManager gm = GameManager.Instance;
+        if (gm == null)
+        {
+            return true;
+        }
+
+        if (string.Equals(evidenceId, EvidenceIds.WINDOW_FRAME, StringComparison.Ordinal))
+        {
+            gm.RatchettWindowFrameDialogueDone = true;
+        }
+        else
+        {
+            gm.RatchettWindowSnowDialogueDone = true;
+        }
+
+        return true;
+    }
+
+    private static string ResolvePostCollectDialogueId(RatchettCloseUpHotspot hotspot)
+    {
+        if (hotspot == null)
+        {
+            return null;
+        }
+
+        if (!string.IsNullOrEmpty(hotspot.dialogueResourceId))
+        {
+            return hotspot.dialogueResourceId.Trim();
+        }
+
+        return ResolveDefaultDialogueIdForEvidence(hotspot.evidenceId);
+    }
+
+    private static string ResolveDefaultDialogueIdForEvidence(string evidenceId)
+    {
+        if (string.IsNullOrEmpty(evidenceId))
+        {
+            return null;
+        }
+
+        if (string.Equals(evidenceId, EvidenceIds.PISTOL, StringComparison.Ordinal))
+        {
+            return "the_pistol";
+        }
+
+        if (string.Equals(evidenceId, EvidenceIds.GOLD_WATCH, StringComparison.Ordinal))
+        {
+            return "ratchett_gold_watch";
+        }
+
+        if (string.Equals(evidenceId, EvidenceIds.BURNED_PAPER, StringComparison.Ordinal))
+        {
+            return "burned_paper_fragment";
+        }
+
+        return evidenceId;
+    }
+
     private void OnBackToCabinClicked()
     {
+        if (DialogueManager.Instance != null)
+        {
+            DialogueManager.Instance.ForceEndDialogueIfAny();
+        }
+
+        CrimeSceneEvidenceGrantBridge.ClearPending();
+
         if (SceneLoader.Instance != null)
         {
             SceneLoader.Instance.LoadScene(cabinSceneName);
         }
         else
         {
+            EvidencePanelUI.DisableAllEventSystemComponentsBeforeSceneLoad();
             SceneManager.LoadScene(cabinSceneName);
+            EvidencePanelUI.EnsureSingleEventSystem();
         }
+    }
+
+    private bool IsHotspotExhausted(string evidenceId)
+    {
+        if (IsDialogueOnlyWindowEvidence(evidenceId))
+        {
+            return IsWindowCollectionComplete(evidenceId);
+        }
+
+        if (!string.IsNullOrEmpty(CrimeSceneEvidenceGrantBridge.PendingEvidenceIdAfterDialogue)
+            && string.Equals(CrimeSceneEvidenceGrantBridge.PendingEvidenceIdAfterDialogue, evidenceId, StringComparison.Ordinal))
+        {
+            return true;
+        }
+
+        EvidenceManager evidenceManager = EvidenceManager.EnsureInstance();
+        DetectiveNotebookManager notebookManager = DetectiveNotebookManager.EnsureInstance();
+        return HasEvidence(evidenceManager, notebookManager, evidenceId);
     }
 
     private void AddEvidence(string evidenceId)
@@ -145,9 +329,6 @@ public class RatchettCloseUpSceneController : MonoBehaviour
 
     private void RefreshHintStates()
     {
-        EvidenceManager evidenceManager = EvidenceManager.EnsureInstance();
-        DetectiveNotebookManager notebookManager = DetectiveNotebookManager.EnsureInstance();
-
         foreach (RatchettCloseUpHotspot hotspot in collectionHotspots)
         {
             if (hotspot == null || string.IsNullOrEmpty(hotspot.buttonObjectName))
@@ -160,7 +341,7 @@ public class RatchettCloseUpSceneController : MonoBehaviour
                 continue;
             }
 
-            bool done = HasEvidence(evidenceManager, notebookManager, hotspot.evidenceId);
+            bool done = IsHotspotExhausted(hotspot.evidenceId);
             trigger.SetHint(done ? exhaustedHint : hotspot.availableHint);
         }
     }

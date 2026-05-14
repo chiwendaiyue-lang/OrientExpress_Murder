@@ -9,10 +9,16 @@ public class GameManager : MonoBehaviour
     public enum GameState { MainMenu, Exploring, Dialogue, Investigating }
     public GameState CurrentState { get; private set; } = GameState.MainMenu;
 
-    // �ؿ���ɱ�־
+    // 关卡完成标志
     public bool HasInvestigatedCrimeScene { get; set; } = false;
     public bool HasTalkedToMrsHubbard { get; set; } = false;
     public bool HasTalkedToCountAndrenyi { get; set; } = false;
+
+    /// <summary>雷切特窗户近景：窗框对话已看过（不记入物证，仅用于搜证进度）。</summary>
+    public bool RatchettWindowFrameDialogueDone { get; set; }
+
+    /// <summary>雷切特窗户近景：窗外雪景对话已看完（不记入物证，仅用于搜证进度）。</summary>
+    public bool RatchettWindowSnowDialogueDone { get; set; }
 
     void Awake()
     {
@@ -33,7 +39,7 @@ public class GameManager : MonoBehaviour
         Debug.Log($"Game State: {CurrentState}");
     }
 
-    // ����Ƿ���Խ�����һ��
+    // 检查是否可以进入下一关
     public bool CanProceedToNextLevel()
     {
         return HasInvestigatedCrimeScene && HasTalkedToMrsHubbard;

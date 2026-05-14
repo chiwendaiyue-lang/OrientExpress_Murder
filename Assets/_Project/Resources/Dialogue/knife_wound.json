@@ -1,0 +1,687 @@
+{
+  "sceneId": "knife_wound",
+  "startNodeId": "node1",
+  "nodes": [
+    {
+      "id": "node1",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "doctor",
+        "speakerName": "大夫",
+        "text": "我得看看伤口的性质。",
+        "stage": {
+          "focusCharacterId": "doctor",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextNodeId": "node2"
+      }
+    },
+    {
+      "id": "node2",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "system",
+        "speakerName": "系统",
+        "text": "康斯坦丁大夫俯身观察了一阵子。",
+        "stage": {
+          "focusCharacterId": "",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextNodeId": "node3"
+      }
+    },
+    {
+      "id": "node3",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "doctor",
+        "speakerName": "大夫",
+        "text": "这可不轻松，凶手得站在这儿，一刀又一刀地朝他身上戳。",
+        "stage": {
+          "focusCharacterId": "doctor",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextNodeId": "node4"
+      }
+    },
+    {
+      "id": "node4",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "一共戳了几刀呢？",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextNodeId": "node5"
+      }
+    },
+    {
+      "id": "node5",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "doctor",
+        "speakerName": "大夫",
+        "text": "我认为是十二处。有一、两处很轻，实际上只是划破一点皮。另一方面，至少有三处可能是致命的。",
+        "dialogueHighlightPhrase": "我认为是十二处。",
+        "stage": {
+          "focusCharacterId": "doctor",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "rewards": {
+          "evidenceToAdd": [
+            "ratchett_knife_wound"
+          ]
+        },
+        "nextNodeId": "node6"
+      }
+    },
+    {
+      "id": "node6",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "system",
+        "speakerName": "系统",
+        "text": "大夫迷惑地皱起眉头，朝尸体凝视着。",
+        "stage": {
+          "focusCharacterId": "",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextNodeId": "node7"
+      }
+    },
+    {
+      "id": "node7",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "有什么奇怪的东西么？",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextNodeId": "node8"
+      }
+    },
+    {
+      "id": "node8",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "doctor",
+        "speakerName": "大夫",
+        "text": "确实有，你瞧这两处伤口──这儿，还有这儿。",
+        "stage": {
+          "focusCharacterId": "doctor",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextNodeId": "node9"
+      }
+    },
+    {
+      "id": "node9",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "doctor",
+        "speakerName": "大夫",
+        "text": "它们都很深，每一处都被戳断了血管──然而──口子都没有裂开。应该出血而没有出血。",
+        "stage": {
+          "focusCharacterId": "doctor",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextNodeId": "node10"
+      }
+    },
+    {
+      "id": "node10",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "这意味着？",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextNodeId": "node11"
+      }
+    },
+    {
+      "id": "node11",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "doctor",
+        "speakerName": "大夫",
+        "text": "这意味着，戳这几刀时，人已经死了──死了一些时候了。可是这无疑是荒谬的。",
+        "stage": {
+          "focusCharacterId": "doctor",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "rewards": {
+          "evidenceStageToUpdate": [
+            {
+              "itemId": "ratchett_knife_wound",
+              "stageId": "ratchett_knife_wound2"
+            }
+          ]
+        },
+        "options": [
+          {
+            "text": "凶手杀完人后又回来彻底核实了一下？",
+            "nextNodeId": "node12_returned"
+          },
+          {
+            "text": "有多人先后作案？",
+            "nextNodeId": "node12_multiple"
+          }
+        ]
+      }
+    },
+    {
+      "id": "node12_returned",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "doctor",
+        "speakerName": "大夫",
+        "text": "有这种可能。不过，还有一点。",
+        "stage": {
+          "focusCharacterId": "doctor",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextNodeId": "node13_common"
+      }
+    },
+    {
+      "id": "node12_multiple",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "doctor",
+        "speakerName": "大夫",
+        "text": "很有可能，你看这里：",
+        "stage": {
+          "focusCharacterId": "doctor",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextNodeId": "node13_common"
+      }
+    },
+    {
+      "id": "node13_common",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "doctor",
+        "speakerName": "大夫",
+        "text": "你瞧这伤口──在右臂根──靠近右肩，这一刀几乎可以肯定是用左手戳的。",
+        "stage": {
+          "focusCharacterId": "doctor",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextNodeId": "node14"
+      }
+    },
+    {
+      "id": "node14",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "doctor",
+        "speakerName": "大夫",
+        "text": "再看这几刀，恰恰明显地像是用的右手。",
+        "stage": {
+          "focusCharacterId": "doctor",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextNodeId": "node15"
+      }
+    },
+    {
+      "id": "node15",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "说明凶手可能有两个人。",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextNodeId": "node16"
+      }
+    },
+    {
+      "id": "node16",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "doctor",
+        "speakerName": "大夫",
+        "text": "不仅如此，这当中有些刀是很软弱无力的──缺乏力气，或者是缺乏决心。",
+        "stage": {
+          "focusCharacterId": "doctor",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextNodeId": "node17"
+      }
+    },
+    {
+      "id": "node17",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "doctor",
+        "speakerName": "大夫",
+        "text": "但是，这儿的一刀──还有这儿一刀──他再次指点说，这两刀可需要很大的力气。它们把肌肉都给戳穿了。",
+        "stage": {
+          "focusCharacterId": "doctor",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextNodeId": "node18"
+      }
+    },
+    {
+      "id": "node18",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "这几刀，按你的看法，是男人戳的吧？",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextNodeId": "node19"
+      }
+    },
+    {
+      "id": "node19",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "doctor",
+        "speakerName": "大夫",
+        "text": "非常肯定。",
+        "stage": {
+          "focusCharacterId": "doctor",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextNodeId": "node20"
+      }
+    },
+    {
+      "id": "node20",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "不可能是一个女人戳的吗？",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextNodeId": "node21"
+      }
+    },
+    {
+      "id": "node21",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "doctor",
+        "speakerName": "大夫",
+        "text": "一个年轻力壮的女运动员，也许能戳这一刀，特别是在她处于强烈感情的支配之下时。",
+        "stage": {
+          "focusCharacterId": "doctor",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextNodeId": "node22"
+      }
+    },
+    {
+      "id": "node22",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "doctor",
+        "speakerName": "大夫",
+        "text": "但是，在我看来，这是不太可能的。",
+        "stage": {
+          "focusCharacterId": "doctor",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "rewards": {
+          "evidenceStageToUpdate": [
+            {
+              "itemId": "ratchett_knife_wound",
+              "stageId": "ratchett_knife_wound3"
+            }
+          ]
+        },
+        "nextNodeId": "node23"
+      }
+    },
+    {
+      "id": "node23",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "system",
+        "speakerName": "系统",
+        "text": "波洛沉默了两分钟。",
+        "stage": {
+          "focusCharacterId": "",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextNodeId": "node24"
+      }
+    },
+    {
+      "id": "node24",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "那么这个被害者──在这整个过程中做点什么呢？他叫喊了吗？他挣扎了吗？他自卫了吗？按道理来说，他有一个防身的武器啊！",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextNodeId": "node25"
+      }
+    },
+    {
+      "id": "node25",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "system",
+        "speakerName": "系统",
+        "text": "请返回案发现场寻找死者防身的武器。",
+        "stage": {
+          "focusCharacterId": "",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextSceneName": "CrimeScene"
+      }
+    }
+  ]
+}

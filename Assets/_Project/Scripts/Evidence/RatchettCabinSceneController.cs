@@ -47,23 +47,36 @@ public class RatchettCabinSceneController : MonoBehaviour
 
     public void OnBodyKnifeWoundClicked()
     {
-        AddEvidence(EvidenceIds.KNIFE_WOUND);
-        RatchettCrimeSceneProgress.TryMarkFinished();
-        RefreshHintStates();
+        TryCollectEvidenceWithOptionalDialogue(EvidenceIds.KNIFE_WOUND, "knife_wound");
     }
 
     public void OnBodyCloseUpClicked()
     {
+        if (IsActiveDialogueBlockingCabinInput())
+        {
+            return;
+        }
+
         LoadScene(bodySceneName);
     }
 
     public void OnWindowClicked()
     {
+        if (IsActiveDialogueBlockingCabinInput())
+        {
+            return;
+        }
+
         LoadScene(windowSceneName);
     }
 
     public void OnFloorClicked()
     {
+        if (IsActiveDialogueBlockingCabinInput())
+        {
+            return;
+        }
+
         AddEvidence(EvidenceIds.H_HANDKERCHIEF);
         RatchettCrimeSceneProgress.TryMarkFinished();
         RefreshHintStates();
@@ -71,6 +84,11 @@ public class RatchettCabinSceneController : MonoBehaviour
 
     public void OnPipeCleanerClicked()
     {
+        if (IsActiveDialogueBlockingCabinInput())
+        {
+            return;
+        }
+
         AddEvidence(EvidenceIds.PIPE_CLEANER);
         RatchettCrimeSceneProgress.TryMarkFinished();
         RefreshHintStates();
@@ -78,11 +96,21 @@ public class RatchettCabinSceneController : MonoBehaviour
 
     public void OnTableClicked()
     {
+        if (IsActiveDialogueBlockingCabinInput())
+        {
+            return;
+        }
+
         LoadScene(tableSceneName);
     }
 
     public void OnLeaveCabinClicked()
     {
+        if (IsActiveDialogueBlockingCabinInput())
+        {
+            return;
+        }
+
         if (!IsCrimeSceneFinished())
         {
             if (HoverHintUI.Instance != null)
@@ -99,6 +127,53 @@ public class RatchettCabinSceneController : MonoBehaviour
         }
 
         LoadScene(postInvestigationSceneName);
+    }
+
+    private static bool IsActiveDialogueBlockingCabinInput()
+    {
+        DialogueManager dm = DialogueManager.Instance;
+        if (dm == null)
+        {
+            dm = UnityEngine.Object.FindFirstObjectByType<DialogueManager>(FindObjectsInactive.Include);
+        }
+
+        return dm != null && dm.IsDialogueUiActive();
+    }
+
+    private void TryCollectEvidenceWithOptionalDialogue(string evidenceId, string dialogueResourceId)
+    {
+        EvidenceManager evidenceManager = EvidenceManager.EnsureInstance();
+        DetectiveNotebookManager notebookManager = DetectiveNotebookManager.EnsureInstance();
+        if (HasEvidence(evidenceManager, notebookManager, evidenceId))
+        {
+            return;
+        }
+
+        if (IsActiveDialogueBlockingCabinInput())
+        {
+            return;
+        }
+
+        if (!string.IsNullOrEmpty(dialogueResourceId) && CrimeSceneEvidenceGrantBridge.DialogueResourceExists(dialogueResourceId))
+        {
+            CrimeSceneEvidenceGrantBridge.ClearPending();
+            AddEvidence(evidenceId);
+            string capturedDialogueId = dialogueResourceId;
+            NotebookUnlockOverlayPresenter.EnqueueContinuation(() =>
+            {
+                if (!CrimeSceneEvidenceGrantBridge.TryStartCollectDialogue(capturedDialogueId))
+                {
+                    Debug.LogWarning($"RatchettCabinSceneController: 搜证对话未能启动：{capturedDialogueId}");
+                }
+            });
+        }
+        else
+        {
+            AddEvidence(evidenceId);
+        }
+
+        RatchettCrimeSceneProgress.TryMarkFinished();
+        RefreshHintStates();
     }
 
     private void AddEvidence(string evidenceId)
@@ -133,7 +208,9 @@ public class RatchettCabinSceneController : MonoBehaviour
         }
         else
         {
+            EvidencePanelUI.DisableAllEventSystemComponentsBeforeSceneLoad();
             SceneManager.LoadScene(sceneName);
+            EvidencePanelUI.EnsureSingleEventSystem();
         }
     }
 
@@ -174,7 +251,7 @@ public class RatchettCabinSceneController : MonoBehaviour
         return trigger;
     }
 
-    private void RefreshHintStates()
+    public void RefreshHintStates()
     {
         EvidenceManager evidenceManager = EvidenceManager.EnsureInstance();
         DetectiveNotebookManager notebookManager = DetectiveNotebookManager.EnsureInstance();
@@ -182,8 +259,7 @@ public class RatchettCabinSceneController : MonoBehaviour
         bool bodyKnifeWoundDone = HasEvidence(evidenceManager, notebookManager, EvidenceIds.KNIFE_WOUND);
         bool bodyCloseUpDone = HasEvidence(evidenceManager, notebookManager, EvidenceIds.GOLD_WATCH)
             && HasEvidence(evidenceManager, notebookManager, EvidenceIds.PISTOL);
-        bool windowDone = HasEvidence(evidenceManager, notebookManager, EvidenceIds.WINDOW_FRAME)
-            && HasEvidence(evidenceManager, notebookManager, EvidenceIds.SNOW_NO_FOOTPRINTS);
+        bool windowDone = RatchettCrimeSceneProgress.IsWindowBranchSatisfied(notebookManager);
         bool floorDone = HasEvidence(evidenceManager, notebookManager, EvidenceIds.H_HANDKERCHIEF);
         bool tableDone = HasEvidence(evidenceManager, notebookManager, EvidenceIds.BURNED_PAPER);
         bool pipeCleanerDone = HasEvidence(evidenceManager, notebookManager, EvidenceIds.PIPE_CLEANER);

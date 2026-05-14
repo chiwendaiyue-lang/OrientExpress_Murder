@@ -91,7 +91,9 @@ public class MainMenuManager : MonoBehaviour
         }
         else
         {
+            EvidencePanelUI.DisableAllEventSystemComponentsBeforeSceneLoad();
             SceneManager.LoadScene(startSceneName);
+            EvidencePanelUI.EnsureSingleEventSystem();
         }
     }
 
@@ -114,7 +116,9 @@ public class MainMenuManager : MonoBehaviour
         }
         else
         {
+            EvidencePanelUI.DisableAllEventSystemComponentsBeforeSceneLoad();
             SceneManager.LoadScene(data.activeSceneName);
+            EvidencePanelUI.EnsureSingleEventSystem();
         }
     }
 

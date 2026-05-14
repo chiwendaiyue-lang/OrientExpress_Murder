@@ -1,0 +1,543 @@
+{
+  "sceneId": "burned_paper_fragment",
+  "startNodeId": "node1",
+  "nodes": [
+    {
+      "id": "node1",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "这张纸条上有一些辨认不清的字迹……",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextNodeId": "node2"
+      }
+    },
+    {
+      "id": "node2",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "现在需要一只老式的女人帽盒。",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextNodeId": "node3"
+      }
+    },
+    {
+      "id": "node3",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "system",
+        "speakerName": "系统",
+        "text": "波洛打开包厢门。",
+        "stage": {
+          "focusCharacterId": "",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        },
+        "nextNodeId": "node4"
+      }
+    },
+    {
+      "id": "node4",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "列车员！",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        },
+        "nextNodeId": "node5"
+      }
+    },
+    {
+      "id": "node5",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "这节车厢有多少妇女？",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "pierre",
+              "portrait": "pierre_anxious"
+            }
+          ]
+        },
+        "nextNodeId": "node6"
+      }
+    },
+    {
+      "id": "node6",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "pierre",
+        "speakerName": "列车员皮埃尔",
+        "text": "一、二、三……六个，先生。一位美国老太太，一位瑞典太太，年轻的英国小姐，安德烈伯爵夫人，还有德雷哥米洛夫公爵夫人和她的女佣人。",
+        "stage": {
+          "focusCharacterId": "pierre",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "pierre",
+              "portrait": "pierre_anxious"
+            }
+          ]
+        },
+        "nextNodeId": "node7"
+      }
+    },
+    {
+      "id": "node7",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "她们都有帽盒吗？",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "pierre",
+              "portrait": "pierre_anxious"
+            }
+          ]
+        },
+        "nextNodeId": "node8"
+      }
+    },
+    {
+      "id": "node8",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "pierre",
+        "speakerName": "列车员皮埃尔",
+        "text": "有，先生。",
+        "stage": {
+          "focusCharacterId": "pierre",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "pierre",
+              "portrait": "pierre_anxious"
+            }
+          ]
+        },
+        "nextNodeId": "node9"
+      }
+    },
+    {
+      "id": "node9",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "给我去拿来──让我看看──，瑞典太太和那个女佣人的。我只打算要这两只。你可以告诉她们，这是一种海关规则──到底怎么说，由你考虑吧。",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "pierre",
+              "portrait": "pierre_anxious"
+            }
+          ]
+        },
+        "nextNodeId": "node10"
+      }
+    },
+    {
+      "id": "node10",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "pierre",
+        "speakerName": "列车员皮埃尔",
+        "text": "不成问题，先生。现在她们都不在自己的包房里。",
+        "stage": {
+          "focusCharacterId": "pierre",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "pierre",
+              "portrait": "pierre_anxious"
+            }
+          ]
+        },
+        "nextNodeId": "node11"
+      }
+    },
+    {
+      "id": "node11",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "那就快。",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "pierre",
+              "portrait": "pierre_anxious"
+            }
+          ]
+        },
+        "nextNodeId": "node12"
+      }
+    },
+    {
+      "id": "node12",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "system",
+        "speakerName": "系统",
+        "text": "一段时间后。",
+        "stage": {
+          "focusCharacterId": "",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        },
+        "nextNodeId": "node13"
+      }
+    },
+    {
+      "id": "node13",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "system",
+        "speakerName": "系统",
+        "text": "列车员回来时，带来了两个帽盒。波洛打开女佣人的那只，把它扔到一旁。接着，他又打开了瑞典太太的，是时发出一声满意的惊叫。他小心翼翼地拿出帽子，揭开几只隆起的圆形金属网。",
+        "stage": {
+          "focusCharacterId": "",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextNodeId": "node14"
+      }
+    },
+    {
+      "id": "node14",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "我还需要……",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextNodeId": "node15"
+      }
+    },
+    {
+      "id": "node15",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "system",
+        "speakerName": "系统",
+        "text": "波洛走出包房，过一会回来了，带着一只小酒精炉和一把烫发钳。",
+        "stage": {
+          "focusCharacterId": "",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextNodeId": "node16"
+      }
+    },
+    {
+      "id": "node16",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "doctor",
+        "speakerName": "大夫",
+        "text": "什么意思？",
+        "stage": {
+          "focusCharacterId": "doctor",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextNodeId": "node17"
+      }
+    },
+    {
+      "id": "node17",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "你还记得阿姆斯特朗家的那个案子吗？",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextNodeId": "node18"
+      }
+    },
+    {
+      "id": "node18",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "doctor",
+        "speakerName": "大夫",
+        "text": "当然记得，那个美国小女孩惨遭绑架杀害的事，谁不记得啊？",
+        "stage": {
+          "focusCharacterId": "doctor",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextNodeId": "node19"
+      }
+    },
+    {
+      "id": "node19",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "你还记得那个小女孩的名字吗？",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextNodeId": "node20"
+      }
+    },
+    {
+      "id": "node20",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "doctor",
+        "speakerName": "大夫",
+        "text": "当然，Daisy……A-I-S-Y，A-R-M-S，Daisy Armstrong！",
+        "dialogueHighlightPhrase": "Daisy Armstrong！",
+        "stage": {
+          "focusCharacterId": "doctor",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextNodeId": "node21"
+      }
+    },
+    {
+      "id": "node21",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "是的，黛西·阿姆斯特朗！",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextNodeId": "node22"
+      }
+    },
+    {
+      "id": "node22",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "所以，雷切特就是卡塞梯，那个绑架案的幕后真凶！",
+        "dialogueHighlightPhrase": "雷切特就是卡塞梯",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextSceneName": "CrimeScene"
+      }
+    }
+  ]
+}

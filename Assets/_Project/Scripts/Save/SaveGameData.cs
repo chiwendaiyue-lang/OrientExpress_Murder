@@ -18,6 +18,8 @@ public class SaveGameData
     public NotebookRuntimeState notebook = new NotebookRuntimeState();
     public List<string> legacyCollectedClues = new List<string>();
     public bool hasInvestigatedCrimeScene;
+    public bool ratchettWindowFrameDialogueDone;
+    public bool ratchettWindowSnowDialogueDone;
     public bool hasTalkedToMrsHubbard;
     public bool hasTalkedToCountAndrenyi;
     public string dialogueProgressBridgePendingId;

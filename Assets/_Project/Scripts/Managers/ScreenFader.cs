@@ -73,12 +73,14 @@ public class ScreenFader : MonoBehaviour
             yield return new WaitForSeconds(holdBlackDuration);
         }
 
+        EvidencePanelUI.DisableAllEventSystemComponentsBeforeSceneLoad();
         AsyncOperation op = SceneManager.LoadSceneAsync(sceneName);
         while (!op.isDone)
         {
             yield return null;
         }
 
+        EvidencePanelUI.EnsureSingleEventSystem();
         yield return FadeTo(0f, defaultFadeInDuration);
         isTransitioning = false;
     }

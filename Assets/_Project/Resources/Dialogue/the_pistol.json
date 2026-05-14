@@ -1,0 +1,117 @@
+{
+  "sceneId": "the_pistol",
+  "startNodeId": "node1",
+  "nodes": [
+    {
+      "id": "node1",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "啊，不出我所料，你瞧，子弹满满的。",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        },
+        "nextNodeId": "node2"
+      }
+    },
+    {
+      "id": "node2",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "之前雷切特给我展示了他的手枪，看来它没能派上用场。",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        },
+        "conditionalNext": [
+          {
+            "requirements": {
+              "requiredEvidenceIds": [
+                "wine_glasses"
+              ]
+            },
+            "nextNodeId": "node_with_wine"
+          },
+          {
+            "nextNodeId": "node_without_wine"
+          }
+        ]
+      }
+    },
+    {
+      "id": "node_with_wine",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "看来雷切特是被迷晕了，所以没有自卫。",
+        "dialogueHighlightPhrase": "被迷晕了，所以没有自卫。",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        },
+        "rewards": {
+          "evidenceStageToUpdate": [
+            {
+              "itemId": "wine_glasses",
+              "stageId": "wine_glasses_3"
+            }
+          ]
+        },
+        "nextSceneName": "CrimeScene"
+      }
+    },
+    {
+      "id": "node_without_wine",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "这是为什么呢？",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        },
+        "nextNodeId": "node_without_wine_hint"
+      }
+    },
+    {
+      "id": "node_without_wine_hint",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "system",
+        "speakerName": "系统",
+        "text": "请返回案发现场寻找更多证据。",
+        "nextSceneName": "CrimeScene"
+      }
+    }
+  ]
+}

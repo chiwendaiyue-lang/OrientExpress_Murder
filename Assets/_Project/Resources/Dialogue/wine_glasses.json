@@ -1,0 +1,165 @@
+{
+  "sceneId": "wine_glasses",
+  "startNodeId": "node1",
+  "nodes": [
+    {
+      "id": "node1",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "这有一个空酒杯。",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "rewards": {
+          "evidenceToAdd": [
+            "wine_glasses"
+          ]
+        },
+        "nextNodeId": "node2"
+      }
+    },
+    {
+      "id": "node2",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "system",
+        "speakerName": "系统",
+        "text": "康斯坦丁大夫拿起酒杯嗅了嗅。",
+        "stage": {
+          "focusCharacterId": "",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextNodeId": "node3"
+      }
+    },
+    {
+      "id": "node3",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "doctor",
+        "speakerName": "大夫",
+        "text": "我能确定这里面掺了麻药。",
+        "dialogueHighlightPhrase": "掺了麻药。",
+        "stage": {
+          "focusCharacterId": "doctor",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "conditionalNext": [
+          {
+            "requirements": {
+              "requiredEvidenceIds": [
+                "ratchett_pistol"
+              ]
+            },
+            "nextNodeId": "node_with_pistol"
+          },
+          {
+            "nextNodeId": "node_without_pistol"
+          }
+        ]
+      }
+    },
+    {
+      "id": "node_with_pistol",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "doctor",
+        "speakerName": "大夫",
+        "text": "看来这就是被害者没有反应的原因。",
+        "stage": {
+          "focusCharacterId": "doctor",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "rewards": {
+          "evidenceStageToUpdate": [
+            {
+              "itemId": "wine_glasses",
+              "stageId": "wine_glasses_3"
+            }
+          ]
+        },
+        "nextSceneName": "CrimeScene"
+      }
+    },
+    {
+      "id": "node_without_pistol",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "doctor",
+        "speakerName": "大夫",
+        "text": "被害者有可能在不知情的情况下喝下了这杯掺了麻药的酒。",
+        "stage": {
+          "focusCharacterId": "doctor",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "rewards": {
+          "evidenceStageToUpdate": [
+            {
+              "itemId": "wine_glasses",
+              "stageId": "wine_glasses_2"
+            }
+          ]
+        },
+        "nextSceneName": "CrimeScene"
+      }
+    }
+  ]
+}

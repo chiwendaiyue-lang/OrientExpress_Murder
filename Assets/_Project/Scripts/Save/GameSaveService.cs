@@ -84,6 +84,8 @@ public static class GameSaveService
         if (GameManager.Instance != null)
         {
             data.hasInvestigatedCrimeScene = GameManager.Instance.HasInvestigatedCrimeScene;
+            data.ratchettWindowFrameDialogueDone = GameManager.Instance.RatchettWindowFrameDialogueDone;
+            data.ratchettWindowSnowDialogueDone = GameManager.Instance.RatchettWindowSnowDialogueDone;
             data.hasTalkedToMrsHubbard = GameManager.Instance.HasTalkedToMrsHubbard;
             data.hasTalkedToCountAndrenyi = GameManager.Instance.HasTalkedToCountAndrenyi;
         }
@@ -125,6 +127,8 @@ public static class GameSaveService
         if (GameManager.Instance != null)
         {
             GameManager.Instance.HasInvestigatedCrimeScene = data.hasInvestigatedCrimeScene;
+            GameManager.Instance.RatchettWindowFrameDialogueDone = data.ratchettWindowFrameDialogueDone;
+            GameManager.Instance.RatchettWindowSnowDialogueDone = data.ratchettWindowSnowDialogueDone;
             GameManager.Instance.HasTalkedToMrsHubbard = data.hasTalkedToMrsHubbard;
             GameManager.Instance.HasTalkedToCountAndrenyi = data.hasTalkedToCountAndrenyi;
         }
@@ -239,6 +243,8 @@ public static class GameSaveService
         if (GameManager.Instance != null)
         {
             GameManager.Instance.HasInvestigatedCrimeScene = false;
+            GameManager.Instance.RatchettWindowFrameDialogueDone = false;
+            GameManager.Instance.RatchettWindowSnowDialogueDone = false;
             GameManager.Instance.HasTalkedToMrsHubbard = false;
             GameManager.Instance.HasTalkedToCountAndrenyi = false;
         }

@@ -1020,7 +1020,9 @@ public class InGamePauseMenuController : MonoBehaviour
         }
 
         // 从暂停返回主菜单：直接切场景，避免 ScreenFader 叠在已关闭的面板上造成「关得慢」的感觉。
+        EvidencePanelUI.DisableAllEventSystemComponentsBeforeSceneLoad();
         SceneManager.LoadScene(SceneLoader.SCENE_MAIN_MENU);
+        EvidencePanelUI.EnsureSingleEventSystem();
     }
 
     private void OnQuitGameClicked()

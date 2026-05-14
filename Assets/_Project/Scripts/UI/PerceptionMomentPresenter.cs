@@ -25,7 +25,7 @@ public class PerceptionMomentPresenter : MonoBehaviour
     [SerializeField, Min(0.05f)] private float introFallbackDuration = 1f;
     [SerializeField, Min(0.1f)] private float videoPrepareTimeout = 3f;
     [SerializeField, Min(0.1f)] private float videoPlayTimeout = 6f;
-    [SerializeField] private int overlaySortingOrder = 3200;
+    [SerializeField] private int overlaySortingOrder = 5800;
     [SerializeField] private Sprite defaultPortrait;
     [SerializeField] private string noticeLineText = "有猫腻....";
     [SerializeField, Min(1)] private int blinkingTailLength = 1;

@@ -13,6 +13,7 @@ public static class CreateSaveSlotModalPrefab
     private const string PrefabPath = "Assets/_Project/Resources/UI/SaveSlotModal.prefab";
 
     [MenuItem("Tools/东方快车/生成 SaveSlotModal 预制体（存档槽 UI）")]
+    [MenuItem("Tools/Orient Express/Generate SaveSlotModal Prefab", false, 10)]
     public static void CreatePrefab()
     {
         string dir = Path.GetDirectoryName(PrefabPath);

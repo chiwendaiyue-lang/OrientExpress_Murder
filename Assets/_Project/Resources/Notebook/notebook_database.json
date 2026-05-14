@@ -1,12 +1,12 @@
 {
   "evidence": [
     {
-      "id": "ratchett_pipe_cleaner",
+      "id": "ratchett_dagger",
       "type": "physical",
-      "name": "烟斗通条",
-      "description": "地板上遗落的烟斗通条，金属头端沾有血迹。",
-      "unlockBrief": "带血迹的烟斗通条。",
-      "foundLocation": "雷切特包厢·地板",
+      "name": "凶器匕首",
+      "description": "一把带血的厨房用刀，刀刃上有血迹。",
+      "unlockBrief": "带血的厨房刀，疑为凶器。",
+      "foundLocation": "雷切特包厢·地板上",
       "icon": "",
       "updates": []
     },
@@ -30,11 +30,22 @@
       "id": "ratchett_knife_wound",
       "type": "physical",
       "name": "十二处刀伤",
-      "description": "尸体身上有多处深浅不一的刺伤，疑似多人参与行凶。",
-      "unlockBrief": "尸体上有多处刺伤。",
+      "description": "尸体身上有十二处深浅不一的刺伤",
+      "unlockBrief": "尸体身上有十二处深浅不一的刺伤",
       "foundLocation": "雷切特包厢·尸体",
       "icon": "",
-      "updates": []
+      "updates": [
+        {
+          "stageId": "ratchett_knife_wound2",
+          "description": "尸体身上有十二处深浅不一的刺伤，伤口的出血情况提示凶手有先后作案的可能",
+          "unlockBrief": "凶手有先后作案的可能。"
+        },
+        {
+          "stageId": "ratchett_knife_wound3",
+          "description": "尸体身上有十二处深浅不一的刺伤，伤口的出血情况提示凶手有先后作案的可能,伤口的位置和力度提示左右惯用手同时存在且男人和女人都参与作案",
+          "unlockBrief": "凶手不仅先后作案，而且男女同时存在，且有左右手惯用者。"
+        }
+      ]
     },
     {
       "id": "h_handkerchief",
@@ -47,46 +58,6 @@
       "updates": []
     },
     {
-      "id": "ratchett_window_frame",
-      "type": "physical",
-      "name": "窗框",
-      "description": "窗户内侧的木框上有新鲜刮擦痕迹，像是有人从外面试图打开。",
-      "unlockBrief": "窗框内侧有刮擦痕迹。",
-      "foundLocation": "雷切特包厢·窗户",
-      "icon": "",
-      "updates": []
-    },
-    {
-      "id": "snow_no_footprints_outside",
-      "type": "physical",
-      "name": "窗外无脚印",
-      "description": "窗外积雪平整，未见有人离开或进入的痕迹。",
-      "unlockBrief": "窗外雪地未见脚印。",
-      "foundLocation": "雷切特包厢·窗外",
-      "icon": "",
-      "updates": []
-    },
-    {
-      "id": "ratchett_gold_watch",
-      "type": "physical",
-      "name": "金表",
-      "description": "尸体身旁的金质怀表，表盖内侧刻有姓名缩写。",
-      "unlockBrief": "尸体旁的金质怀表。",
-      "foundLocation": "雷切特包厢·尸体",
-      "icon": "",
-      "updates": []
-    },
-    {
-      "id": "ratchett_pistol",
-      "type": "physical",
-      "name": "手枪",
-      "description": "尸体衣物下藏着一把小型手枪，未被使用。",
-      "unlockBrief": "尸体衣物下的小型手枪。",
-      "foundLocation": "雷切特包厢·尸体",
-      "icon": "",
-      "updates": []
-    },
-    {
       "id": "metal_button",
       "type": "physical",
       "name": "列车员钮扣",
@@ -95,6 +66,72 @@
       "foundLocation": "哈伯德太太包厢·杂志上",
       "icon": "icon_metal_button",
       "updates": []
+    },
+    {
+      "id": "snow_view",
+      "type": "physical",
+      "name": "窗外雪景",
+      "description": "窗外白茫茫的一片，除了雪什么都没有",
+      "unlockBrief": "窗外白茫茫的一片，除了雪什么都没有",
+      "foundLocation": "雷切特包厢·窗外",
+      "icon": "icon_snow_view",
+      "updates": [
+        {
+          "stageId": "climb_out_impossible",
+          "description": "窗外雪景没有脚印，凶手不可能翻窗离开",
+          "unlockBrief": "凶手不可能翻窗离开。"
+        }
+      ]
+    },
+    {
+      "id": "wine_glasses",
+      "type": "physical",
+      "name": "雷切特桌上的酒杯",
+      "description": "桌上发现的酒杯，里面什么也没有",
+      "unlockBrief": "桌上发现的酒杯，里面什么也没有",
+      "foundLocation": "雷切特包厢·桌上",
+      "icon": "icon_wine_glasses",
+      "updates": [
+        {
+          "stageId": "wine_glasses_2",
+          "description": "大夫闻出酒杯里有麻药的味道，凶手可能在酒里下了麻药",
+          "unlockBrief": "凶手可能在酒里下了麻药。"
+        },
+        {
+          "stageId": "wine_glasses_3",
+          "description": "雷切特很可能喝了下麻药的酒，导致他没有用手枪自卫",
+          "unlockBrief": "雷切特被迷晕了，所以没有自卫。"
+        }
+      ]
+    },
+    {
+      "id": "the_pistol",
+      "type": "physical",
+      "name": "雷切特枕头下的手枪",
+      "description": "雷切特枕头下发现的手枪",
+      "unlockBrief": "雷切特枕头下的手枪",
+      "foundLocation": "雷切特包厢·枕头下",
+      "icon": "icon_the_pistol"
+    },
+    {
+      "id": "ratchett_pistol",
+      "type": "physical",
+      "name": "雷切特枕头下的手枪",
+      "description": "雷切特枕头下发现的手枪",
+      "unlockBrief": "雷切特枕头下的手枪",
+      "foundLocation": "雷切特包厢·枕头下",
+      "icon": "icon_the_pistol",
+      "updates": []
+    },
+    {
+      "id": "ratchett_gold_watch",
+      "type": "physical",
+      "name": "雷切特的金表",
+      "description": "尸体旁发现的怀表，指针停在某一时刻。",
+      "unlockBrief": "尸体上的金表已停摆。",
+      "foundLocation": "雷切特包厢·尸体",
+      "icon": "",
+      "updates": []
     }
   ],
   "characters": [
@@ -102,6 +139,7 @@
       "id": "macqueen",
       "displayName": "麦克昆",
       "role": "死者秘书",
+      "detail": "",
       "portrait": "",
       "sortOrder": 10
     },
@@ -109,6 +147,7 @@
       "id": "mrs_hubbard",
       "displayName": "哈伯德太太",
       "role": "美国旅客",
+      "detail": "",
       "portrait": "",
       "sortOrder": 20
     },
@@ -116,6 +155,7 @@
       "id": "poirot",
       "displayName": "波洛",
       "role": "侦探",
+      "detail": "",
       "portrait": "",
       "sortOrder": 30
     },
@@ -123,6 +163,7 @@
       "id": "doctor",
       "displayName": "康斯坦丁大夫",
       "role": "医生",
+      "detail": "",
       "portrait": "",
       "sortOrder": 40
     },
@@ -130,6 +171,7 @@
       "id": "bouc",
       "displayName": "鲍克",
       "role": "国际列车公司董事",
+      "detail": "",
       "portrait": "",
       "sortOrder": 50
     },
@@ -137,13 +179,55 @@
       "id": "pierre",
       "displayName": "列车员皮埃尔",
       "role": "列车员",
+      "detail": "",
       "portrait": "",
       "sortOrder": 60
+    },
+    {
+      "id": "cassetti",
+      "displayName": "卡塞蒂",
+      "role": "绑架案主谋",
+      "detail": "卡塞蒂是美国黑帮头目，也是阿姆斯特朗绑架案的幕后主谋。案发后卡塞蒂利用其巨额财富和强大的人脉关系，通过贿赂与法律漏洞成功逃脱了法律制裁，随后携赎金潜逃海外，雷切特正是他在案后改名后的身份。",
+      "portrait": "",
+      "sortOrder": 70
+    },
+    {
+      "id": "daisy_armstrong",
+      "displayName": "黛西·阿姆斯特朗",
+      "role": "被绑女童",
+      "detail": "黛西·阿姆斯特朗是阿姆斯特朗上校与索尼娅·阿姆斯特朗的三岁女儿。她在绑架案中被掳走，最终死亡",
+      "portrait": "",
+      "sortOrder": 80
+    },
+    {
+      "id": "sonia_armstrong",
+      "displayName": "阿姆斯特朗夫人",
+      "role": "阿姆斯特朗夫人",
+      "detail": "索尼娅·阿姆斯特朗是阿姆斯特朗上校之妻，也是美国著名舞台剧演员琳达·阿登之女。她在得知女儿黛西遇害后遭受巨大打击，引发早产，最终与腹中胎儿双双不治身亡。",
+      "portrait": "",
+      "sortOrder": 90
+    },
+    {
+      "id": "colonel_armstrong",
+      "displayName": "阿姆斯特朗上校",
+      "role": "阿姆斯特朗上校",
+      "detail": "阿姆斯特朗上校是英国陆军军官，也是黛西·阿姆斯特朗的父亲。在接连失去女儿、妻子和未出世的孩子后，他陷入极度悲痛，最终饮弹自尽。",
+      "portrait": "",
+      "sortOrder": 100
+    },
+    {
+      "id": "susanne",
+      "displayName": "苏珊",
+      "role": "黛西的法籍保姆",
+      "detail": "苏珊是黛西·阿姆斯特朗的法籍保姆。案发后警方一度怀疑她为绑匪提供内应，并对她进行严酷审讯。她因无法承受冤屈与精神压力跳楼自杀，事后才被证明完全清白。",
+      "portrait": "",
+      "sortOrder": 110
     },
     {
       "id": "unknown_voice",
       "displayName": "未知人物",
       "role": "待确认身份",
+      "detail": "",
       "portrait": "",
       "sortOrder": 999
     }
@@ -248,6 +332,20 @@
           "source": "哈伯德太太包厢结构察觉后更新"
         }
       ]
+    },
+    {
+      "id": "armstrong_case",
+      "type": "testimony",
+      "name": "阿姆斯特朗案",
+      "isConfirmed": true,
+      "unlockBrief": "阿姆斯特朗案详情",
+      "speakerCharacterId": "poirot",
+      "speakerName": "波洛",
+      "summary": "1930年，美国发生了一起震惊全国的重大绑架案。阿姆斯特朗上校年仅三岁的女儿黛西·阿姆斯特朗（Daisy Armstrong）在家中遭到绑架。绑匪索要赎金二十万美元，阿姆斯特朗一家如数交付后，却发现黛西早已被残忍杀害。黛西遇害的消息传出后，悲剧如同多米诺骨牌般接连发生。怀有身孕的阿姆斯特朗富人在得知噩耗后遭受巨大打击，引发早产，最终与腹中胎儿双双不治身亡，一尸两命；随后阿姆斯特朗上校陷入不可自拔的悲痛，最终饮弹自尽；黛西的法籍保姆苏珊被错误怀疑，在警方极为严酷的审讯下，苏珊因承受不住冤屈和精神压力，跳楼自杀。警方最终锁定了绑架案的主谋——美国黑帮头目卡塞蒂。然而，卡塞蒂利用其巨额财富和强大的人脉关系，通过贿赂与法律漏洞成功逃脱了法律制裁，随后携赎金潜逃海外",
+      "originalText": "",
+      "source": "波洛讲述",
+      "topic": "rachett_identity",
+      "updates": []
     }
   ],
   "doubts": [
@@ -261,26 +359,6 @@
       "finalConclusion": "",
       "resolved": false,
       "updates": []
-    },
-    {
-      "id": "armstrong_case_connection",
-      "type": "doubt",
-      "name": "阿姆斯特朗案关联",
-      "unlockBrief": "本案是否牵扯阿姆斯特朗旧事？",
-      "question": "雷切特与阿姆斯特朗案是否有关？",
-      "description": "目前只有零散迹象指向阿姆斯特朗案，还不足以形成结论。",
-      "finalConclusion": "",
-      "resolved": false,
-      "updates": [
-        {
-          "stageId": "paper_mentions_daisy",
-          "unlockBrief": "焦纸上出现黛西之名，仇杀疑云转向旧案。",
-          "question": "烧焦纸片为什么提到黛西·阿姆斯特朗？",
-          "description": "烧焦纸片上的名字说明雷切特遇害可能并非普通仇杀，而与阿姆斯特朗案有关。",
-          "finalConclusion": "雷切特的真实身份和阿姆斯特朗案之间很可能存在关键联系。",
-          "resolved": true
-        }
-      ]
     }
   ]
 }

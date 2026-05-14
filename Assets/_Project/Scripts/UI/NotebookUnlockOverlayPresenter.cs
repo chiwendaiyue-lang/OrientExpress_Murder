@@ -36,9 +36,12 @@ public class NotebookUnlockOverlayPresenter : MonoBehaviour
     private const string ChildPrimerPrompt = "PrimerPrompt";
     private const string ChildRevealButton = "RevealButton";
 
+    /// <summary>须高于对话层（见 <see cref="DialogueManager"/>），低于 ScreenFader。</summary>
+    private const int MinimumUnlockOverlayAboveDialogue = 5500;
+
     [Header("可选：美术预制体（根下须含 Dim / Panel，Panel 下 Title / CloseButton / Icon / Name / Body）")]
     [SerializeField] private GameObject optionalOverlayPrefab;
-    [SerializeField] private int overlaySortingOrder = 280;
+    [SerializeField] private int overlaySortingOrder = 5500;
 
     [Header("先按钮再弹出详情")]
     [Tooltip("为 true：先显示 PrimerPanel +「查看详情」按钮，再显示下方详情面板；遮罩在此期间不可一点就关详情。")]
@@ -93,6 +96,11 @@ public class NotebookUnlockOverlayPresenter : MonoBehaviour
         GameObject go = new GameObject(nameof(NotebookUnlockOverlayPresenter));
         DontDestroyOnLoad(go);
         Instance = go.AddComponent<NotebookUnlockOverlayPresenter>();
+    }
+
+    private int ResolvedUnlockOverlaySortingOrder()
+    {
+        return Mathf.Max(overlaySortingOrder, MinimumUnlockOverlayAboveDialogue);
     }
 
     private void Awake()
@@ -183,6 +191,37 @@ public class NotebookUnlockOverlayPresenter : MonoBehaviour
         }
 
         Instance?.EnqueueSynthesis(outputClueId);
+    }
+
+    /// <summary>
+    /// 在「获得线索」等弹窗队列之后执行：若当前没有正在显示的弹窗且队列为空，会立即执行；否则入队，在上一条关闭后执行。
+    /// 执行完毕后会自动 <see cref="TryShowNext"/>，以清空队列状态。
+    /// </summary>
+    public static void EnqueueContinuation(Action continuation)
+    {
+        if (continuation == null)
+        {
+            return;
+        }
+
+        if (Instance == null)
+        {
+            Bootstrap();
+        }
+
+        if (Instance == null)
+        {
+            continuation();
+            return;
+        }
+
+        Instance.Enqueue(() => Instance.RunQueueContinuation(continuation));
+    }
+
+    private void RunQueueContinuation(Action continuation)
+    {
+        continuation?.Invoke();
+        TryShowNext();
     }
 
     private void HandleNotebookRevealed(NotebookRevealEvent e)
@@ -875,7 +914,7 @@ public class NotebookUnlockOverlayPresenter : MonoBehaviour
         }
 
         rootCanvas.overrideSorting = true;
-        rootCanvas.sortingOrder = overlaySortingOrder;
+        rootCanvas.sortingOrder = ResolvedUnlockOverlaySortingOrder();
     }
 
     private void BuildRuntimeHierarchy()
@@ -887,7 +926,7 @@ public class NotebookUnlockOverlayPresenter : MonoBehaviour
         rootCanvas = root.AddComponent<Canvas>();
         rootCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
         rootCanvas.overrideSorting = true;
-        rootCanvas.sortingOrder = overlaySortingOrder;
+        rootCanvas.sortingOrder = ResolvedUnlockOverlaySortingOrder();
 
         root.AddComponent<GraphicRaycaster>();
 

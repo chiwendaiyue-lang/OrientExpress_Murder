@@ -1,0 +1,311 @@
+{
+  "sceneId": "lookout_window",
+  "startNodeId": "node1",
+  "nodes": [
+    {
+      "id": "node1",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "system",
+        "speakerName": "系统",
+        "text": "窗外白茫茫的一片，除了雪什么都没有",
+        "nextNodeId": "node2"
+      }
+    },
+    {
+      "id": "node2",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "bouc",
+        "speakerName": "鲍克",
+        "text": "门锁着，相通门也闩着，凶手很有可能从窗外逃走了。",
+        "stage": {
+          "focusCharacterId": "bouc",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "bouc",
+              "portrait": "bouc_serious"
+            }
+          ]
+        },
+        "options": [
+          {
+            "text": "有这种可能",
+            "nextNodeId": "node3_possible"
+          },
+          {
+            "text": "几乎不可能",
+            "nextNodeId": "node3_impossible"
+          }
+        ]
+      }
+    },
+    {
+      "id": "node3_possible",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "doctor",
+        "speakerName": "大夫",
+        "text": "哼",
+        "stage": {
+          "focusCharacterId": "doctor",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextNodeId": "node4_possible"
+      }
+    },
+    {
+      "id": "node4_possible",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "又怎么了",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextNodeId": "node5_possible"
+      }
+    },
+    {
+      "id": "node5_possible",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "doctor",
+        "speakerName": "大夫",
+        "text": "我的大侦探，我可不这么认为，请注意列车陷入雪堆的时间，雷切特十二点四十左右还没有死，如果凶手跳窗离开，那么这件事就说不通了",
+        "stage": {
+          "focusCharacterId": "doctor",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "options": [
+          {
+            "text": "红睡衣人",
+            "nextNodeId": "node_wrong_possible"
+          },
+          {
+            "text": "窗外雪景",
+            "nextNodeId": "node_snow_scene_possible"
+          },
+          {
+            "text": "死亡时间判断",
+            "nextNodeId": "node_wrong_possible"
+          }
+        ]
+      }
+    },
+    {
+      "id": "node_wrong_possible",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "doctor",
+        "speakerName": "大夫",
+        "text": "再好好想想吧，我的大侦探",
+        "stage": {
+          "focusCharacterId": "doctor",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextNodeId": "node5_possible"
+      }
+    },
+    {
+      "id": "node_snow_scene_possible",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "如果凶手从窗外逃走，这时车周围都是雪，一定会留下脚印，所以凶手不可能从窗外离开。",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        },
+        "nextNodeId": "node_conclusion_possible"
+      }
+    },
+    {
+      "id": "node_conclusion_possible",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "doctor",
+        "speakerName": "大夫",
+        "text": "正是如此。",
+        "stage": {
+          "focusCharacterId": "doctor",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextSceneName": "CrimeScene"
+      }
+    },
+    {
+      "id": "node3_impossible",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "这种可能性很低，列车是在十二点半陷入雪堆的，而雷切特十二点四十左右还没有死，如果凶手跳窗离开，那么这件事就说不通了",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        },
+        "options": [
+          {
+            "text": "窗外雪景",
+            "nextNodeId": "node_snow_scene_impossible"
+          },
+          {
+            "text": "红睡衣人",
+            "nextNodeId": "node_wrong_impossible"
+          },
+          {
+            "text": "死亡时间判断",
+            "nextNodeId": "node_wrong_impossible"
+          }
+        ]
+      }
+    },
+    {
+      "id": "node_wrong_impossible",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "doctor",
+        "speakerName": "大夫",
+        "text": "我不觉得这有什么矛盾",
+        "stage": {
+          "focusCharacterId": "doctor",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextNodeId": "node3_impossible"
+      }
+    },
+    {
+      "id": "node_snow_scene_impossible",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "如果凶手从窗外逃走，这时车周围都是雪，一定会留下脚印，所以凶手不可能从窗外离开。",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        },
+        "nextNodeId": "node_conclusion_impossible"
+      }
+    },
+    {
+      "id": "node_conclusion_impossible",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "doctor",
+        "speakerName": "大夫",
+        "text": "说的有理。",
+        "stage": {
+          "focusCharacterId": "doctor",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextSceneName": "CrimeScene"
+      }
+    }
+  ]
+}

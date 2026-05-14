@@ -98,7 +98,9 @@ public class InterrogationPanelController : MonoBehaviour
             }
             else
             {
+                EvidencePanelUI.DisableAllEventSystemComponentsBeforeSceneLoad();
                 SceneManager.LoadScene(entry.targetSceneName);
+                EvidencePanelUI.EnsureSingleEventSystem();
             }
         }
     }

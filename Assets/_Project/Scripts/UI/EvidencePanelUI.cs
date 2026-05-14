@@ -10,6 +10,9 @@ public class EvidencePanelUI : MonoBehaviour
     private static EvidencePanelUI persistentInstance;
     private const string NOTEBOOK_PREFAB_PATH = "UI/DetectiveNotebookRoot";
 
+    /// <summary>须高于对话层（见 <see cref="DialogueManager"/>），低于 ScreenFader。</summary>
+    private const int MinimumNotebookSortingAboveDialogue = 5500;
+
     public enum EvidenceTab
     {
         Physical,
@@ -75,7 +78,7 @@ public class EvidencePanelUI : MonoBehaviour
     [Header("Overlay (Optional)")]
     [Tooltip("当 Prefab 上缺少 Canvas/CanvasScaler/GraphicRaycaster 时，运行时是否按 ScreenSpaceOverlay 默认值自动补齐。Prefab 已自带这些组件时建议关闭。")]
     [SerializeField] private bool autoEnsureCanvas = true;
-    [SerializeField] private int overlaySortingOrder = 100;
+    [SerializeField] private int overlaySortingOrder = 5500;
     [SerializeField] private Vector2 referenceResolution = new Vector2(1280f, 720f);
     [SerializeField, Range(0f, 1f)] private float matchWidthOrHeight = 0.5f;
 
@@ -117,6 +120,8 @@ public class EvidencePanelUI : MonoBehaviour
     private static void OnSceneLoadedEnsureNotebookInstance(Scene scene, LoadSceneMode mode)
     {
         EnsureRuntimeInstance();
+        EnsureSingleEventSystem();
+        EnsureSingleAudioListener();
     }
 
     public static EvidencePanelUI EnsureRuntimeInstance()
@@ -183,12 +188,13 @@ public class EvidencePanelUI : MonoBehaviour
         persistentInstance = this;
         DetachFromSceneParent();
         EnsureCanvasIfNeeded();
+        EnsureNotebookCanvasStacksAboveDialogue();
         DontDestroyOnLoad(gameObject);
     }
 
     private void Start()
     {
-        EnsureEventSystem();
+        EnsureSingleEventSystem();
         TryAutoBindReferences();
         EnsurePanelStructure();
         EnsureDraggablePanel();
@@ -213,6 +219,11 @@ public class EvidencePanelUI : MonoBehaviour
 
         HideClueDetail();
         RefreshNotebookVisibility();
+    }
+
+    private int ResolvedNotebookOverlaySortingOrder()
+    {
+        return Mathf.Max(overlaySortingOrder, MinimumNotebookSortingAboveDialogue);
     }
 
     private void OnDestroy()
@@ -252,7 +263,7 @@ public class EvidencePanelUI : MonoBehaviour
             canvas = gameObject.AddComponent<Canvas>();
             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
             canvas.overrideSorting = true;
-            canvas.sortingOrder = overlaySortingOrder;
+            canvas.sortingOrder = ResolvedNotebookOverlaySortingOrder();
         }
 
         if (GetComponent<CanvasScaler>() == null)
@@ -266,6 +277,25 @@ public class EvidencePanelUI : MonoBehaviour
         if (GetComponent<GraphicRaycaster>() == null)
         {
             gameObject.AddComponent<GraphicRaycaster>();
+        }
+    }
+
+    /// <summary>
+    /// Prefab 已带 Canvas 时 <see cref="EnsureCanvasIfNeeded"/> 不会写入 sortingOrder；此处保证侦探笔记叠在对话层之上。
+    /// </summary>
+    private void EnsureNotebookCanvasStacksAboveDialogue()
+    {
+        Canvas canvas = GetComponent<Canvas>();
+        if (canvas == null)
+        {
+            return;
+        }
+
+        int target = ResolvedNotebookOverlaySortingOrder();
+        canvas.overrideSorting = true;
+        if (canvas.sortingOrder < target)
+        {
+            canvas.sortingOrder = target;
         }
     }
 
@@ -1008,15 +1038,166 @@ public class EvidencePanelUI : MonoBehaviour
         return rect != null && RectTransformUtility.RectangleContainsScreenPoint(rect, Input.mousePosition, null);
     }
 
-    private static void EnsureEventSystem()
+    /// <summary>
+    /// 在切换场景前调用：将所有 <see cref="EventSystem"/> 的 <c>enabled</c> 设为 false，
+    /// 避免新场景里自带的 EventSystem 在 OnEnable 时与 DontDestroyOnLoad 上仍启用的实例冲突。
+    /// 只关组件、不整机关闭 GameObject，以免误伤挂在同一物体上的 DialogueManager 等。
+    /// </summary>
+    public static void DisableAllEventSystemComponentsBeforeSceneLoad()
     {
-        if (FindObjectOfType<EventSystem>() != null)
+        EventSystem[] systems = Object.FindObjectsByType<EventSystem>(
+            FindObjectsInactive.Include,
+            FindObjectsSortMode.None);
+        if (systems == null)
         {
             return;
         }
 
-        GameObject eventSystemObject = new GameObject("EventSystem", typeof(EventSystem), typeof(StandaloneInputModule));
-        DontDestroyOnLoad(eventSystemObject);
+        foreach (EventSystem es in systems)
+        {
+            if (es != null)
+            {
+                es.enabled = false;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 保证全局恰好一个 EventSystem。侦探笔记在无系统时会创建一个并放入 DontDestroyOnLoad，
+    /// 与 CrimeScene / Ratchett* 等场景自带的 EventSystem 会冲突并导致 UI/对话异常。
+    /// </summary>
+    public static void EnsureSingleEventSystem()
+    {
+        EventSystem[] systems = Object.FindObjectsByType<EventSystem>(
+            FindObjectsInactive.Include,
+            FindObjectsSortMode.None);
+
+        if (systems == null || systems.Length == 0)
+        {
+            GameObject eventSystemObject = new GameObject("EventSystem", typeof(EventSystem), typeof(StandaloneInputModule));
+            DontDestroyOnLoad(eventSystemObject);
+            return;
+        }
+
+        foreach (EventSystem es in systems)
+        {
+            if (es != null)
+            {
+                es.enabled = false;
+            }
+        }
+
+        Scene active = SceneManager.GetActiveScene();
+        EventSystem keeperInActiveScene = null;
+        EventSystem keeperDdol = null;
+        EventSystem keeperDialogue = null;
+
+        DialogueManager dialogueManager = DialogueManager.Instance;
+        bool dialogueUiActive = dialogueManager != null && dialogueManager.IsDialogueUiActive();
+
+        foreach (EventSystem es in systems)
+        {
+            if (es == null)
+            {
+                continue;
+            }
+
+            if (dialogueUiActive && IsEventSystemOwnedByDialogueRuntime(es, dialogueManager))
+            {
+                keeperDialogue ??= es;
+            }
+            else if (es.gameObject.scene.name == "DontDestroyOnLoad")
+            {
+                keeperDdol ??= es;
+            }
+            else if (es.gameObject.scene == active)
+            {
+                keeperInActiveScene ??= es;
+            }
+        }
+
+        // 对话打开时优先用对话树里的 EventSystem；关闭后用当前场景，避免主菜单等再出现双开。
+        EventSystem keeper = keeperDialogue != null
+            ? keeperDialogue
+            : keeperInActiveScene != null ? keeperInActiveScene
+            : keeperDdol != null ? keeperDdol : systems[0];
+
+        if (keeper == null)
+        {
+            return;
+        }
+
+        if (!keeper.gameObject.activeSelf)
+        {
+            keeper.gameObject.SetActive(true);
+        }
+
+        keeper.enabled = true;
+    }
+
+    private static bool IsEventSystemOwnedByDialogueRuntime(EventSystem es, DialogueManager dialogueManager)
+    {
+        if (es == null || dialogueManager == null)
+        {
+            return false;
+        }
+
+        if (es.GetComponentInParent<DialogueRuntimeRootMarker>() != null || es.GetComponent<DialogueManager>() != null)
+        {
+            return true;
+        }
+
+        return es.gameObject == dialogueManager.gameObject || es.transform.IsChildOf(dialogueManager.transform);
+    }
+
+    /// <summary>
+    /// 保证全局至多一个启用的 AudioListener（附加场景 / DDOL 相机易叠出多个监听器）。
+    /// </summary>
+    public static void EnsureSingleAudioListener()
+    {
+        AudioListener[] listeners = Object.FindObjectsByType<AudioListener>(
+            FindObjectsInactive.Include,
+            FindObjectsSortMode.None);
+
+        if (listeners == null || listeners.Length <= 1)
+        {
+            return;
+        }
+
+        Scene active = SceneManager.GetActiveScene();
+        AudioListener keeper = null;
+        Camera mainCam = Camera.main;
+        if (mainCam != null)
+        {
+            keeper = mainCam.GetComponent<AudioListener>();
+        }
+
+        if (keeper == null)
+        {
+            foreach (AudioListener listener in listeners)
+            {
+                if (listener != null && listener.gameObject.scene == active)
+                {
+                    keeper = listener;
+                    break;
+                }
+            }
+        }
+
+        if (keeper == null)
+        {
+            keeper = listeners[0];
+        }
+
+        foreach (AudioListener listener in listeners)
+        {
+            if (listener == null || listener == keeper)
+            {
+                continue;
+            }
+
+            listener.enabled = false;
+        }
     }
 
     private void RefreshCurrentTab()

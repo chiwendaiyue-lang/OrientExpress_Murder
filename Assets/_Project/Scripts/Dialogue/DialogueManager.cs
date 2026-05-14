@@ -4,8 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System.IO;
-using TMPro;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class DialogueManager : MonoBehaviour
 {
@@ -55,6 +55,14 @@ public class DialogueManager : MonoBehaviour
 
     private string currentDialogueResourceId = string.Empty;
 
+    private const string RuntimePrefabResourcePath = "UI/DialogueRuntimeRoot";
+
+    /// <summary>
+    /// 全屏 UI 排序带（Screen Space Overlay）：背景 &lt; 对话 &lt; 弹窗 &lt; ScreenFader。
+    /// 与 <see cref="NotebookUnlockOverlayPresenter"/>、<see cref="EvidencePanelUI"/> 中的层级对齐。
+    /// </summary>
+    private const int DialogueCanvasSortingOrder = 4000;
+
     public string GetCurrentDialogueResourceId()
     {
         return currentDialogueResourceId ?? string.Empty;
@@ -83,9 +91,65 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 确保存在可用的 DialogueManager（含 UI）。优先从 Resources/UI/DialogueRuntimeRoot 实例化（见菜单烘焙 Prefab）。
+    /// </summary>
+    public static DialogueManager EnsureExists()
+    {
+        if (Instance != null)
+        {
+            return Instance;
+        }
+
+        DialogueManager found = UnityEngine.Object.FindFirstObjectByType<DialogueManager>(FindObjectsInactive.Include);
+        if (found != null)
+        {
+            return found;
+        }
+
+        GameObject prefabAsset = Resources.Load<GameObject>(RuntimePrefabResourcePath);
+        if (prefabAsset == null)
+        {
+            Debug.LogError(
+                "DialogueManager: 缺少 Resources/UI/DialogueRuntimeRoot.prefab。请在 Unity 菜单执行：Tools/东方快车/烘焙 DialogueRuntimeRoot（对话 UI Prefab）。");
+            return null;
+        }
+
+        // Prefab 内常带 EventSystem；Instantiate 时其 OnEnable 会与场景里仍启用的 EventSystem 冲突。
+        EvidencePanelUI.DisableAllEventSystemComponentsBeforeSceneLoad();
+        GameObject instance = UnityEngine.Object.Instantiate(prefabAsset);
+        instance.name = "DialogueRuntimeRoot";
+
+        if (Instance == null)
+        {
+            UnityEngine.Object.Destroy(instance);
+            Debug.LogError(
+                "DialogueManager: 已实例化 DialogueRuntimeRoot，但未找到 DialogueManager 组件。请检查 Prefab 是否包含 DialogueManager。");
+            return null;
+        }
+
+        EvidencePanelUI.EnsureRuntimeInstance();
+        EvidencePanelUI.EnsureSingleEventSystem();
+        EvidencePanelUI.EnsureSingleAudioListener();
+        return Instance;
+    }
+
     void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
         Instance = this;
+        if (GetComponentInParent<DialogueRuntimeRootMarker>() == null)
+        {
+            DontDestroyOnLoad(gameObject);
+        }
+
+        PreserveDialogueUiRoots();
+
         if (dialoguePanel != null)
         {
             dialoguePanel.SetActive(false);
@@ -94,6 +158,77 @@ public class DialogueManager : MonoBehaviour
         if (dialogueText != null)
         {
             dialogueText.richText = true;
+        }
+
+        EnsureDialogueCanvasesRenderOnTop();
+    }
+
+    private void EnsureDialogueCanvasesRenderOnTop()
+    {
+        // DialogueManager 与主 Canvas 在 DialogueRuntimeRoot 下常为兄弟节点，不能只扫本物体子级。
+        Transform scanRoot = dialoguePanel != null ? dialoguePanel.transform.root : transform.root;
+        Canvas[] canvases = scanRoot.GetComponentsInChildren<Canvas>(true);
+        foreach (Canvas canvas in canvases)
+        {
+            if (canvas == null)
+            {
+                continue;
+            }
+
+            canvas.overrideSorting = true;
+            if (canvas.sortingOrder < DialogueCanvasSortingOrder)
+            {
+                canvas.sortingOrder = DialogueCanvasSortingOrder;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 对话 END 带 nextSceneName 时：已在目标场景则不再 Load；在桌子/窗/尸体近景时不自动跳回案发包厢（JSON 里多为 CrimeScene）。
+    /// </summary>
+    private static bool ShouldSuppressDialogueAutoSceneLoad(string targetSceneName)
+    {
+        if (string.IsNullOrEmpty(targetSceneName))
+        {
+            return false;
+        }
+
+        string activeName = SceneManager.GetActiveScene().name;
+        if (string.Equals(activeName, targetSceneName, StringComparison.Ordinal))
+        {
+            return true;
+        }
+
+        bool returningToCabin = string.Equals(targetSceneName, SceneLoader.SCENE_CRIME_SCENE, StringComparison.Ordinal);
+        if (!returningToCabin)
+        {
+            return false;
+        }
+
+        return string.Equals(activeName, SceneLoader.SCENE_RATCHETT_TABLE, StringComparison.Ordinal)
+            || string.Equals(activeName, SceneLoader.SCENE_RATCHETT_WINDOW, StringComparison.Ordinal)
+            || string.Equals(activeName, SceneLoader.SCENE_RATCHETT_BODY, StringComparison.Ordinal);
+    }
+
+    private void PreserveDialogueUiRoots()
+    {
+        HashSet<int> roots = new HashSet<int>();
+        if (dialoguePanel != null)
+        {
+            GameObject root = dialoguePanel.transform.root.gameObject;
+            if (root != null && root != gameObject && roots.Add(root.GetInstanceID()))
+            {
+                DontDestroyOnLoad(root);
+            }
+        }
+
+        if (stageController != null)
+        {
+            GameObject root = stageController.transform.root.gameObject;
+            if (root != null && root != gameObject && roots.Add(root.GetInstanceID()))
+            {
+                DontDestroyOnLoad(root);
+            }
         }
     }
 
@@ -190,7 +325,12 @@ public class DialogueManager : MonoBehaviour
         TextAsset jsonFile = Resources.Load<TextAsset>($"Dialogue/{characterId}");
         if (jsonFile == null)
         {
-            Debug.LogError($"???????????: {characterId}");
+            jsonFile = Resources.Load<TextAsset>($"Notebook/{characterId}");
+        }
+
+        if (jsonFile == null)
+        {
+            Debug.LogError($"???????????: Dialogue/{characterId} 或 Notebook/{characterId}");
             return;
         }
 
@@ -217,7 +357,9 @@ public class DialogueManager : MonoBehaviour
         }
 
         dialoguePanel.SetActive(true);
+        EvidencePanelUI.EnsureSingleEventSystem();
         EnsureRuntimeVisualContainers();
+        EnsureDialogueCanvasesRenderOnTop();
         if (GameManager.Instance != null)
         {
             GameManager.Instance.ChangeState(GameManager.GameState.Dialogue);
@@ -440,6 +582,12 @@ public class DialogueManager : MonoBehaviour
         {
             if (!string.IsNullOrEmpty(nextSceneName))
             {
+                if (ShouldSuppressDialogueAutoSceneLoad(nextSceneName))
+                {
+                    EndDialogue();
+                    return;
+                }
+
                 LoadScene(nextSceneName);
                 return;
             }
@@ -519,6 +667,9 @@ public class DialogueManager : MonoBehaviour
             else if (dialogueKey == "count_andrenyi")
                 GameManager.Instance.HasTalkedToCountAndrenyi = true;
         }
+
+        CrimeSceneEvidenceGrantBridge.GrantPendingIfAny();
+        EvidencePanelUI.EnsureSingleEventSystem();
     }
 
     private string GetCurrentDialogueKey()
@@ -1106,7 +1257,9 @@ public class DialogueManager : MonoBehaviour
         }
         else
         {
+            EvidencePanelUI.DisableAllEventSystemComponentsBeforeSceneLoad();
             SceneManager.LoadScene(sceneName);
+            EvidencePanelUI.EnsureSingleEventSystem();
         }
     }
 }

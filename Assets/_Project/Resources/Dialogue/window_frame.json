@@ -1,0 +1,26 @@
+{
+  "sceneId": "window_frame",
+  "startNodeId": "node1",
+  "nodes": [
+    {
+      "id": "node1",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "根本没有指纹，说明窗框被擦过了，如今的罪犯是不会犯这类错误的了。",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        },
+        "nextSceneName": "CrimeScene"
+      }
+    }
+    ]
+}
