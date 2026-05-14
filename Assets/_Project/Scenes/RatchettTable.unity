@@ -787,6 +787,10 @@ MonoBehaviour:
     evidenceId: burned_paper_fragment
     dialogueResourceId: 
     availableHint: "\u70B9\u51FB\u67E5\u770B"
+  - buttonObjectName: Hotspot_glasses_Button
+    evidenceId: wine_glasses
+    dialogueResourceId: wine_glasses
+    availableHint: "\u70B9\u51FB\u67E5\u770B"
 --- !u!4 &493407297
 Transform:
   m_ObjectHideFlags: 0

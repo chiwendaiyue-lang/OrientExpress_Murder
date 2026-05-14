@@ -8,4 +8,5 @@ public static class EvidenceIds
     public const string SNOW_NO_FOOTPRINTS = "snow_no_footprints_outside";
     public const string GOLD_WATCH = "ratchett_gold_watch";
     public const string PISTOL = "ratchett_pistol";
+    public const string WINE_GLASSES = "wine_glasses";
 }

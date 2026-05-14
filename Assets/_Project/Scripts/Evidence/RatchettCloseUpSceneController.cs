@@ -215,6 +215,12 @@ public class RatchettCloseUpSceneController : MonoBehaviour
             return "burned_paper_fragment";
         }
 
+        // 桌上拾取：只收录笔记与线索，不自动播 Dialogue/wine_glasses（剧情可由手枪对话等推进）。
+        if (string.Equals(evidenceId, EvidenceIds.WINE_GLASSES, StringComparison.Ordinal))
+        {
+            return null;
+        }
+
         return evidenceId;
     }
 

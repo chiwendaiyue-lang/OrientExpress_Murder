@@ -1,16 +1,6 @@
 {
   "evidence": [
     {
-      "id": "ratchett_dagger",
-      "type": "physical",
-      "name": "凶器匕首",
-      "description": "一把带血的厨房用刀，刀刃上有血迹。",
-      "unlockBrief": "带血的厨房刀，疑为凶器。",
-      "foundLocation": "雷切特包厢·地板上",
-      "icon": "",
-      "updates": []
-    },
-    {
       "id": "burned_paper_fragment",
       "type": "physical",
       "name": "烧焦纸条",
@@ -54,6 +44,16 @@
       "description": "地板上发现的女士手帕，角落绣有字母 H。",
       "unlockBrief": "女士手帕，角上绣有字母 H。",
       "foundLocation": "雷切特包厢·地板",
+      "icon": "",
+      "updates": []
+    },
+    {
+      "id": "ratchett_pipe_cleaner",
+      "type": "physical",
+      "name": "烟斗通条",
+      "description": "在包厢内发现的烟斗通条，可用于清理烟斗。",
+      "unlockBrief": "烟斗通条。",
+      "foundLocation": "雷切特包厢·陈设附近",
       "icon": "",
       "updates": []
     },
