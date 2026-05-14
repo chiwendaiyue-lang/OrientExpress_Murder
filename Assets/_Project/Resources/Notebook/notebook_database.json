@@ -121,7 +121,7 @@
       "description": "雷切特枕头下发现的手枪",
       "unlockBrief": "雷切特枕头下的手枪",
       "foundLocation": "雷切特包厢·枕头下",
-      "icon": "icon_the_pistol"
+      "icon": ""
     },
     {
       "id": "ratchett_gold_watch",
@@ -350,6 +350,18 @@
   ],
   "doubts": [
     {
+      "id": "golden_clock",
+      "type": "doubt",
+      "name": "金表上的时间",
+      "unlockBrief": "金表停在1:15。",
+      "question": "金表停在1:15，这说明了什么？",
+      "description": "现场发现一只金表，指针停在1:15。",
+      "finalConclusion": "",
+      "resolved": false,
+      "doubtInquiryLineScriptResourcePath": "Notebook/doubt/doubt_golden_clock",
+      "updates": []
+    },
+    {
       "id": "ratchett_enemy",
       "type": "doubt",
       "name": "雷切特的敌人",
@@ -358,6 +370,7 @@
       "description": "雷切特声称自己受到威胁，并含糊地说自己有敌人，因此随身带着手枪。",
       "finalConclusion": "",
       "resolved": false,
+      "doubtInquiryLineScriptResourcePath": "Notebook/doubt/doubt_ratchett_identitiy",
       "updates": []
     }
   ]

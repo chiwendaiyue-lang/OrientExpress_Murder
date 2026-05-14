@@ -1,5 +1,6 @@
 {
   "sceneId": "opening",
+  "backdropImageId": "opening",
   "mainStoryBlockDeferredRewardSkip": true,
   "startNodeId": "node1",
   "nodes": [

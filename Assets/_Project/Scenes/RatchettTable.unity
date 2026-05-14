@@ -363,7 +363,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u8FD4\u56DE"
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 3db1105220fd2db4baa86e527f69ea4c, type: 2}
   m_sharedMaterial: {fileID: -7436905282954916866, guid: 3db1105220fd2db4baa86e527f69ea4c, type: 2}
@@ -784,10 +784,12 @@ MonoBehaviour:
   backButtonHint: "\u8FD4\u56DE\u5305\u5ECA"
   collectionHotspots:
   - buttonObjectName: Hotspot_BurnedPaper_Button
+    additionalButtonObjectNames: []
     evidenceId: burned_paper_fragment
     dialogueResourceId: 
     availableHint: "\u70B9\u51FB\u67E5\u770B"
   - buttonObjectName: Hotspot_glasses_Button
+    additionalButtonObjectNames: []
     evidenceId: wine_glasses
     dialogueResourceId: wine_glasses
     availableHint: "\u70B9\u51FB\u67E5\u770B"
@@ -1218,8 +1220,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -727, y: 450}
-  m_SizeDelta: {x: 146.7217, y: 97.0121}
+  m_AnchoredPosition: {x: -668.13965, y: 440.51}
+  m_SizeDelta: {x: 200, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1323135904
 MonoBehaviour:
@@ -1285,8 +1287,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: 0d3c9526ecc02454ba9a82152c100f43, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4

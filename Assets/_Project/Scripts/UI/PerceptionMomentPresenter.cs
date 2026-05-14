@@ -25,7 +25,11 @@ public class PerceptionMomentPresenter : MonoBehaviour
     [SerializeField, Min(0.05f)] private float introFallbackDuration = 1f;
     [SerializeField, Min(0.1f)] private float videoPrepareTimeout = 3f;
     [SerializeField, Min(0.1f)] private float videoPlayTimeout = 6f;
-    [SerializeField] private int overlaySortingOrder = 5800;
+
+    /// <summary>须高于 <see cref="DialogueManager"/> 对话 Canvas（约 4000）及笔记/疑点等叠层，低于 <see cref="ScreenFader"/>（10000）。</summary>
+    private const int MinimumOverlaySortingAboveDialogueUi = 9800;
+
+    [SerializeField] private int overlaySortingOrder = 9800;
     [SerializeField] private Sprite defaultPortrait;
     [SerializeField] private string noticeLineText = "有猫腻....";
     [SerializeField, Min(1)] private int blinkingTailLength = 1;
@@ -126,6 +130,8 @@ public class PerceptionMomentPresenter : MonoBehaviour
                 yield break;
             }
 
+            ApplyPerceptionOverlayStackingPolicy();
+
             if (optionalOverlayPrefab != null)
             {
                 PerceptionMomentOverlayView view = optionalOverlayPrefab.GetComponentInChildren<PerceptionMomentOverlayView>(true);
@@ -211,6 +217,8 @@ public class PerceptionMomentPresenter : MonoBehaviour
             player.targetTexture = videoRenderTexture;
             player.clip = clip;
             rawImage.texture = videoRenderTexture;
+
+            ApplyPerceptionOverlayStackingPolicy();
 
             Debug.Log("[PerceptionMoment] 在察觉 Overlay 上播放开场视频。");
             yield return WaitUntilPrepared(player);
@@ -344,6 +352,7 @@ public class PerceptionMomentPresenter : MonoBehaviour
 
         SetIntroBlockerActive(false);
         HideVideoDisplay();
+        ApplyPerceptionOverlayStackingPolicy();
 
         if (chromeGroup != null)
         {
@@ -466,34 +475,56 @@ public class PerceptionMomentPresenter : MonoBehaviour
 
     private void EnsureOverlayRoot()
     {
-        if (overlayRoot != null)
+        if (overlayRoot == null)
+        {
+            overlayRoot = new GameObject("PerceptionMomentOverlay", typeof(RectTransform));
+            overlayRoot.transform.SetParent(transform, false);
+            StretchFull(overlayRoot.GetComponent<RectTransform>());
+
+            rootCanvas = overlayRoot.AddComponent<Canvas>();
+            rootCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            rootCanvas.overrideSorting = true;
+            overlayRoot.AddComponent<GraphicRaycaster>();
+
+            CanvasScaler scaler = overlayRoot.AddComponent<CanvasScaler>();
+            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+            scaler.referenceResolution = new Vector2(1920f, 1080f);
+            scaler.matchWidthOrHeight = 0.5f;
+
+            introBlocker = CreateUiObject("IntroBlocker", overlayRoot.transform);
+            StretchFull(introBlocker.GetComponent<RectTransform>());
+            Image blockerImage = introBlocker.AddComponent<Image>();
+            blockerImage.color = new Color(0f, 0f, 0f, 0f);
+            blockerImage.raycastTarget = true;
+
+            SetIntroBlockerActive(false);
+            SetOverlayRaycastBlocking(false);
+        }
+
+        ApplyPerceptionOverlayStackingPolicy();
+    }
+
+    /// <summary>
+    /// 防止 Inspector/预制体里误填较低 sortingOrder，导致全屏对话或场景背景 Canvas 盖住察觉视频。
+    /// </summary>
+    private void ApplyPerceptionOverlayStackingPolicy()
+    {
+        if (rootCanvas == null)
         {
             return;
         }
 
-        overlayRoot = new GameObject("PerceptionMomentOverlay", typeof(RectTransform));
-        overlayRoot.transform.SetParent(transform, false);
-        StretchFull(overlayRoot.GetComponent<RectTransform>());
-
-        rootCanvas = overlayRoot.AddComponent<Canvas>();
-        rootCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
         rootCanvas.overrideSorting = true;
-        rootCanvas.sortingOrder = overlaySortingOrder;
-        overlayRoot.AddComponent<GraphicRaycaster>();
+        rootCanvas.sortingOrder = Mathf.Max(overlaySortingOrder, MinimumOverlaySortingAboveDialogueUi);
+        rootCanvas.pixelPerfect = false;
 
-        CanvasScaler scaler = overlayRoot.AddComponent<CanvasScaler>();
-        scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-        scaler.referenceResolution = new Vector2(1920f, 1080f);
-        scaler.matchWidthOrHeight = 0.5f;
+        if (overlayRoot != null)
+        {
+            overlayRoot.transform.SetAsLastSibling();
+        }
 
-        introBlocker = CreateUiObject("IntroBlocker", overlayRoot.transform);
-        StretchFull(introBlocker.GetComponent<RectTransform>());
-        Image blockerImage = introBlocker.AddComponent<Image>();
-        blockerImage.color = new Color(0f, 0f, 0f, 0f);
-        blockerImage.raycastTarget = true;
-
-        SetIntroBlockerActive(false);
-        SetOverlayRaycastBlocking(false);
+        transform.SetAsLastSibling();
+        Canvas.ForceUpdateCanvases();
     }
 
     private void SetIntroBlockerActive(bool active)

@@ -1,5 +1,6 @@
 {
   "sceneId": "mr_MacQueen",
+  "backdropImageId": "hall",
   "startNodeId": "node1",
   "nodes": [
     {

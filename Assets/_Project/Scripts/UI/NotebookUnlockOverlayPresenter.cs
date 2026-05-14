@@ -326,7 +326,7 @@ public class NotebookUnlockOverlayPresenter : MonoBehaviour
                 break;
         }
 
-        PopulateAndShow(title, displayName, body, sprite);
+        PopulateAndShow(title, displayName, body, sprite, e.Kind == NotebookRevealKind.Evidence);
     }
 
     private void PresentLegacyClue(string clueId)
@@ -364,7 +364,7 @@ public class NotebookUnlockOverlayPresenter : MonoBehaviour
             ? LoadOverlayEvidenceIcon(def != null ? def.icon : null, clueId)
             : null;
 
-        PopulateAndShow("获得新线索", name, body, sprite);
+        PopulateAndShow("获得新线索", name, body, sprite, playClueCollectSound: true);
     }
 
     private void PresentSynthesis(string outputClueId)
@@ -393,7 +393,7 @@ public class NotebookUnlockOverlayPresenter : MonoBehaviour
             ? LoadOverlayEvidenceIcon(def != null ? def.icon : null, outputClueId)
             : null;
 
-        PopulateAndShow("线索整理", name, body, sprite);
+        PopulateAndShow("线索整理", name, body, sprite, playClueCollectSound: true);
     }
 
     private static string ResolveTitle(NotebookRevealKind kind, NotebookRevealType revealType)
@@ -566,13 +566,13 @@ public class NotebookUnlockOverlayPresenter : MonoBehaviour
         }
     }
 
-    private void PopulateAndShow(string title, string displayName, string body, Sprite sprite)
+    private void PopulateAndShow(string title, string displayName, string body, Sprite sprite, bool playClueCollectSound)
     {
         PopulateDetailContent(title, displayName, body, sprite);
-        ShowAfterPopulate(title);
+        ShowAfterPopulate(title, playClueCollectSound);
     }
 
-    private void ShowAfterPopulate(string title)
+    private void ShowAfterPopulate(string title, bool playClueCollectSound)
     {
         if (overlayRoot == null)
         {
@@ -580,6 +580,15 @@ public class NotebookUnlockOverlayPresenter : MonoBehaviour
         }
 
         overlayRoot.SetActive(true);
+
+        if (playClueCollectSound)
+        {
+            GameAudioManager.EnsureExists();
+            if (GameAudioManager.Instance != null)
+            {
+                GameAudioManager.Instance.TryPlayClueCollectionSound();
+            }
+        }
 
         bool usePrimer = ShouldUsePrimerInCurrentScene()
                          && primerPanelGo != null

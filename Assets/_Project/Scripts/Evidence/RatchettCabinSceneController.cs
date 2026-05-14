@@ -208,6 +208,15 @@ public class RatchettCabinSceneController : MonoBehaviour
         }
         else
         {
+            if (SceneAudioPolicy.ShouldPlayTransitionSfx(sceneName))
+            {
+                GameAudioManager.EnsureExists();
+                if (GameAudioManager.Instance != null)
+                {
+                    GameAudioManager.Instance.TryPlayTransitionSound();
+                }
+            }
+
             EvidencePanelUI.DisableAllEventSystemComponentsBeforeSceneLoad();
             SceneManager.LoadScene(sceneName);
             EvidencePanelUI.EnsureSingleEventSystem();
@@ -259,7 +268,7 @@ public class RatchettCabinSceneController : MonoBehaviour
         bool bodyKnifeWoundDone = HasEvidence(evidenceManager, notebookManager, EvidenceIds.KNIFE_WOUND);
         bool bodyCloseUpDone = HasEvidence(evidenceManager, notebookManager, EvidenceIds.GOLD_WATCH)
             && HasEvidence(evidenceManager, notebookManager, EvidenceIds.PISTOL);
-        bool windowDone = RatchettCrimeSceneProgress.IsWindowBranchSatisfied(notebookManager);
+        bool windowDone = notebookManager != null && notebookManager.HasEvidence(EvidenceIds.SNOW_VIEW);
         bool floorDone = HasEvidence(evidenceManager, notebookManager, EvidenceIds.H_HANDKERCHIEF);
         bool tableDone = HasEvidence(evidenceManager, notebookManager, EvidenceIds.BURNED_PAPER);
         bool pipeCleanerDone = HasEvidence(evidenceManager, notebookManager, EvidenceIds.PIPE_CLEANER);

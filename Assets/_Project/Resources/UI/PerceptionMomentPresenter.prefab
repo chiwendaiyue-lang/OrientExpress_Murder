@@ -119,7 +119,7 @@ MonoBehaviour:
   introFallbackDuration: 1
   videoPrepareTimeout: 3
   videoPlayTimeout: 6
-  overlaySortingOrder: 3200
+  overlaySortingOrder: 9800
   defaultPortrait: {fileID: 0}
   noticeLineText: "\u6709\u732B\u817B...."
   blinkingTailLength: 1

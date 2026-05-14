@@ -1,5 +1,6 @@
 {
   "sceneId": "the_night",
+  "backdropImageId": "night",
   "mainStoryBlockDeferredRewardSkip": true,
   "startNodeId": "node1",
   "nodes": [

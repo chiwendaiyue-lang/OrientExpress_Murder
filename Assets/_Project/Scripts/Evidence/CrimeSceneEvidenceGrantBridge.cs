@@ -79,7 +79,8 @@ public static class CrimeSceneEvidenceGrantBridge
         }
 
         return Resources.Load<TextAsset>($"Dialogue/{dialogueId}") != null
-            || Resources.Load<TextAsset>($"Notebook/{dialogueId}") != null;
+            || Resources.Load<TextAsset>($"Notebook/{dialogueId}") != null
+            || Resources.Load<TextAsset>($"Notebook/doubt/{dialogueId}") != null;
     }
 
     public static bool TryStartCollectDialogue(string dialogueId)

@@ -49,23 +49,38 @@ public class ScreenFader : MonoBehaviour
 
     public static void LoadSceneWithFade(string sceneName)
     {
-        EnsureInstance().StartTransition(sceneName);
+        bool playTransition = SceneAudioPolicy.ShouldPlayTransitionSfx(sceneName);
+        LoadSceneWithFade(sceneName, playTransition);
     }
 
-    private void StartTransition(string sceneName)
+    public static void LoadSceneWithFade(string sceneName, bool playTransitionSound)
+    {
+        EnsureInstance().StartTransition(sceneName, playTransitionSound);
+    }
+
+    private void StartTransition(string sceneName, bool playTransitionSound)
     {
         if (isTransitioning)
         {
             return;
         }
 
-        StartCoroutine(TransitionRoutine(sceneName));
+        StartCoroutine(TransitionRoutine(sceneName, playTransitionSound));
     }
 
-    private IEnumerator TransitionRoutine(string sceneName)
+    private IEnumerator TransitionRoutine(string sceneName, bool playTransitionSound)
     {
         isTransitioning = true;
         CreateOverlayIfNeeded();
+
+        if (playTransitionSound)
+        {
+            GameAudioManager.EnsureExists();
+            if (GameAudioManager.Instance != null)
+            {
+                GameAudioManager.Instance.TryPlayTransitionSound();
+            }
+        }
 
         yield return FadeTo(1f, defaultFadeOutDuration);
         if (holdBlackDuration > 0f)

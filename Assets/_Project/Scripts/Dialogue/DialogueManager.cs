@@ -385,6 +385,11 @@ public class DialogueManager : MonoBehaviour
 
         if (jsonFile == null)
         {
+            jsonFile = Resources.Load<TextAsset>($"Notebook/doubt/{characterId}");
+        }
+
+        if (jsonFile == null)
+        {
             Debug.LogError($"???????????: Dialogue/{characterId} 或 Notebook/{characterId}");
             return;
         }

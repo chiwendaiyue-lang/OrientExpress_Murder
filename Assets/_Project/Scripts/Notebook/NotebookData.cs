@@ -96,6 +96,13 @@ public class DoubtDefinition
     public string description;
     public string finalConclusion;
     public bool resolved;
+
+    /// <summary>
+    /// 若设为非空：疑点覆层从 Resources 加载与对话同结构的 JSON（路径无扩展名，如 Notebook/doubt/doubt_golden_clock），
+    /// 在 Bubble/Line 中展示并按选项/继续推进；不设则仍只显示疑点标题。
+    /// </summary>
+    public string doubtInquiryLineScriptResourcePath;
+
     public List<DoubtUpdate> updates;
 }
 

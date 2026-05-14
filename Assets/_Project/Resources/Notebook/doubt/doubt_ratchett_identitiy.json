@@ -1,0 +1,126 @@
+{
+  "sceneId": "doubt_ratchett_identitiy",
+  "startNodeId": "node1",
+  "nodes": [
+    {
+      "id": "node1",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "雷切特，美国人，说自己处于危险之中，还随身配着枪。",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        },
+        "conditionalNext": [
+          {
+            "requirements": {
+              "requiredTestimonyIds": [
+                "armstrong_case"
+              ]
+            },
+            "nextNodeId": "node_with_armstrong"
+          },
+          {
+            "nextNodeId": "node_without_armstrong"
+          }
+        ]
+      }
+    },
+    {
+      "id": "node_without_armstrong",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "现在信息太少，还不能确定雷切特的身份，更没法确定他的敌人。",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        },
+        "nextSceneName": "CrimeScene"
+      }
+    },
+    {
+      "id": "node_with_armstrong",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "凶手杀死他之后，留下了很多证据，但关键的纸条却没有完全销毁。",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        },
+        "nextNodeId": "node3"
+      }
+    },
+    {
+      "id": "node3",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "黛西·阿姆斯特朗……",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        },
+        "nextNodeId": "node4"
+      }
+    },
+    {
+      "id": "node4",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "雷切特，原来你就是卡塞蒂！那么雷切特的敌人是谁就很显而易见了。",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        },
+        "rewards": {
+          "doubtStageToUpdate": [
+            {
+              "itemId": "ratchett_enemy",
+              "stageId": "ratchett_enemy_2"
+            }
+          ]
+        },
+        "nextSceneName": "CrimeScene"
+      }
+    }
+  ]
+}

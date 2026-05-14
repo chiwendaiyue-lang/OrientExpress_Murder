@@ -137,7 +137,8 @@ public class RatchettCloseUpSceneController : MonoBehaviour
         if (string.Equals(evidenceId, EvidenceIds.SNOW_NO_FOOTPRINTS, StringComparison.Ordinal))
         {
             return (gm != null && gm.RatchettWindowSnowDialogueDone)
-                || HasEvidence(evidenceManager, notebookManager, evidenceId);
+                || HasEvidence(evidenceManager, notebookManager, evidenceId)
+                || (notebookManager != null && notebookManager.HasEvidence(EvidenceIds.SNOW_VIEW));
         }
 
         return false;
@@ -250,6 +251,15 @@ public class RatchettCloseUpSceneController : MonoBehaviour
         }
         else
         {
+            if (SceneAudioPolicy.ShouldPlayTransitionSfx(cabinSceneName))
+            {
+                GameAudioManager.EnsureExists();
+                if (GameAudioManager.Instance != null)
+                {
+                    GameAudioManager.Instance.TryPlayTransitionSound();
+                }
+            }
+
             EvidencePanelUI.DisableAllEventSystemComponentsBeforeSceneLoad();
             SceneManager.LoadScene(cabinSceneName);
             EvidencePanelUI.EnsureSingleEventSystem();

@@ -810,6 +810,7 @@ public class DetectiveNotebookManager : MonoBehaviour
             description = source.description,
             finalConclusion = source.finalConclusion,
             resolved = source.resolved,
+            doubtInquiryLineScriptResourcePath = source.doubtInquiryLineScriptResourcePath,
             updates = source.updates
         };
     }
