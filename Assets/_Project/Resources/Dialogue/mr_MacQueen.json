@@ -203,7 +203,7 @@
             {
               "slotId": "left",
               "characterId": "poirot",
-              "portrait": "poirot"
+              "portrait": "poirot_normal"
             },
             {
               "slotId": "right",
@@ -228,7 +228,7 @@
             {
               "slotId": "left",
               "characterId": "poirot",
-              "portrait": "poirot"
+              "portrait": "poirot_normal"
             },
             {
               "slotId": "right",
@@ -253,7 +253,7 @@
             {
               "slotId": "left",
               "characterId": "poirot",
-              "portrait": "poirot"
+              "portrait": "poirot_normal"
             },
             {
               "slotId": "right",
@@ -278,7 +278,7 @@
             {
               "slotId": "left",
               "characterId": "poirot",
-              "portrait": "poirot"
+              "portrait": "poirot_normal"
             },
             {
               "slotId": "right",
@@ -303,7 +303,7 @@
             {
               "slotId": "left",
               "characterId": "poirot",
-              "portrait": "poirot"
+              "portrait": "poirot_normal"
             },
             {
               "slotId": "right",
@@ -328,7 +328,7 @@
             {
               "slotId": "left",
               "characterId": "poirot",
-              "portrait": "poirot"
+              "portrait": "poirot_normal"
             },
             {
               "slotId": "right",
@@ -353,7 +353,7 @@
             {
               "slotId": "left",
               "characterId": "poirot",
-              "portrait": "poirot"
+              "portrait": "poirot_normal"
             },
             {
               "slotId": "right",
@@ -378,7 +378,7 @@
             {
               "slotId": "left",
               "characterId": "poirot",
-              "portrait": "poirot"
+              "portrait": "poirot_normal"
             },
             {
               "slotId": "right",
@@ -403,7 +403,7 @@
             {
               "slotId": "left",
               "characterId": "poirot",
-              "portrait": "poirot"
+              "portrait": "poirot_normal"
             },
             {
               "slotId": "right",
@@ -471,7 +471,7 @@
             {
               "slotId": "left",
               "characterId": "poirot",
-              "portrait": "poirot"
+              "portrait": "poirot_normal"
             },
             {
               "slotId": "right",
@@ -496,7 +496,7 @@
             {
               "slotId": "left",
               "characterId": "poirot",
-              "portrait": "poirot"
+              "portrait": "poirot_normal"
             },
             {
               "slotId": "right",
@@ -521,7 +521,7 @@
             {
               "slotId": "left",
               "characterId": "poirot",
-              "portrait": "poirot"
+              "portrait": "poirot_normal"
             },
             {
               "slotId": "right",
@@ -546,7 +546,7 @@
             {
               "slotId": "left",
               "characterId": "poirot",
-              "portrait": "poirot"
+              "portrait": "poirot_normal"
             },
             {
               "slotId": "right",
@@ -571,7 +571,7 @@
             {
               "slotId": "left",
               "characterId": "poirot",
-              "portrait": "poirot"
+              "portrait": "poirot_normal"
             },
             {
               "slotId": "right",
@@ -597,7 +597,7 @@
             {
               "slotId": "left",
               "characterId": "poirot",
-              "portrait": "poirot"
+              "portrait": "poirot_normal"
             },
             {
               "slotId": "right",
@@ -627,7 +627,7 @@
             {
               "slotId": "left",
               "characterId": "poirot",
-              "portrait": "poirot"
+              "portrait": "poirot_normal"
             },
             {
               "slotId": "right",
@@ -652,7 +652,7 @@
             {
               "slotId": "left",
               "characterId": "poirot",
-              "portrait": "poirot"
+              "portrait": "poirot_normal"
             },
             {
               "slotId": "right",
@@ -677,7 +677,7 @@
             {
               "slotId": "left",
               "characterId": "poirot",
-              "portrait": "poirot"
+              "portrait": "poirot_normal"
             },
             {
               "slotId": "right",
@@ -697,12 +697,12 @@
         "speakerName": "麦克昆",
         "text": "铺好床我就睡了，一直到天亮。",
         "stage": {
-          "focusCharacterId": "macqueen",
+          "focusCharacterId": "poirot",
           "slots": [
             {
               "slotId": "left",
               "characterId": "poirot",
-              "portrait": "poirot"
+              "portrait": "poirot_doubt"
             },
             {
               "slotId": "right",
@@ -744,7 +744,7 @@
             {
               "slotId": "left",
               "characterId": "poirot",
-              "portrait": "poirot"
+              "portrait": "poirot_normal"
             },
             {
               "slotId": "right",
@@ -769,7 +769,7 @@
             {
               "slotId": "left",
               "characterId": "poirot",
-              "portrait": "poirot"
+              "portrait": "poirot_normal"
             },
             {
               "slotId": "right",
@@ -794,7 +794,7 @@
             {
               "slotId": "left",
               "characterId": "poirot",
-              "portrait": "poirot"
+              "portrait": "poirot_normal"
             },
             {
               "slotId": "right",
@@ -819,7 +819,7 @@
             {
               "slotId": "left",
               "characterId": "poirot",
-              "portrait": "poirot"
+              "portrait": "poirot_normal"
             },
             {
               "slotId": "right",
@@ -844,7 +844,7 @@
             {
               "slotId": "left",
               "characterId": "poirot",
-              "portrait": "poirot"
+              "portrait": "poirot_normal"
             },
             {
               "slotId": "right",
@@ -869,7 +869,7 @@
             {
               "slotId": "left",
               "characterId": "poirot",
-              "portrait": "poirot"
+              "portrait": "poirot_normal"
             },
             {
               "slotId": "right",
@@ -894,7 +894,7 @@
             {
               "slotId": "left",
               "characterId": "poirot",
-              "portrait": "poirot"
+              "portrait": "poirot_normal"
             },
             {
               "slotId": "right",
@@ -919,7 +919,7 @@
             {
               "slotId": "left",
               "characterId": "poirot",
-              "portrait": "poirot"
+              "portrait": "poirot_normal"
             },
             {
               "slotId": "right",
@@ -944,7 +944,7 @@
             {
               "slotId": "left",
               "characterId": "poirot",
-              "portrait": "poirot"
+              "portrait": "poirot_normal"
             },
             {
               "slotId": "right",
@@ -970,7 +970,7 @@
             {
               "slotId": "left",
               "characterId": "poirot",
-              "portrait": "poirot"
+              "portrait": "poirot_normal"
             },
             {
               "slotId": "right",
@@ -1003,7 +1003,7 @@
             {
               "slotId": "left",
               "characterId": "poirot",
-              "portrait": "poirot"
+              "portrait": "poirot_normal"
             },
             {
               "slotId": "right",
@@ -1028,7 +1028,7 @@
             {
               "slotId": "left",
               "characterId": "poirot",
-              "portrait": "poirot"
+              "portrait": "poirot_normal"
             },
             {
               "slotId": "right",
@@ -1048,8 +1048,14 @@
         "speakerName": "波洛",
         "text": "我看，暂且就谈这些吧。谢谢你，麦克昆先生。",
         "stage": {
-          "focusCharacterId": "",
-          "slots": []
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
         },
         "nextNodeId": "END",
         "nextDialogueId": "mrs_hubbard"

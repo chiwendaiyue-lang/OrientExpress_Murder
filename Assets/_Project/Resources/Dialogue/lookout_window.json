@@ -69,7 +69,7 @@
             {
               "slotId": "right",
               "characterId": "doctor",
-              "portrait": "doctor"
+              "portrait": "doctor_wry"
             }
           ]
         },
@@ -157,7 +157,7 @@
             {
               "slotId": "right",
               "characterId": "doctor",
-              "portrait": "doctor"
+              "portrait": "doctor_wry"
             }
           ]
         },
@@ -268,7 +268,7 @@
             {
               "slotId": "right",
               "characterId": "doctor",
-              "portrait": "doctor"
+              "portrait": "doctor_wry"
             }
           ]
         },

@@ -57,6 +57,7 @@ public class DialogueManager : MonoBehaviour
     private string pendingNextSceneName;
     private readonly List<GameObject> activeHotspots = new List<GameObject>();
     private readonly HashSet<string> noticeIntroPlayedNodeIds = new HashSet<string>();
+    private readonly HashSet<string> selectedOptionKeys = new HashSet<string>();
     private Coroutine noticeMomentRoutine;
     private Coroutine dialogueVideoRoutine;
 
@@ -480,6 +481,7 @@ public class DialogueManager : MonoBehaviour
         currentDialogue.BuildLookup();
         currentDialogueResourceId = characterId ?? string.Empty;
         ResetNoticeIntroPlaybackState();
+        selectedOptionKeys.Clear();
         AbandonPendingDeferredNotebookRewards();
 
         DialogueSceneBackdropBinder.ApplyIfAny(currentDialogue.backdropImageId);
@@ -637,8 +639,17 @@ public class DialogueManager : MonoBehaviour
             return;
         }
 
-        foreach (var option in node.options)
+        for (int i = 0; i < node.options.Count; i++)
         {
+            DialogueOption option = node.options[i];
+            if (option == null)
+            {
+                continue;
+            }
+
+            string optionKey = BuildOptionSelectionKey(currentNodeId, option, i);
+            bool alreadySelected = selectedOptionKeys.Contains(optionKey);
+
             if (DetectiveNotebookManager.Instance != null && !DetectiveNotebookManager.Instance.MeetsRequirements(option.requirements))
             {
                 continue;
@@ -666,13 +677,65 @@ public class DialogueManager : MonoBehaviour
                     legacyText.text = option.text;
                 }
             }
-            btnObj.GetComponent<Button>().onClick.AddListener(() => SelectOption(option));
+            DialogueOption capturedOption = option;
+            string capturedOptionKey = optionKey;
+            Button button = btnObj.GetComponent<Button>();
+            if (button != null)
+            {
+                button.onClick.RemoveAllListeners();
+                if (alreadySelected)
+                {
+                    button.interactable = false;
+                    ApplyDisabledOptionVisual(btnObj);
+                }
+                else
+                {
+                    button.interactable = true;
+                    button.onClick.AddListener(() => SelectOption(capturedOption, capturedOptionKey));
+                }
+            }
         }
 
         ApplyOptionsContainerLayoutOffset(true);
     }
 
-    void SelectOption(DialogueOption option)
+    private static void ApplyDisabledOptionVisual(GameObject optionObject)
+    {
+        if (optionObject == null)
+        {
+            return;
+        }
+
+        Image image = optionObject.GetComponent<Image>();
+        if (image != null)
+        {
+            Color color = image.color;
+            image.color = new Color(color.r * 0.78f, color.g * 0.78f, color.b * 0.78f, color.a * 0.92f);
+        }
+
+        TMP_Text tmpText = optionObject.GetComponentInChildren<TMP_Text>(true);
+        if (tmpText != null)
+        {
+            tmpText.color = new Color(0.72f, 0.72f, 0.72f, tmpText.color.a);
+        }
+
+        Text legacyText = optionObject.GetComponentInChildren<Text>(true);
+        if (legacyText != null)
+        {
+            legacyText.color = new Color(0.72f, 0.72f, 0.72f, legacyText.color.a);
+        }
+    }
+
+    private static string BuildOptionSelectionKey(string nodeId, DialogueOption option, int index)
+    {
+        string optionId = !string.IsNullOrEmpty(option.id)
+            ? option.id
+            : $"{index}|{option.text}|{option.nextNodeId}|{option.nextDialogueId}|{option.nextSceneName}";
+
+        return $"{nodeId}|{optionId}";
+    }
+
+    void SelectOption(DialogueOption option, string optionKey)
     {
         if (NotebookUnlockOverlayPresenter.IsBlockingInput)
         {
@@ -685,6 +748,10 @@ public class DialogueManager : MonoBehaviour
         }
 
         AbandonPendingDeferredNotebookRewards();
+        if (!string.IsNullOrEmpty(optionKey))
+        {
+            selectedOptionKeys.Add(optionKey);
+        }
 
         DetectiveNotebookManager notebookManager = DetectiveNotebookManager.EnsureInstance();
         if (notebookManager != null)

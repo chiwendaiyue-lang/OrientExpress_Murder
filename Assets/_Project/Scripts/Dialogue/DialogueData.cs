@@ -7,6 +7,7 @@ using UnityEngine;
 [Serializable]
 public class DialogueOption
 {
+    public string id;
     public string text;
     public string nextNodeId;
     public string nextDialogueId;
