@@ -44,6 +44,7 @@ public class EvidencePanelUI : MonoBehaviour
     public Transform leftDoubtList;
     public Transform rightDoubtList;
     public GameObject physicalDetailPanel;
+    public TMP_Text currentTabTitleText;
     public TMP_Text clueDetailText;
     public Image clueDetailIcon;
 
@@ -88,6 +89,7 @@ public class EvidencePanelUI : MonoBehaviour
     private string selectedDoubtId;
     private TMP_FontAsset generatedFontAsset;
     private Material generatedFontMaterial;
+    private RectTransform titleArea;
 
     public static bool IsNotebookOpen
     {
@@ -463,6 +465,25 @@ public class EvidencePanelUI : MonoBehaviour
             physicalDetailPanel = FindChildGameObject("DetailPanel");
         }
 
+        if (titleArea == null)
+        {
+            GameObject title = FindChildGameObject("TitleArea");
+            titleArea = title != null ? title.transform as RectTransform : null;
+        }
+
+        if (currentTabTitleText == null)
+        {
+            GameObject titleTextObject = FindChildGameObject("CurrentTabTitle");
+            if (titleTextObject != null)
+            {
+                currentTabTitleText = titleTextObject.GetComponent<TMP_Text>();
+            }
+            else if (titleArea != null)
+            {
+                currentTabTitleText = titleArea.GetComponentInChildren<TMP_Text>(true);
+            }
+        }
+
         if (evidenceSlotPrefab == null)
         {
             Debug.LogWarning("EvidencePanelUI: evidenceSlotPrefab 未指定，请在 Prefab 上拖入 EvidenceSlot.prefab。");
@@ -662,6 +683,8 @@ public class EvidencePanelUI : MonoBehaviour
         }
 
         currentTab = normalizedTab;
+        EnsureCurrentTabTitle();
+        UpdateCurrentTabTitle();
         UpdateContentPanels();
         RefreshCurrentTab();
         HideClueDetail();
@@ -1203,6 +1226,8 @@ public class EvidencePanelUI : MonoBehaviour
 
     private void RefreshCurrentTab()
     {
+        EnsureCurrentTabTitle();
+        UpdateCurrentTabTitle();
         UpdateContentPanels();
 
         EvidenceTab normalizedTab = NormalizeTab(currentTab);
@@ -1219,6 +1244,73 @@ public class EvidencePanelUI : MonoBehaviour
         }
 
         RefreshDoubtPanel();
+    }
+
+    private void EnsureCurrentTabTitle()
+    {
+        if (currentTabTitleText != null)
+        {
+            return;
+        }
+
+        if (titleArea == null)
+        {
+            GameObject title = FindChildGameObject("TitleArea");
+            titleArea = title != null ? title.transform as RectTransform : null;
+        }
+
+        if (titleArea == null)
+        {
+            return;
+        }
+
+        TMP_Text existing = titleArea.GetComponentInChildren<TMP_Text>(true);
+        if (existing != null)
+        {
+            currentTabTitleText = existing;
+            return;
+        }
+
+        GameObject textObject = new GameObject("CurrentTabTitle", typeof(RectTransform), typeof(CanvasRenderer), typeof(TextMeshProUGUI));
+        textObject.transform.SetParent(titleArea, false);
+
+        TextMeshProUGUI titleText = textObject.GetComponent<TextMeshProUGUI>();
+        ApplyGeneratedTextStyle(titleText);
+        titleText.fontSize = 34f;
+        titleText.color = generatedTextColor;
+        titleText.alignment = TextAlignmentOptions.MidlineLeft;
+        titleText.enableWordWrapping = false;
+        titleText.overflowMode = TextOverflowModes.Ellipsis;
+        titleText.margin = new Vector4(22f, 6f, 18f, 6f);
+
+        RectTransform rect = titleText.rectTransform;
+        rect.anchorMin = Vector2.zero;
+        rect.anchorMax = Vector2.one;
+        rect.offsetMin = Vector2.zero;
+        rect.offsetMax = Vector2.zero;
+
+        currentTabTitleText = titleText;
+    }
+
+    private void UpdateCurrentTabTitle()
+    {
+        if (currentTabTitleText == null)
+        {
+            return;
+        }
+
+        switch (NormalizeTab(currentTab))
+        {
+            case EvidenceTab.Physical:
+                currentTabTitleText.text = "物证";
+                break;
+            case EvidenceTab.Testimony:
+                currentTabTitleText.text = "证词";
+                break;
+            default:
+                currentTabTitleText.text = "疑点";
+                break;
+        }
     }
 
     private void RefreshPhysicalPanel()

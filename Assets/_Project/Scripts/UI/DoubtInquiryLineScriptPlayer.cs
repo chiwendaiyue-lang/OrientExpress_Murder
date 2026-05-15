@@ -22,6 +22,7 @@ public sealed class DoubtInquiryLineScriptPlayer : MonoBehaviour
     private string currentNodeId;
     private bool isActive;
     private GameObject optionButtonPrefab;
+    private readonly HashSet<string> selectedOptionKeys = new HashSet<string>();
 
     private const float OptionStripMaxWidth = 380f;
     /// <summary>选项条相对 <c>detail</c> 右上锚点的水平偏移（像素）。负值向左（进入正文区），正值向右。</summary>
@@ -76,6 +77,7 @@ public sealed class DoubtInquiryLineScriptPlayer : MonoBehaviour
 
         EnsureBubbleClickSurface();
         currentNodeId = dialogue.startNodeId;
+        selectedOptionKeys.Clear();
         isActive = true;
         RenderCurrentNode();
     }
@@ -85,6 +87,7 @@ public sealed class DoubtInquiryLineScriptPlayer : MonoBehaviour
         isActive = false;
         dialogue = null;
         currentNodeId = null;
+        selectedOptionKeys.Clear();
         ClearOptionRows();
         TeardownBubbleClick();
     }
@@ -323,7 +326,9 @@ public sealed class DoubtInquiryLineScriptPlayer : MonoBehaviour
             foreach (DialogueOption opt in usableOptions)
             {
                 DialogueOption captured = opt;
-                AddOptionButton(captured.text, () => OnOptionChosen(captured));
+                string capturedOptionKey = BuildOptionSelectionKey(currentNodeId, captured, node.options.IndexOf(opt));
+                bool alreadySelected = selectedOptionKeys.Contains(capturedOptionKey);
+                AddOptionButton(captured.text, () => OnOptionChosen(captured, capturedOptionKey), !alreadySelected);
             }
 
             return;
@@ -442,8 +447,9 @@ public sealed class DoubtInquiryLineScriptPlayer : MonoBehaviour
         }
 
         DetectiveNotebookManager nb = DetectiveNotebookManager.Instance;
-        foreach (DialogueOption option in node.options)
+        for (int i = 0; i < node.options.Count; i++)
         {
+            DialogueOption option = node.options[i];
             if (option == null || string.IsNullOrEmpty(option.text))
             {
                 continue;
@@ -466,11 +472,25 @@ public sealed class DoubtInquiryLineScriptPlayer : MonoBehaviour
         return list;
     }
 
-    private void OnOptionChosen(DialogueOption option)
+    private static string BuildOptionSelectionKey(string nodeId, DialogueOption option, int index)
+    {
+        string optionId = !string.IsNullOrEmpty(option.id)
+            ? option.id
+            : $"{index}|{option.text}|{option.nextNodeId}|{option.nextDialogueId}|{option.nextSceneName}";
+
+        return $"{nodeId}|{optionId}";
+    }
+
+    private void OnOptionChosen(DialogueOption option, string optionKey)
     {
         if (!isActive || option == null)
         {
             return;
+        }
+
+        if (!string.IsNullOrEmpty(optionKey))
+        {
+            selectedOptionKeys.Add(optionKey);
         }
 
         DetectiveNotebookManager nb = DetectiveNotebookManager.EnsureInstance();
@@ -583,7 +603,7 @@ public sealed class DoubtInquiryLineScriptPlayer : MonoBehaviour
         return null;
     }
 
-    private void AddOptionButton(string label, UnityAction onClick)
+    private void AddOptionButton(string label, UnityAction onClick, bool interactable = true)
     {
         if (optionHost == null)
         {
@@ -629,7 +649,42 @@ public sealed class DoubtInquiryLineScriptPlayer : MonoBehaviour
         }
 
         btn.onClick.RemoveAllListeners();
-        btn.onClick.AddListener(onClick);
+        btn.interactable = interactable;
+        if (interactable)
+        {
+            btn.onClick.AddListener(onClick);
+        }
+        else
+        {
+            ApplyDisabledOptionVisual(btnObj);
+        }
+    }
+
+    private static void ApplyDisabledOptionVisual(GameObject optionObject)
+    {
+        if (optionObject == null)
+        {
+            return;
+        }
+
+        Image image = optionObject.GetComponent<Image>();
+        if (image != null)
+        {
+            Color color = image.color;
+            image.color = new Color(color.r * 0.78f, color.g * 0.78f, color.b * 0.78f, color.a * 0.92f);
+        }
+
+        TMP_Text tmpText = optionObject.GetComponentInChildren<TMP_Text>(true);
+        if (tmpText != null)
+        {
+            tmpText.color = new Color(0.72f, 0.72f, 0.72f, tmpText.color.a);
+        }
+
+        Text legacyText = optionObject.GetComponentInChildren<Text>(true);
+        if (legacyText != null)
+        {
+            legacyText.color = new Color(0.72f, 0.72f, 0.72f, legacyText.color.a);
+        }
     }
 
     private GameObject CreateFallbackOptionRow()

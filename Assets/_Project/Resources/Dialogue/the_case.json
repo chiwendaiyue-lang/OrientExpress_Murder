@@ -207,7 +207,7 @@
             {
               "slotId": "right",
               "characterId": "bouc",
-              "portrait": "bouc_serious"
+              "portrait": "bouc_normal"
             }
           ]
         },
@@ -347,7 +347,7 @@
             {
               "slotId": "right",
               "characterId": "bouc",
-              "portrait": "bouc_serious"
+              "portrait": "bouc_normal"
             }
           ]
         },
@@ -492,7 +492,7 @@
             {
               "slotId": "right",
               "characterId": "doctor",
-              "portrait": "doctor"
+              "portrait": "doctor_wry"
             }
           ]
         },
@@ -542,7 +542,7 @@
             {
               "slotId": "right",
               "characterId": "doctor",
-              "portrait": "doctor"
+              "portrait": "doctor_wry"
             }
           ]
         },
@@ -777,7 +777,7 @@
             {
               "slotId": "right",
               "characterId": "bouc",
-              "portrait": "bouc_serious"
+              "portrait": "bouc_normal"
             }
           ]
         },
@@ -822,7 +822,7 @@
             {
               "slotId": "right",
               "characterId": "bouc",
-              "portrait": "bouc_serious"
+              "portrait": "bouc_normal"
             }
           ]
         },
@@ -847,7 +847,7 @@
             {
               "slotId": "right",
               "characterId": "bouc",
-              "portrait": "bouc_serious"
+              "portrait": "bouc_normal"
             }
           ]
         },
