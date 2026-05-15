@@ -23,7 +23,7 @@
             {
               "slotId": "right",
               "characterId": "unknown_voice",
-              "portrait": "unknown_voice"
+              "portrait": ""
             }
           ]
         }
@@ -123,7 +123,7 @@
             {
               "slotId": "right",
               "characterId": "unknown_voice",
-              "portrait": "unknown_voice"
+              "portrait": ""
             }
           ]
         }
