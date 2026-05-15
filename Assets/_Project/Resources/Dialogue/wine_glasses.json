@@ -24,11 +24,6 @@
             }
           ]
         },
-        "rewards": {
-          "evidenceToAdd": [
-            "wine_glasses"
-          ]
-        },
         "nextNodeId": "node2"
       }
     },

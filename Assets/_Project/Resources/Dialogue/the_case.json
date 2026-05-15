@@ -145,7 +145,7 @@
             {
               "slotId": "left",
               "characterId": "poirot",
-              "portrait": "poirot_normal"
+              "portrait": "poirot_doubt"
             }
           ]
         },
@@ -447,7 +447,7 @@
             {
               "slotId": "right",
               "characterId": "pierre",
-              "portrait": "pierre_panicked"
+              "portrait": "pierre_shake"
             }
           ]
         },

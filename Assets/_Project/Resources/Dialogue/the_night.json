@@ -12,21 +12,7 @@
         "speakerName": "? ? ?",
         "text": "啊！",
         "nextNodeId": "node2",
-        "stage": {
-          "focusCharacterId": "unknown_voice",
-          "slots": [
-            {
-              "slotId": "left",
-              "characterId": "poirot",
-              "portrait": "poirot_normal"
-            },
-            {
-              "slotId": "right",
-              "characterId": "unknown_voice",
-              "portrait": ""
-            }
-          ]
-        }
+        "stage": {}
       }
     },
     {
@@ -37,21 +23,7 @@
         "speakerName": "系统",
         "text": "有什么人在呻吟，几乎是一声喊叫。",
         "nextNodeId": "node3",
-        "stage": {
-          "focusCharacterId": "",
-          "slots": [
-            {
-              "slotId": "left",
-              "characterId": "poirot",
-              "portrait": "poirot_normal"
-            },
-            {
-              "slotId": "right",
-              "characterId": "mrs_hubbard",
-              "portrait": ""
-            }
-          ]
-        }
+        "stage": { }
       }
     },
     {
@@ -62,21 +34,7 @@
         "speakerName": "系统",
         "text": "噔，噔，噔，砰砰砰，有人在敲门。",
         "nextNodeId": "node4",
-        "stage": {
-          "focusCharacterId": "",
-          "slots": [
-            {
-              "slotId": "left",
-              "characterId": "poirot",
-              "portrait": "poirot_normal"
-            },
-            {
-              "slotId": "right",
-              "characterId": "mrs_hubbard",
-              "portrait": ""
-            }
-          ]
-        }
+        "stage": {}
       }
     },
     {
@@ -87,21 +45,7 @@
         "speakerName": "列车员皮埃尔",
         "text": "砰砰砰",
         "nextNodeId": "node5",
-        "stage": {
-          "focusCharacterId": "pierre",
-          "slots": [
-            {
-              "slotId": "left",
-              "characterId": "poirot",
-              "portrait": "poirot_normal"
-            },
-            {
-              "slotId": "right",
-              "characterId": "pierre",
-              "portrait": "pierre_anxious"
-            }
-          ]
-        }
+        "stage": {}
       }
     },
     {
@@ -112,21 +56,7 @@
         "speakerName": "? ? ?",
         "text": "没什么事，是我搞错了（法语）",
         "nextNodeId": "node6",
-        "stage": {
-          "focusCharacterId": "unknown_voice",
-          "slots": [
-            {
-              "slotId": "left",
-              "characterId": "poirot",
-              "portrait": "poirot_normal"
-            },
-            {
-              "slotId": "right",
-              "characterId": "unknown_voice",
-              "portrait": ""
-            }
-          ]
-        }
+        "stage": {}
       }
     },
     {
@@ -142,21 +72,7 @@
             "nextNodeId": "node7"
           }
         ],
-        "stage": {
-          "focusCharacterId": "pierre",
-          "slots": [
-            {
-              "slotId": "left",
-              "characterId": "poirot",
-              "portrait": "poirot_normal"
-            },
-            {
-              "slotId": "right",
-              "characterId": "pierre",
-              "portrait": "pierre_anxious"
-            }
-          ]
-        }
+        "stage": {}
       }
     },
     {
@@ -209,11 +125,6 @@
               "slotId": "left",
               "characterId": "poirot",
               "portrait": "poirot_normal"
-            },
-            {
-              "slotId": "right",
-              "characterId": "mrs_hubbard",
-              "portrait": ""
             }
           ]
         }
@@ -226,22 +137,7 @@
         "speakerCharacterId": "system",
         "speakerName": "系统",
         "text": "咔哒，哗哗哗（流水声）...咔哒",
-        "nextNodeId": "node10",
-        "stage": {
-          "focusCharacterId": "",
-          "slots": [
-            {
-              "slotId": "left",
-              "characterId": "poirot",
-              "portrait": "poirot_normal"
-            },
-            {
-              "slotId": "right",
-              "characterId": "mrs_hubbard",
-              "portrait": ""
-            }
-          ]
-        }
+        "nextNodeId": "node10"
       }
     },
     {
@@ -252,21 +148,7 @@
         "speakerName": "系统",
         "text": "噔——噔——噔",
         "nextNodeId": "node11",
-        "stage": {
-          "focusCharacterId": "",
-          "slots": [
-            {
-              "slotId": "left",
-              "characterId": "poirot",
-              "portrait": "poirot_normal"
-            },
-            {
-              "slotId": "right",
-              "characterId": "mrs_hubbard",
-              "portrait": ""
-            }
-          ]
-        }
+        "stage": {}
       }
     },
     {
@@ -302,21 +184,7 @@
         "speakerName": "系统",
         "text": "叮铃，叮铃，叮铃……",
         "nextNodeId": "node13",
-        "stage": {
-          "focusCharacterId": "",
-          "slots": [
-            {
-              "slotId": "left",
-              "characterId": "poirot",
-              "portrait": "poirot_normal"
-            },
-            {
-              "slotId": "right",
-              "characterId": "mrs_hubbard",
-              "portrait": ""
-            }
-          ]
-        }
+        "stage": {}
       }
     },
     {
@@ -327,21 +195,7 @@
         "speakerName": "哈伯德太太",
         "text": "有个男人在我的房间里面……",
         "nextNodeId": "node14",
-        "stage": {
-          "focusCharacterId": "mrs_hubbard",
-          "slots": [
-            {
-              "slotId": "left",
-              "characterId": "poirot",
-              "portrait": "poirot_normal"
-            },
-            {
-              "slotId": "right",
-              "characterId": "mrs_hubbard",
-              "portrait": ""
-            }
-          ]
-        }
+        "stage": {}
       }
     },
     {
@@ -352,21 +206,7 @@
         "speakerName": "系统",
         "text": "……",
         "nextNodeId": "node15",
-        "stage": {
-          "focusCharacterId": "",
-          "slots": [
-            {
-              "slotId": "left",
-              "characterId": "poirot",
-              "portrait": "poirot_normal"
-            },
-            {
-              "slotId": "right",
-              "characterId": "mrs_hubbard",
-              "portrait": ""
-            }
-          ]
-        }
+        "stage": {}
       }
     },
     {
@@ -383,17 +223,17 @@
           }
         ],
         "stage": {
-          "focusCharacterId": "pierre",
+          "focusCharacterId": "mrs_hubbard",
           "slots": [
             {
               "slotId": "left",
-              "characterId": "poirot",
-              "portrait": "poirot_normal"
+              "characterId": "pierre",
+              "portrait": "poirot"
             },
             {
               "slotId": "right",
-              "characterId": "pierre",
-              "portrait": "pierre_anxious"
+              "characterId": "mrs_hubbard",
+              "portrait": ""
             }
           ]
         }
