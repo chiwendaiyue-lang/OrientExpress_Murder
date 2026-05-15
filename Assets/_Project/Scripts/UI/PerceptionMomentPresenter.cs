@@ -14,7 +14,9 @@ public class PerceptionMomentPresenter : MonoBehaviour
     /// <summary>仅察觉开场视频播放期间为 true（挡点击）；热点阶段不挡察觉按钮。</summary>
     public static bool IsBlockingInput => Instance != null && Instance.introBlocking;
 
-    private const string IntroVideoResourcesPath = "test";
+    [SerializeField, Tooltip("Resources 下路径，不要写扩展名。例：MOV/test → Assets/.../Resources/MOV/test.mov")]
+    private string introVideoResourcesPath = "MOV/test";
+
     private const string DefaultPortraitResourcesPath = "Characters/poirot_normal";
     private const string PresenterResourcesPath = "UI/PerceptionMomentPresenter";
     private const string NoticeChromeResourcesPath = "UI/PerceptionMomentNoticeChrome";
@@ -148,10 +150,11 @@ public class PerceptionMomentPresenter : MonoBehaviour
             VideoClip clip = LoadIntroVideoClip();
             if (clip == null)
             {
+                string path = GetIntroVideoResourcesPath();
                 Debug.LogWarning(
-                    $"[PerceptionMoment] 未找到可用的 VideoClip「{IntroVideoResourcesPath}」。"
+                    $"[PerceptionMoment] 未找到可用的 VideoClip「{path}」。"
                     + $" 将等待 {introFallbackDuration:0.##}s 后进入立绘与气泡。"
-                    + " 请把 test.mov（H.264）放在 Resources 根目录，并在 Inspector 中按 Video Clip 重新导入。");
+                    + " 请把视频放在 Assets/_Project/Resources/ 下对应子文件夹，并在 Inspector 中按 Video Clip 导入（路径填 Resources 相对路径，无扩展名）。");
                 yield return new WaitForSecondsRealtime(introFallbackDuration);
                 yield break;
             }
@@ -169,19 +172,30 @@ public class PerceptionMomentPresenter : MonoBehaviour
         }
     }
 
-    private static VideoClip LoadIntroVideoClip()
+    private string GetIntroVideoResourcesPath()
     {
-        VideoClip clip = Resources.Load<VideoClip>(IntroVideoResourcesPath);
+        if (string.IsNullOrWhiteSpace(introVideoResourcesPath))
+        {
+            return "MOV/test";
+        }
+
+        return introVideoResourcesPath.Trim().TrimStart('/', '\\');
+    }
+
+    private VideoClip LoadIntroVideoClip()
+    {
+        string path = GetIntroVideoResourcesPath();
+        VideoClip clip = Resources.Load<VideoClip>(path);
         if (clip != null)
         {
             return clip;
         }
 
-        Object asset = Resources.Load(IntroVideoResourcesPath);
+        Object asset = Resources.Load(path);
         if (asset != null)
         {
             Debug.LogWarning(
-                $"[PerceptionMoment] Resources/{IntroVideoResourcesPath} 存在，但类型是 {asset.GetType().Name}，不是 VideoClip。"
+                $"[PerceptionMoment] Resources/{path} 存在，但类型是 {asset.GetType().Name}，不是 VideoClip。"
                 + " 请在 Project 里选中该视频并确认 Importer 为 Video Clip。");
         }
 

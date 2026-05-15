@@ -1004,6 +1004,7 @@ MonoBehaviour:
   hotspotButtonPrefab: {fileID: 2372245168819841017, guid: a3749fd586fd22a43bf9673337772010, type: 3}
   dialogueFontOverride: {fileID: 11400000, guid: 732ca041bcd2b1545b7d93121c542b17, type: 2}
   useLeftSpeakerPortrait: 0
+  optionsContainerAnchoredPositionOffset: {x: 0, y: 84}
   deferNotebookRewardsByDefaultWhenRewardsPresent: 1
   deferNotebookRewardsHintRichText: "<size=88%><color=#D4C4A8>\u53F3\u952E\uFF1A\u6536\u5F55\u5230\u4FA6\u63A2\u7B14\u8BB0</color><color=#8A8074>
     \xB7 \u5DE6\u952E\uFF1A\u7EE7\u7EED\uFF08\u8DF3\u8FC7\u7EBF\u7D22\uFF09</color></size>"

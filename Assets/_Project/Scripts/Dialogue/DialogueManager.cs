@@ -29,6 +29,10 @@ public class DialogueManager : MonoBehaviour
     [Header("Portrait Display")]
     public bool useLeftSpeakerPortrait = false;
 
+    [Header("对话选项区布局")]
+    [Tooltip("叠在 OptionsContainer 预制体上的 anchoredPosition 偏移（像素）。Y 为正通常使整块选项按钮在画面上移；无选项节点会自动还原基准位置。")]
+    [SerializeField] private Vector2 optionsContainerAnchoredPositionOffset = new Vector2(0f, 72f);
+
     [Header("对话中的笔记奖励（弹丸式）")]
     [Tooltip("无选项的点击推进节点上，若带有笔记 rewards 且未勾选 dialogueSkipDeferNotebookRewards，则默认延迟到右键收录；左键继续为跳过。")]
     [SerializeField] private bool deferNotebookRewardsByDefaultWhenRewardsPresent = true;
@@ -61,7 +65,60 @@ public class DialogueManager : MonoBehaviour
 
     private string currentDialogueResourceId = string.Empty;
 
+    private Vector2 optionsContainerAnchoredPositionBase;
+    private bool optionsContainerLayoutBaseCached;
+
     private const string RuntimePrefabResourcePath = "UI/DialogueRuntimeRoot";
+
+    private void CacheOptionsContainerLayoutBaseIfNeeded()
+    {
+        if (optionsContainerLayoutBaseCached || optionsContainer == null)
+        {
+            return;
+        }
+
+        RectTransform rt = optionsContainer as RectTransform;
+        if (rt == null)
+        {
+            return;
+        }
+
+        optionsContainerAnchoredPositionBase = rt.anchoredPosition;
+        optionsContainerLayoutBaseCached = true;
+    }
+
+    private void ResetOptionsContainerToPrefabLayout()
+    {
+        if (!optionsContainerLayoutBaseCached || optionsContainer == null)
+        {
+            return;
+        }
+
+        RectTransform rt = optionsContainer as RectTransform;
+        if (rt == null)
+        {
+            return;
+        }
+
+        rt.anchoredPosition = optionsContainerAnchoredPositionBase;
+    }
+
+    private void ApplyOptionsContainerLayoutOffset()
+    {
+        CacheOptionsContainerLayoutBaseIfNeeded();
+        if (!optionsContainerLayoutBaseCached || optionsContainer == null)
+        {
+            return;
+        }
+
+        RectTransform rt = optionsContainer as RectTransform;
+        if (rt == null)
+        {
+            return;
+        }
+
+        rt.anchoredPosition = optionsContainerAnchoredPositionBase + optionsContainerAnchoredPositionOffset;
+    }
 
     /// <summary>
     /// 全屏 UI 排序带（Screen Space Overlay）：背景 &lt; 对话 &lt; 弹窗 &lt; ScreenFader。
@@ -163,6 +220,7 @@ public class DialogueManager : MonoBehaviour
         EnsureDialogueCanvasesRenderOnTop();
         PassThroughDecorativeCanvasImages();
         HideRuntimeDialoguePrefabBackgroundLayer();
+        CacheOptionsContainerLayoutBaseIfNeeded();
     }
 
     /// <summary>
@@ -516,6 +574,7 @@ public class DialogueManager : MonoBehaviour
         // ????????
         foreach (Transform child in optionsContainer)
             Destroy(child.gameObject);
+        ResetOptionsContainerToPrefabLayout();
         ClearHotspots();
 
         waitingForClickAdvance = false;
@@ -597,6 +656,8 @@ public class DialogueManager : MonoBehaviour
             }
             btnObj.GetComponent<Button>().onClick.AddListener(() => SelectOption(option));
         }
+
+        ApplyOptionsContainerLayoutOffset();
     }
 
     void SelectOption(DialogueOption option)
