@@ -432,6 +432,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2763959483041595047}
   - component: {fileID: 5379070951724973603}
+  - component: {fileID: 9100000000000000091}
   m_Layer: 5
   m_Name: doubt
   m_TagString: Untagged
@@ -475,3 +476,20 @@ MonoBehaviour:
   portraitImage: {fileID: 5944446746805992690}
   noticeLineText: {fileID: 417964154674321614}
   lineBlink: {fileID: 0}
+--- !u!114 &9100000000000000091
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6268031591839708388}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89fe9a5bd47b9234280caece6ea9b0bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speakerNameText: {fileID: 4810404044378023660}
+  detailText: {fileID: 417964154674321614}
+  legacyLineText: {fileID: 0}
+  writeQuestionToDetail: 1
+  doubtOptionButtonPrefab: {fileID: 5241313901349784478, guid: d85b2833bc1cefe4eb9fcd112dbd7bc7, type: 3}

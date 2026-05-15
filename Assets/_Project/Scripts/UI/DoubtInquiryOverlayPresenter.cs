@@ -81,7 +81,12 @@ public sealed class DoubtInquiryOverlayPresenter : MonoBehaviour
         DoubtInquiryChromeView view = chromeInstance.GetComponent<DoubtInquiryChromeView>();
         if (view == null)
         {
-            view = chromeInstance.AddComponent<DoubtInquiryChromeView>();
+            Debug.LogError(
+                "DoubtInquiryOverlayPresenter: Resources/UI/doubt 根物体缺少 DoubtInquiryChromeView。"
+                + " 运行时 AddComponent 会丢失 Inspector 上的 doubtOptionButtonPrefab 等引用；请在预制体根上挂 DoubtInquiryChromeView 并保存。");
+            Destroy(chromeInstance);
+            chromeInstance = null;
+            return;
         }
 
         view.Bind(doubt);

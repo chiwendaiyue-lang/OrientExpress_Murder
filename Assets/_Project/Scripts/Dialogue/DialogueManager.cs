@@ -33,6 +33,9 @@ public class DialogueManager : MonoBehaviour
     [Tooltip("叠在 OptionsContainer 预制体上的 anchoredPosition 偏移（像素）。Y 为正通常使整块选项按钮在画面上移；无选项节点会自动还原基准位置。")]
     [SerializeField] private Vector2 optionsContainerAnchoredPositionOffset = new Vector2(0f, 72f);
 
+    [Tooltip("察觉开场（notice + hotspots）结束并解锁热点后，下一次出现对话选项时在选项区额外叠加的 anchoredPosition.y（像素）；只生效一次，不影响未走察觉的对话选项。")]
+    [SerializeField] private float noticePerceptionOptionsExtraAnchoredPositionY = 200f;
+
     [Header("对话中的笔记奖励（弹丸式）")]
     [Tooltip("无选项的点击推进节点上，若带有笔记 rewards 且未勾选 dialogueSkipDeferNotebookRewards，则默认延迟到右键收录；左键继续为跳过。")]
     [SerializeField] private bool deferNotebookRewardsByDefaultWhenRewardsPresent = true;
@@ -67,6 +70,7 @@ public class DialogueManager : MonoBehaviour
 
     private Vector2 optionsContainerAnchoredPositionBase;
     private bool optionsContainerLayoutBaseCached;
+    private float pendingNoticePerceptionOptionsLayoutBoostY;
 
     private const string RuntimePrefabResourcePath = "UI/DialogueRuntimeRoot";
 
@@ -103,7 +107,7 @@ public class DialogueManager : MonoBehaviour
         rt.anchoredPosition = optionsContainerAnchoredPositionBase;
     }
 
-    private void ApplyOptionsContainerLayoutOffset()
+    private void ApplyOptionsContainerLayoutOffset(bool consumeNoticePerceptionExtraLayoutBoost = false)
     {
         CacheOptionsContainerLayoutBaseIfNeeded();
         if (!optionsContainerLayoutBaseCached || optionsContainer == null)
@@ -117,7 +121,14 @@ public class DialogueManager : MonoBehaviour
             return;
         }
 
-        rt.anchoredPosition = optionsContainerAnchoredPositionBase + optionsContainerAnchoredPositionOffset;
+        Vector2 extra = Vector2.zero;
+        if (consumeNoticePerceptionExtraLayoutBoost && pendingNoticePerceptionOptionsLayoutBoostY != 0f)
+        {
+            extra.y = pendingNoticePerceptionOptionsLayoutBoostY;
+            pendingNoticePerceptionOptionsLayoutBoostY = 0f;
+        }
+
+        rt.anchoredPosition = optionsContainerAnchoredPositionBase + optionsContainerAnchoredPositionOffset + extra;
     }
 
     /// <summary>
@@ -657,7 +668,7 @@ public class DialogueManager : MonoBehaviour
             btnObj.GetComponent<Button>().onClick.AddListener(() => SelectOption(option));
         }
 
-        ApplyOptionsContainerLayoutOffset();
+        ApplyOptionsContainerLayoutOffset(true);
     }
 
     void SelectOption(DialogueOption option)
@@ -857,6 +868,7 @@ public class DialogueManager : MonoBehaviour
     {
         AbandonPendingDeferredNotebookRewards();
         ResetNoticeIntroPlaybackState();
+        pendingNoticePerceptionOptionsLayoutBoostY = 0f;
 
         waitingForClickAdvance = false;
         pendingNextNodeId = null;
@@ -1261,6 +1273,7 @@ public class DialogueManager : MonoBehaviour
         PerceptionMomentPresenter.ShowNoticeChrome();
         SetNoticeHotspotsInteractable(true);
         noticeMomentRoutine = null;
+        pendingNoticePerceptionOptionsLayoutBoostY = noticePerceptionOptionsExtraAnchoredPositionY;
     }
 
     private void ResetNoticeIntroPlaybackState()

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -6,7 +7,7 @@ using UnityEngine.UI;
 
 /// <summary>
 /// 疑点覆层内：按 <see cref="DialogueData"/> 在 <c>Bubble/name</c>（speakerName）与 <c>Bubble/detail</c>（text）展示；
-/// 无选项时点击 <c>Bubble</c> 区域推进下一句或关闭；有选项时在 Bubble 下生成选项按钮。
+/// 无选项时点击 <c>Bubble</c> 区域推进下一句或关闭；有选项时在 <c>Bubble/detail</c> 右上角挂选项条（复用 OptionButton 预制体）。
 /// </summary>
 [DisallowMultipleComponent]
 public sealed class DoubtInquiryLineScriptPlayer : MonoBehaviour
@@ -20,6 +21,18 @@ public sealed class DoubtInquiryLineScriptPlayer : MonoBehaviour
     private DialogueData dialogue;
     private string currentNodeId;
     private bool isActive;
+    private GameObject optionButtonPrefab;
+
+    private const float OptionStripMaxWidth = 380f;
+    /// <summary>选项条相对 <c>detail</c> 右上锚点的水平偏移（像素）。负值向左（进入正文区），正值向右。</summary>
+    private const float OptionStripHorizontalLift = 200f;
+    /// <summary>选项条相对 <c>detail</c> 右上锚点的垂直偏移（像素）。正值向上。</summary>
+    private const float OptionStripTopLift = 200f;
+
+    public void SetOptionButtonPrefab(GameObject prefab)
+    {
+        optionButtonPrefab = prefab;
+    }
 
     public void StartPlayback(TMP_Text nameTmp, TMP_Text detailTmp, TMP_Text legacyLine, string resourcesPathWithoutExtension)
     {
@@ -61,7 +74,6 @@ public sealed class DoubtInquiryLineScriptPlayer : MonoBehaviour
             return;
         }
 
-        EnsureOptionHost();
         EnsureBubbleClickSurface();
         currentNodeId = dialogue.startNodeId;
         isActive = true;
@@ -84,7 +96,7 @@ public sealed class DoubtInquiryLineScriptPlayer : MonoBehaviour
 
     private void EnsureBubbleClickSurface()
     {
-        Transform bubble = transform.Find("Bubble");
+        Transform bubble = FindDirectChildByName(transform, "Bubble");
         if (bubble == null)
         {
             return;
@@ -122,21 +134,30 @@ public sealed class DoubtInquiryLineScriptPlayer : MonoBehaviour
 
     private void EnsureOptionHost()
     {
-        if (optionHost != null)
+        Transform detailTarget = ResolveDetailTransform();
+        if (detailTarget == null)
         {
+            detailTarget = FindDirectChildByName(transform, "Bubble") ?? transform;
+        }
+
+        if (optionHost != null && optionHost.parent != detailTarget)
+        {
+            Destroy(optionHost.gameObject);
+            optionHost = null;
+        }
+
+        if (optionHost != null && optionHost.parent == detailTarget)
+        {
+            ApplyOptionHostVerticalLayoutPolicy(optionHost.gameObject);
             return;
         }
 
-        Transform bubble = transform.Find("Bubble");
-        if (bubble == null)
-        {
-            bubble = transform;
-        }
-
-        Transform existing = bubble.Find("DoubtInquiryOptionHost");
+        Transform existing = FindDirectChildByName(detailTarget, "DoubtInquiryOptionHost");
         if (existing != null)
         {
             optionHost = existing;
+            ConfigureOptionHostRect(existing as RectTransform, detailTarget as RectTransform);
+            ApplyOptionHostVerticalLayoutPolicy(optionHost.gameObject);
             return;
         }
 
@@ -145,28 +166,102 @@ public sealed class DoubtInquiryLineScriptPlayer : MonoBehaviour
             typeof(RectTransform),
             typeof(VerticalLayoutGroup),
             typeof(ContentSizeFitter));
-        host.transform.SetParent(bubble, false);
+        host.transform.SetParent(detailTarget, false);
+        host.transform.SetAsLastSibling();
+
         RectTransform rt = host.GetComponent<RectTransform>();
-        rt.anchorMin = new Vector2(0f, 0f);
-        rt.anchorMax = new Vector2(1f, 0f);
-        rt.pivot = new Vector2(0.5f, 1f);
-        rt.anchoredPosition = new Vector2(0f, 8f);
-        rt.sizeDelta = new Vector2(-40f, 0f);
+        ConfigureOptionHostRect(rt, detailTarget as RectTransform);
 
         VerticalLayoutGroup vlg = host.GetComponent<VerticalLayoutGroup>();
-        vlg.childAlignment = TextAnchor.UpperCenter;
+        vlg.childAlignment = TextAnchor.UpperRight;
         vlg.spacing = 6f;
-        vlg.padding = new RectOffset(8, 8, 4, 8);
-        vlg.childControlHeight = true;
-        vlg.childControlWidth = true;
-        vlg.childForceExpandHeight = false;
-        vlg.childForceExpandWidth = true;
+        vlg.padding = new RectOffset(4, 4, 2, 4);
+        ApplyOptionHostVerticalLayoutPolicy(host);
 
         ContentSizeFitter fitter = host.GetComponent<ContentSizeFitter>();
         fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
         fitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
 
         optionHost = host.transform;
+    }
+
+    /// <summary>
+    /// 不强制拉伸子项，避免把 OptionButton 预制体压变形导致 TMP 溢出背景。
+    /// </summary>
+    private static void ApplyOptionHostVerticalLayoutPolicy(GameObject host)
+    {
+        if (host == null)
+        {
+            return;
+        }
+
+        VerticalLayoutGroup vlg = host.GetComponent<VerticalLayoutGroup>();
+        if (vlg == null)
+        {
+            return;
+        }
+
+        vlg.childControlHeight = false;
+        vlg.childControlWidth = false;
+        vlg.childForceExpandHeight = false;
+        vlg.childForceExpandWidth = false;
+    }
+
+    private Transform ResolveDetailTransform()
+    {
+        if (detailText != null)
+        {
+            return detailText.transform;
+        }
+
+        Transform bubble = FindDirectChildByName(transform, "Bubble");
+        return bubble != null ? FindDirectChildByName(bubble, "detail") : null;
+    }
+
+    /// <summary>
+    /// 遍历直接子节点（含未激活），避免 <see cref="Transform.Find(string)"/> 不搜索未激活子物体。
+    /// </summary>
+    private static Transform FindDirectChildByName(Transform parent, string childName)
+    {
+        if (parent == null || string.IsNullOrEmpty(childName))
+        {
+            return null;
+        }
+
+        for (int i = 0; i < parent.childCount; i++)
+        {
+            Transform c = parent.GetChild(i);
+            if (string.Equals(c.name, childName, StringComparison.OrdinalIgnoreCase))
+            {
+                return c;
+            }
+        }
+
+        return null;
+    }
+
+    private void ConfigureOptionHostRect(RectTransform hostRt, RectTransform detailRt)
+    {
+        if (hostRt == null)
+        {
+            return;
+        }
+
+        float stripWidth = OptionStripMaxWidth;
+        if (detailRt != null)
+        {
+            float parentW = detailRt.rect.width;
+            if (parentW > 1f)
+            {
+                stripWidth = Mathf.Min(OptionStripMaxWidth, parentW * 0.92f);
+            }
+        }
+
+        hostRt.anchorMin = new Vector2(1f, 1f);
+        hostRt.anchorMax = new Vector2(1f, 1f);
+        hostRt.pivot = new Vector2(1f, 1f);
+        hostRt.sizeDelta = new Vector2(stripWidth, 0f);
+        hostRt.anchoredPosition = new Vector2(OptionStripHorizontalLift, OptionStripTopLift);
     }
 
     private void ClearOptionRows()
@@ -180,6 +275,8 @@ public sealed class DoubtInquiryLineScriptPlayer : MonoBehaviour
         {
             Destroy(optionHost.GetChild(i).gameObject);
         }
+
+        optionHost.gameObject.SetActive(false);
     }
 
     private void RenderCurrentNode()
@@ -214,6 +311,9 @@ public sealed class DoubtInquiryLineScriptPlayer : MonoBehaviour
         List<DialogueOption> usableOptions = CollectUsableOptions(node);
         if (usableOptions.Count > 0)
         {
+            EnsureOptionHost();
+            ConfigureOptionHostRect(optionHost as RectTransform, ResolveDetailTransform() as RectTransform);
+            optionHost.gameObject.SetActive(true);
             if (bubbleClickButton != null)
             {
                 bubbleClickButton.interactable = false;
@@ -490,9 +590,51 @@ public sealed class DoubtInquiryLineScriptPlayer : MonoBehaviour
             return;
         }
 
-        GameObject row = new GameObject("Option", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(Button), typeof(LayoutElement));
-        row.transform.SetParent(optionHost, false);
+        GameObject btnObj;
+        if (optionButtonPrefab != null)
+        {
+            btnObj = Instantiate(optionButtonPrefab, optionHost, false);
+        }
+        else
+        {
+            btnObj = CreateFallbackOptionRow();
+            btnObj.transform.SetParent(optionHost, false);
+        }
 
+        TMP_Text tmpText = btnObj.GetComponentInChildren<TMP_Text>(true);
+        if (tmpText != null)
+        {
+            tmpText.text = label;
+            if (optionButtonPrefab == null)
+            {
+                TMP_Text fontSource = detailText != null ? detailText : legacyLineText;
+                if (fontSource != null && fontSource.font != null)
+                {
+                    tmpText.font = fontSource.font;
+                }
+
+                if (fontSource != null && fontSource.fontSharedMaterial != null)
+                {
+                    tmpText.fontSharedMaterial = fontSource.fontSharedMaterial;
+                }
+
+                tmpText.raycastTarget = false;
+            }
+        }
+
+        Button btn = btnObj.GetComponent<Button>();
+        if (btn == null)
+        {
+            btn = btnObj.AddComponent<Button>();
+        }
+
+        btn.onClick.RemoveAllListeners();
+        btn.onClick.AddListener(onClick);
+    }
+
+    private GameObject CreateFallbackOptionRow()
+    {
+        GameObject row = new GameObject("Option", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(Button), typeof(LayoutElement));
         LayoutElement le = row.GetComponent<LayoutElement>();
         le.minHeight = 36f;
         le.preferredHeight = 40f;
@@ -514,20 +656,14 @@ public sealed class DoubtInquiryLineScriptPlayer : MonoBehaviour
         StretchFull(trt);
 
         TextMeshProUGUI tmp = textGo.GetComponent<TextMeshProUGUI>();
-        tmp.text = label;
         tmp.fontSize = 22f;
         tmp.alignment = TextAlignmentOptions.Midline;
         tmp.color = new Color(0.95f, 0.92f, 0.88f);
         tmp.raycastTarget = false;
-        TMP_Text fontSource = detailText != null ? detailText : legacyLineText;
-        if (fontSource != null && fontSource.font != null)
-        {
-            tmp.font = fontSource.font;
-        }
 
         Button btn = row.GetComponent<Button>();
         btn.transition = Selectable.Transition.ColorTint;
-        btn.onClick.AddListener(onClick);
+        return row;
     }
 
     private static void StretchFull(RectTransform rect)
