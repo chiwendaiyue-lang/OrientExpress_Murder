@@ -9,7 +9,22 @@
         "speakerCharacterId": "mrs_hubbard",
         "speakerName": "哈伯德太太",
         "text": "快跟我说，这儿谁负责？我有极要紧的话要说，真的，极要紧的话。可是，我只想跟负责的人说。你这位先生要是──",
-        "nextNodeId": "node2"
+        "nextNodeId": "node2",
+        "stage": {
+          "focusCharacterId": "mrs_hubbard",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "mrs_hubbard",
+              "portrait": "mrs_hubbard_nervous"
+            }
+          ]
+        }
       }
     },
     {
@@ -19,7 +34,17 @@
         "speakerCharacterId": "poirot",
         "speakerName": "波洛",
         "text": "太太，跟我说吧。不过，先请坐下来。",
-        "nextNodeId": "node3"
+        "nextNodeId": "node3",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        }
       }
     },
     {
@@ -29,7 +54,22 @@
         "speakerCharacterId": "mrs_hubbard",
         "speakerName": "哈伯德太太",
         "text": "昨晚车上发生一宗人命案，凶手恰恰就在我的房里呆过。",
-        "nextNodeId": "node4"
+        "nextNodeId": "node4",
+        "stage": {
+          "focusCharacterId": "mrs_hubbard",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "mrs_hubbard",
+              "portrait": "mrs_hubbard_nervous"
+            }
+          ]
+        }
       }
     },
     {
@@ -39,7 +79,17 @@
         "speakerCharacterId": "poirot",
         "speakerName": "波洛",
         "text": "真的吗？太太？",
-        "nextNodeId": "node5"
+        "nextNodeId": "node5",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        }
       }
     },
     {
@@ -49,7 +99,22 @@
         "speakerCharacterId": "mrs_hubbard",
         "speakerName": "哈伯德太太",
         "text": "当然真的，错不了！我才不瞎说哩。我这就把事情一五一十说给你听。我上床就睡着了。突然，醒了过来——四周黑古隆冬的──我明白过来了，原来房里来了个男人。吓得我不敢吱声。我就这么躺着，心里直嘀咕：‘老天爷，这下我可没命了。’我想到的净是些书本上读到过的种种杀人抢劫什么的。心想：‘管它呢，反正他拿不走我的金银珠宝。’知道吗，我早藏在袜子里塞在枕头下了──睡起来自然不很舒服，有点儿高低不平。要是你明白我的意思才好呢。重要的不在这儿。我说到哪儿了？",
-        "nextNodeId": "node6"
+        "nextNodeId": "node6",
+        "stage": {
+          "focusCharacterId": "mrs_hubbard",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "mrs_hubbard",
+              "portrait": "mrs_hubbard_nervous"
+            }
+          ]
+        }
       }
     },
     {
@@ -59,7 +124,17 @@
         "speakerCharacterId": "poirot",
         "speakerName": "波洛",
         "text": "太太，你说有个男人在你的房里。",
-        "nextNodeId": "node7"
+        "nextNodeId": "node7",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        }
       }
     },
     {
@@ -69,7 +144,22 @@
         "speakerCharacterId": "mrs_hubbard",
         "speakerName": "哈伯德太太",
         "text": "正是，我闭着眼，就这么躺着。寻思该怎么办。心想：‘谢天谢地，幸好我的女儿不知道我在受苦受难。’后来，我灵机一动，悄悄地摸到了铃儿，一按，想让列车员来。我一个劲地按铃，按呀按，可是没半点响动。我敢说，我的心眼看着就要不跳了。‘老天爷，’我心想，‘很可能是他把车上的人全宰了。’车停着没开，四周静得叫人发毛。可是我还是一个劲地按铃。后来总算听到脚步声朝过道这头来，有人敲我的门，我这才松了口气。‘进来！’我惊叫起来，同时把灯点亮，睁眼一看，信不信由你，那儿连个人影也没有。",
-        "nextNodeId": "node8"
+        "nextNodeId": "node8",
+        "stage": {
+          "focusCharacterId": "mrs_hubbard",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "mrs_hubbard",
+              "portrait": "mrs_hubbard_nervous"
+            }
+          ]
+        }
       }
     },
     {
@@ -79,7 +169,17 @@
         "speakerCharacterId": "poirot",
         "speakerName": "波洛",
         "text": "太太，后来呢？",
-        "nextNodeId": "node9"
+        "nextNodeId": "node9",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        }
       }
     },
     {
@@ -95,6 +195,21 @@
           "testimonyToAdd": [
             "mrs_hubbard_man_in_room"
           ]
+        },
+        "stage": {
+          "focusCharacterId": "mrs_hubbard",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "mrs_hubbard",
+              "portrait": "mrs_hubbard_nervous"
+            }
+          ]
         }
       }
     },
@@ -105,7 +220,17 @@
         "speakerCharacterId": "poirot",
         "speakerName": "波洛",
         "text": "波洛，太太。这位是鲍克先生，公司的董事。这位是康斯坦丁大夫。",
-        "nextNodeId": "node11"
+        "nextNodeId": "node11",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        }
       }
     },
     {
@@ -115,7 +240,22 @@
         "speakerCharacterId": "mrs_hubbard",
         "speakerName": "哈伯德太太",
         "text": "我相信，碰到诸位很开心。我倒不想把自己装作聪明绝顶，我心里明白，就是隔壁的那个男人──那个给人杀了的可怜的男人。我让列车员瞧瞧两个房间的那扇公用的门。那门明摆着没闩上，我一眼就瞧见了。于是我让他当着我的面当场把门闩上。他走后，我从床上起来，拿来一只提箱顶着，更保险。",
-        "nextNodeId": "node12"
+        "nextNodeId": "node12",
+        "stage": {
+          "focusCharacterId": "mrs_hubbard",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "mrs_hubbard",
+              "portrait": "mrs_hubbard_normal"
+            }
+          ]
+        }
       }
     },
     {
@@ -125,7 +265,17 @@
         "speakerCharacterId": "poirot",
         "speakerName": "波洛",
         "text": "哈伯德太太，那是什么时候？",
-        "nextNodeId": "node13"
+        "nextNodeId": "node13",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        }
       }
     },
     {
@@ -135,7 +285,22 @@
         "speakerCharacterId": "mrs_hubbard",
         "speakerName": "哈伯德太太",
         "text": "当时我的心乱成一团麻，压根儿没留神。",
-        "nextNodeId": "node14"
+        "nextNodeId": "node14",
+        "stage": {
+          "focusCharacterId": "mrs_hubbard",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "mrs_hubbard",
+              "portrait": "mrs_hubbard_normal"
+            }
+          ]
+        }
       }
     },
     {
@@ -145,7 +310,17 @@
         "speakerCharacterId": "poirot",
         "speakerName": "波洛",
         "text": "你觉得那男人又回到隔壁的房间去了？",
-        "nextNodeId": "node15"
+        "nextNodeId": "node15",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        }
       }
     },
     {
@@ -155,7 +330,22 @@
         "speakerCharacterId": "mrs_hubbard",
         "speakerName": "哈伯德太太",
         "text": "他到哪里去，我怎么知道？当时我的眼睛紧闭着呢。",
-        "nextNodeId": "node16"
+        "nextNodeId": "node16",
+        "stage": {
+          "focusCharacterId": "mrs_hubbard",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "mrs_hubbard",
+              "portrait": "mrs_hubbard_normal"
+            }
+          ]
+        }
       }
     },
     {
@@ -165,7 +355,17 @@
         "speakerCharacterId": "poirot",
         "speakerName": "波洛",
         "text": "太太，你是认为，你听到的就是有人在隔壁房里──被害人的房里，走动的声响吗？",
-        "nextNodeId": "node17"
+        "nextNodeId": "node17",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        }
       }
     },
     {
@@ -175,7 +375,22 @@
         "speakerCharacterId": "mrs_hubbard",
         "speakerName": "哈伯德太太",
         "text": "不，我可不这么想，先生。──你的大名？──波洛。波洛先生，千真万确，他就是到我房里来过。再说，我还有证据哩。",
-        "nextNodeId": "node18"
+        "nextNodeId": "node18",
+        "stage": {
+          "focusCharacterId": "mrs_hubbard",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "mrs_hubbard",
+              "portrait": "mrs_hubbard_nervous"
+            }
+          ]
+        }
       }
     },
     {
@@ -185,7 +400,22 @@
         "speakerCharacterId": "system",
         "speakerName": "系统",
         "text": "哈伯德太太从她的提包里掏出一大堆东西，一副骨架眼镜，一瓶阿司匹林，一包芒硝……最后是一颗金属钮扣。",
-        "nextNodeId": "node19"
+        "nextNodeId": "node19",
+        "stage": {
+          "focusCharacterId": "",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "mrs_hubbard",
+              "portrait": "mrs_hubbard_nervous"
+            }
+          ]
+        }
       }
     },
     {
@@ -195,7 +425,22 @@
         "speakerCharacterId": "mrs_hubbard",
         "speakerName": "哈伯德太太",
         "text": "你见过这种钮扣吗？这可不是我的钮扣，也不是我的什么衣服上掉下的。是今天早上我起床时捡到的。",
-        "nextNodeId": "node20"
+        "nextNodeId": "node20",
+        "stage": {
+          "focusCharacterId": "mrs_hubbard",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "mrs_hubbard",
+              "portrait": "mrs_hubbard_nervous"
+            }
+          ]
+        }
       }
     },
     {
@@ -212,6 +457,21 @@
           "evidenceToAdd": [
             "metal_button"
           ]
+        },
+        "stage": {
+          "focusCharacterId": "bouc",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "bouc",
+              "portrait": "bouc_serious"
+            }
+          ]
         }
       }
     },
@@ -222,7 +482,17 @@
         "speakerCharacterId": "poirot",
         "speakerName": "波洛",
         "text": "对此可以有一种很合理的解释。太太，这颗钮扣可能是从列车员制服上掉下来的。不是他查看你的包房时掉的，就是昨晚为你铺床时掉的。",
-        "nextNodeId": "node22"
+        "nextNodeId": "node22",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        }
       }
     },
     {
@@ -232,7 +502,22 @@
         "speakerCharacterId": "mrs_hubbard",
         "speakerName": "哈伯德太太",
         "text": "听我说，列车员在门边瞧了瞧我的床下，然后进来闩上与隔壁相通的那扇门，可是他没挨近过那扇窗。今天早上我就在杂志上面发现这颗钮扣。",
-        "nextNodeId": "node23"
+        "nextNodeId": "node23",
+        "stage": {
+          "focusCharacterId": "mrs_hubbard",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "mrs_hubbard",
+              "portrait": "mrs_hubbard_nervous"
+            }
+          ]
+        }
       }
     },
     {
@@ -242,7 +527,17 @@
         "speakerCharacterId": "poirot",
         "speakerName": "波洛",
         "text": "你提供了最有趣，最有价值的证据。现在我能不能问几个问题？",
-        "nextNodeId": "node24"
+        "nextNodeId": "node24",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        }
       }
     },
     {
@@ -252,7 +547,17 @@
         "speakerCharacterId": "poirot",
         "speakerName": "波洛",
         "text": "既然你那么怕这个雷切特，怎么事先不把那扇两个房间相通的门闩上呢，这是怎么一回事？",
-        "nextNodeId": "node25"
+        "nextNodeId": "node25",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        }
       }
     },
     {
@@ -262,7 +567,22 @@
         "speakerCharacterId": "mrs_hubbard",
         "speakerName": "哈伯德太太",
         "text": "事实上，我问过那个瑞典女人──一个讨人喜欢的女人──门是不是闩上，她说闩上的。",
-        "nextNodeId": "node26"
+        "nextNodeId": "node26",
+        "stage": {
+          "focusCharacterId": "mrs_hubbard",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "mrs_hubbard",
+              "portrait": "mrs_hubbard_normal"
+            }
+          ]
+        }
       }
     },
     {
@@ -272,7 +592,17 @@
         "speakerCharacterId": "poirot",
         "speakerName": "波洛",
         "text": "你自己为什么不亲自去看看呢？",
-        "nextNodeId": "node27"
+        "nextNodeId": "node27",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        }
       }
     },
     {
@@ -282,7 +612,22 @@
         "speakerCharacterId": "mrs_hubbard",
         "speakerName": "哈伯德太太",
         "text": "因为我已经上了床，我的提包也挂在门把上，我看不见门有没有闩上。",
-        "nextNodeId": "hubbard_latch_notice"
+        "nextNodeId": "hubbard_latch_notice",
+        "stage": {
+          "focusCharacterId": "mrs_hubbard",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "mrs_hubbard",
+              "portrait": "mrs_hubbard_normal"
+            }
+          ]
+        }
       }
     },
     {
@@ -307,7 +652,7 @@
             "x": 0.22,
             "y": 0.22,
             "width": 0.14,
-            "height": 0.10
+            "height": 0.1
           },
           {
             "id": "bell",
@@ -317,7 +662,7 @@
             "x": 0.58,
             "y": 0.24,
             "width": 0.12,
-            "height": 0.10
+            "height": 0.1
           },
           {
             "id": "latch",
@@ -329,7 +674,22 @@
             "width": 0.12,
             "height": 0.12
           }
-        ]
+        ],
+        "stage": {
+          "focusCharacterId": "mrs_hubbard",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "mrs_hubbard",
+              "portrait": "mrs_hubbard_nervous"
+            }
+          ]
+        }
       }
     },
     {
@@ -339,7 +699,22 @@
         "speakerCharacterId": "system",
         "speakerName": "系统",
         "text": "床下确实很窄，藏不下一个成年人。但这并不能解释哈伯德太太关于门闩的说法。",
-        "nextNodeId": "hubbard_latch_notice"
+        "nextNodeId": "hubbard_latch_notice",
+        "stage": {
+          "focusCharacterId": "",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "mrs_hubbard",
+              "portrait": "mrs_hubbard_normal"
+            }
+          ]
+        }
       }
     },
     {
@@ -349,7 +724,22 @@
         "speakerCharacterId": "system",
         "speakerName": "系统",
         "text": "门铃的位置可以从床上摸到，这一点和她的说法并不冲突。",
-        "nextNodeId": "hubbard_latch_notice"
+        "nextNodeId": "hubbard_latch_notice",
+        "stage": {
+          "focusCharacterId": "",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "mrs_hubbard",
+              "portrait": "mrs_hubbard_normal"
+            }
+          ]
+        }
       }
     },
     {
@@ -368,6 +758,21 @@
               "stageId": "latch_position_contradiction"
             }
           ]
+        },
+        "stage": {
+          "focusCharacterId": "",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "mrs_hubbard",
+              "portrait": "mrs_hubbard_nervous"
+            }
+          ]
         }
       }
     },
@@ -378,7 +783,17 @@
         "speakerCharacterId": "poirot",
         "speakerName": "波洛",
         "text": "这以后，你听见雷切特先生房里有什么声响吗？",
-        "nextNodeId": "node29"
+        "nextNodeId": "node29",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        }
       }
     },
     {
@@ -388,7 +803,22 @@
         "speakerCharacterId": "mrs_hubbard",
         "speakerName": "哈伯德太太",
         "text": "很难说──他在打呼噜，响极了。前天晚上闹得我一刻也不安宁。",
-        "nextNodeId": "node30"
+        "nextNodeId": "node30",
+        "stage": {
+          "focusCharacterId": "mrs_hubbard",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "mrs_hubbard",
+              "portrait": "mrs_hubbard_normal"
+            }
+          ]
+        }
       }
     },
     {
@@ -398,7 +828,17 @@
         "speakerCharacterId": "poirot",
         "speakerName": "波洛",
         "text": "哈伯德太太，你可记得阿姆斯特朗拐骗案？",
-        "nextNodeId": "node31"
+        "nextNodeId": "node31",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        }
       }
     },
     {
@@ -408,7 +848,22 @@
         "speakerCharacterId": "mrs_hubbard",
         "speakerName": "哈伯德太太",
         "text": "记得，当然记得。这个坏蛋竟然还给他漏了网！阿，我真想亲手宰了他！",
-        "nextNodeId": "node32"
+        "nextNodeId": "node32",
+        "stage": {
+          "focusCharacterId": "mrs_hubbard",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "mrs_hubbard",
+              "portrait": "mrs_hubbard_shocked"
+            }
+          ]
+        }
       }
     },
     {
@@ -418,7 +873,17 @@
         "speakerCharacterId": "poirot",
         "speakerName": "波洛",
         "text": "他可逃不了啦，他死了。昨天晚上死的，雷切特就是他。",
-        "nextNodeId": "node33"
+        "nextNodeId": "node33",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        }
       }
     },
     {
@@ -428,7 +893,22 @@
         "speakerCharacterId": "mrs_hubbard",
         "speakerName": "哈伯德太太",
         "text": "好阿，想想看，这该多好。我非写信告诉我的女儿不可。昨天晚上我不是跟你说过，这人有一副可恶的面孔？瞧，我说对了。我的女儿老是说，只要妈妈一猜，你尽管押上全部的钱，准保会赢。",
-        "nextNodeId": "node34"
+        "nextNodeId": "node34",
+        "stage": {
+          "focusCharacterId": "mrs_hubbard",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "mrs_hubbard",
+              "portrait": "mrs_hubbard_shocked"
+            }
+          ]
+        }
       }
     },
     {
@@ -438,7 +918,17 @@
         "speakerCharacterId": "poirot",
         "speakerName": "波洛",
         "text": "你跟阿姆斯特朗一家认识吗，哈伯德太太？",
-        "nextNodeId": "node35"
+        "nextNodeId": "node35",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        }
       }
     },
     {
@@ -448,7 +938,22 @@
         "speakerCharacterId": "mrs_hubbard",
         "speakerName": "哈伯德太太",
         "text": "不认识。他们家进进出出的尽是有身份的人家。不过我听过，阿姆斯特朗太太是个讨人喜欢的女人，她的丈夫很敬重她。",
-        "nextNodeId": "node36"
+        "nextNodeId": "node36",
+        "stage": {
+          "focusCharacterId": "mrs_hubbard",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "mrs_hubbard",
+              "portrait": "mrs_hubbard_normal"
+            }
+          ]
+        }
       }
     },
     {
@@ -458,7 +963,17 @@
         "speakerCharacterId": "poirot",
         "speakerName": "波洛",
         "text": "哈伯德太太，你帮了我们的大忙──说真的很大的忙。",
-        "nextNodeId": "node37"
+        "nextNodeId": "node37",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        }
       }
     },
     {
@@ -468,7 +983,17 @@
         "speakerCharacterId": "poirot",
         "speakerName": "波洛",
         "text": "顺便问一句，你有鲜红色的丝睡衣？",
-        "nextNodeId": "node38"
+        "nextNodeId": "node38",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        }
       }
     },
     {
@@ -478,7 +1003,22 @@
         "speakerCharacterId": "mrs_hubbard",
         "speakerName": "哈伯德太太",
         "text": "老天爷，问得多奇怪！怎么会有呢！我身边有两件睡衣──一件是粉红色的法兰绒的，坐般时穿起来挺舒服。还有一件是我女儿送给我的礼物──紫色的，丝的，在家里时穿。可是你为什么问我的睡衣？",
-        "nextNodeId": "node39"
+        "nextNodeId": "node39",
+        "stage": {
+          "focusCharacterId": "mrs_hubbard",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "mrs_hubbard",
+              "portrait": "mrs_hubbard_nervous"
+            }
+          ]
+        }
       }
     },
     {
@@ -488,7 +1028,17 @@
         "speakerCharacterId": "poirot",
         "speakerName": "波洛",
         "text": "是这么一回事，太太。有一个穿鲜红睡衣的，昨天晚上到过你的包房或雷切特先生的包房。正如你刚才所说的那样，那时全部房门都关着，这样就很难弄明白究竟是哪个包房。",
-        "nextNodeId": "node40"
+        "nextNodeId": "node40",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        }
       }
     },
     {
@@ -498,7 +1048,22 @@
         "speakerCharacterId": "mrs_hubbard",
         "speakerName": "哈伯德太太",
         "text": "可是没什么穿红睡衣的人到过我的包房。",
-        "nextNodeId": "node41"
+        "nextNodeId": "node41",
+        "stage": {
+          "focusCharacterId": "mrs_hubbard",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "mrs_hubbard",
+              "portrait": "mrs_hubbard_shocked"
+            }
+          ]
+        }
       }
     },
     {
@@ -508,7 +1073,17 @@
         "speakerCharacterId": "poirot",
         "speakerName": "波洛",
         "text": "那必然是到雷切特先生的包房去了。",
-        "nextNodeId": "node42"
+        "nextNodeId": "node42",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        }
       }
     },
     {
@@ -518,7 +1093,22 @@
         "speakerCharacterId": "mrs_hubbard",
         "speakerName": "哈伯德太太",
         "text": "或许吧，这我可不清楚。",
-        "nextNodeId": "node49"
+        "nextNodeId": "node49",
+        "stage": {
+          "focusCharacterId": "mrs_hubbard",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "mrs_hubbard",
+              "portrait": "mrs_hubbard_normal"
+            }
+          ]
+        }
       }
     },
     {
@@ -528,7 +1118,22 @@
         "speakerCharacterId": "system",
         "speakerName": "系统",
         "text": "波洛帮太太收拾东西。",
-        "nextNodeId": "node50"
+        "nextNodeId": "node50",
+        "stage": {
+          "focusCharacterId": "",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "mrs_hubbard",
+              "portrait": "mrs_hubbard_normal"
+            }
+          ]
+        }
       }
     },
     {
@@ -538,7 +1143,17 @@
         "speakerCharacterId": "poirot",
         "speakerName": "波洛",
         "text": "你的手帕掉了，太太。",
-        "nextNodeId": "node51"
+        "nextNodeId": "node51",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        }
       }
     },
     {
@@ -548,7 +1163,22 @@
         "speakerCharacterId": "mrs_hubbard",
         "speakerName": "哈伯德太太",
         "text": "这不是我的，波洛先生。我的帕上绣着C·M·H三个字母，而且都是些很合用的普普通通的大路货──不是高档的巴黎来的稀罕玩意儿。这么精细的帕谁配得上用？",
-        "nextNodeId": "END"
+        "nextNodeId": "END",
+        "stage": {
+          "focusCharacterId": "mrs_hubbard",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "mrs_hubbard",
+              "portrait": "mrs_hubbard_normal"
+            }
+          ]
+        }
       }
     }
   ]

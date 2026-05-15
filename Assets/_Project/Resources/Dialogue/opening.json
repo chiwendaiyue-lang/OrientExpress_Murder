@@ -41,6 +41,11 @@
           "focusCharacterId": "",
           "slots": [
             {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
               "slotId": "right",
               "characterId": "ratchett",
               "portrait": "ratchett_neutral"
@@ -62,6 +67,11 @@
           "focusCharacterId": "ratchett",
           "slots": [
             {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
               "slotId": "right",
               "characterId": "ratchett",
               "portrait": "ratchett_neutral"
@@ -80,8 +90,13 @@
         "speakerName": "波洛",
         "text": "你了解得正确，先生。",
         "stage": {
-          "focusCharacterId": "",
+          "focusCharacterId": "poirot",
           "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
             {
               "slotId": "right",
               "characterId": "ratchett",
@@ -104,6 +119,11 @@
           "focusCharacterId": "ratchett",
           "slots": [
             {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
               "slotId": "right",
               "characterId": "ratchett",
               "portrait": "ratchett_neutral"
@@ -122,8 +142,13 @@
         "speakerName": "波洛",
         "text": "你希望我为你做的是什么呢，雷切特先生？",
         "stage": {
-          "focusCharacterId": "",
+          "focusCharacterId": "poirot",
           "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
             {
               "slotId": "right",
               "characterId": "ratchett",
@@ -146,6 +171,11 @@
           "focusCharacterId": "ratchett",
           "slots": [
             {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
               "slotId": "right",
               "characterId": "ratchett",
               "portrait": "ratchett_neutral"
@@ -164,8 +194,13 @@
         "speakerName": "波洛",
         "text": "只有一个敌人？",
         "stage": {
-          "focusCharacterId": "",
+          "focusCharacterId": "poirot",
           "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
             {
               "slotId": "right",
               "characterId": "ratchett",
@@ -188,6 +223,11 @@
           "focusCharacterId": "ratchett",
           "slots": [
             {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
               "slotId": "right",
               "characterId": "ratchett",
               "portrait": "ratchett_nervous"
@@ -206,8 +246,13 @@
         "speakerName": "波洛",
         "text": "先生，根据我的经验，当一个人处于象你所说的有敌人的情况时，那通常是不会只有一个敌人的。",
         "stage": {
-          "focusCharacterId": "",
+          "focusCharacterId": "poirot",
           "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
             {
               "slotId": "right",
               "characterId": "ratchett",
@@ -230,6 +275,11 @@
           "focusCharacterId": "ratchett",
           "slots": [
             {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
               "slotId": "right",
               "characterId": "ratchett",
               "portrait": "ratchett_neutral"
@@ -250,6 +300,11 @@
         "stage": {
           "focusCharacterId": "ratchett",
           "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
             {
               "slotId": "right",
               "characterId": "ratchett",
@@ -272,6 +327,11 @@
           "focusCharacterId": "",
           "slots": [
             {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
               "slotId": "right",
               "characterId": "ratchett",
               "portrait": "ratchett_neutral"
@@ -293,6 +353,11 @@
         "stage": {
           "focusCharacterId": "ratchett",
           "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
             {
               "slotId": "right",
               "characterId": "ratchett",
@@ -317,8 +382,13 @@
         "speakerName": "波洛",
         "text": "我很抱歉，先生，我不能答应你的要求。",
         "stage": {
-          "focusCharacterId": "",
+          "focusCharacterId": "poirot",
           "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
             {
               "slotId": "right",
               "characterId": "ratchett",
@@ -341,6 +411,11 @@
           "focusCharacterId": "ratchett",
           "slots": [
             {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
               "slotId": "right",
               "characterId": "ratchett",
               "portrait": "ratchett_nervous"
@@ -362,6 +437,11 @@
           "focusCharacterId": "ratchett",
           "slots": [
             {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
               "slotId": "right",
               "characterId": "ratchett",
               "portrait": "ratchett_neutral"
@@ -380,8 +460,13 @@
         "speakerName": "波洛",
         "text": "不能。",
         "stage": {
-          "focusCharacterId": "",
+          "focusCharacterId": "poirot",
           "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
             {
               "slotId": "right",
               "characterId": "ratchett",
@@ -404,6 +489,11 @@
           "focusCharacterId": "ratchett",
           "slots": [
             {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
               "slotId": "right",
               "characterId": "ratchett",
               "portrait": "ratchett_nervous"
@@ -424,6 +514,11 @@
         "stage": {
           "focusCharacterId": "ratchett",
           "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
             {
               "slotId": "right",
               "characterId": "ratchett",
