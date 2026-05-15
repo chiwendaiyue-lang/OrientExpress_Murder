@@ -14,7 +14,14 @@ public sealed class DoubtInquiryOverlayPresenter : MonoBehaviour
         Instance != null && Instance.overlayRoot != null && Instance.overlayRoot.activeInHierarchy;
 
     private const string ChromePrefabResourcesPath = "UI/doubt";
-    private const int OverlayCanvasSortingOrder = 5600;
+
+    /// <summary>疑点全屏覆层（暗角 + doubt 预制体）。</summary>
+    public const int OverlayCanvasSortingOrder = 5600;
+
+    /// <summary>
+    /// 疑点流程内获得物证/线索时，<see cref="NotebookUnlockOverlayPresenter"/> 须高于本覆层与对话层。
+    /// </summary>
+    public const int EvidenceUnlockPopupSortingOrder = 5800;
 
     private GameObject overlayRoot;
     private Canvas rootCanvas;

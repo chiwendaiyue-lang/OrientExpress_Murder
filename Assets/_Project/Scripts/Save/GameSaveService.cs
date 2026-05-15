@@ -236,6 +236,7 @@ public static class GameSaveService
 
     public static void ResetAllProgressForNewGame()
     {
+        OpeningFlowController.ResetOpeningIntroForNewGame();
         DialogueProgressBridge.PendingDialogueId = null;
 
         if (DetectiveNotebookManager.Instance != null)

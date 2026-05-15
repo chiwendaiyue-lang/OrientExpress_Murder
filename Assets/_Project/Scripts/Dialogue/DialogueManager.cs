@@ -178,6 +178,7 @@ public class DialogueManager : MonoBehaviour
         DialogueManager found = UnityEngine.Object.FindFirstObjectByType<DialogueManager>(FindObjectsInactive.Include);
         if (found != null)
         {
+            Instance = found;
             return found;
         }
 

@@ -100,7 +100,41 @@ public class NotebookUnlockOverlayPresenter : MonoBehaviour
 
     private int ResolvedUnlockOverlaySortingOrder()
     {
-        return Mathf.Max(overlaySortingOrder, MinimumUnlockOverlayAboveDialogue);
+        int order = Mathf.Max(overlaySortingOrder, MinimumUnlockOverlayAboveDialogue);
+        if (DoubtInquiryOverlayPresenter.IsBlockingInput)
+        {
+            order = Mathf.Max(order, DoubtInquiryOverlayPresenter.EvidenceUnlockPopupSortingOrder);
+        }
+
+        return order;
+    }
+
+    private void ApplyOverlayCanvasSorting()
+    {
+        int order = ResolvedUnlockOverlaySortingOrder();
+        if (overlayRoot != null)
+        {
+            Canvas[] canvases = overlayRoot.GetComponentsInChildren<Canvas>(true);
+            for (int i = 0; i < canvases.Length; i++)
+            {
+                Canvas canvas = canvases[i];
+                if (canvas == null)
+                {
+                    continue;
+                }
+
+                canvas.overrideSorting = true;
+                canvas.sortingOrder = order;
+            }
+
+            return;
+        }
+
+        if (rootCanvas != null)
+        {
+            rootCanvas.overrideSorting = true;
+            rootCanvas.sortingOrder = order;
+        }
     }
 
     private void Awake()
@@ -579,6 +613,7 @@ public class NotebookUnlockOverlayPresenter : MonoBehaviour
             return;
         }
 
+        ApplyOverlayCanvasSorting();
         overlayRoot.SetActive(true);
 
         if (playClueCollectSound)
@@ -922,8 +957,7 @@ public class NotebookUnlockOverlayPresenter : MonoBehaviour
             rootCanvas.gameObject.AddComponent<GraphicRaycaster>();
         }
 
-        rootCanvas.overrideSorting = true;
-        rootCanvas.sortingOrder = ResolvedUnlockOverlaySortingOrder();
+        ApplyOverlayCanvasSorting();
     }
 
     private void BuildRuntimeHierarchy()
@@ -934,15 +968,13 @@ public class NotebookUnlockOverlayPresenter : MonoBehaviour
 
         rootCanvas = root.AddComponent<Canvas>();
         rootCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
-        rootCanvas.overrideSorting = true;
-        rootCanvas.sortingOrder = ResolvedUnlockOverlaySortingOrder();
-
         root.AddComponent<GraphicRaycaster>();
 
         CanvasScaler scaler = root.AddComponent<CanvasScaler>();
         scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
         scaler.referenceResolution = new Vector2(1280f, 720f);
         scaler.matchWidthOrHeight = 0.5f;
+        ApplyOverlayCanvasSorting();
 
         GameObject dimGo = CreateUiObject(ChildDim, root.transform);
         RectTransform dimRect = dimGo.GetComponent<RectTransform>();
