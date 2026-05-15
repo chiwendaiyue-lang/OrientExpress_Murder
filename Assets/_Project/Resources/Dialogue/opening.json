@@ -303,8 +303,7 @@
         "nextNodeId": "node15",
         "rewards": {
           "doubtToAdd": [
-            "ratchett_enemy",
-            "armstrong_case_connection"
+            "ratchett_enemy"
           ]
         },
         "options": []

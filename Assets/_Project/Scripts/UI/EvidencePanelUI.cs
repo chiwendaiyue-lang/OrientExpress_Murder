@@ -40,6 +40,7 @@ public class EvidencePanelUI : MonoBehaviour
     public GameObject doubtPanel;
     public Transform testimonyCharacterList;
     public Transform testimonyList;
+    public RectTransform testimonyViewport;
     public Transform leftDoubtList;
     public Transform rightDoubtList;
     public GameObject physicalDetailPanel;
@@ -1412,6 +1413,14 @@ public class EvidencePanelUI : MonoBehaviour
         {
             CreateTestimonyCard(testimony);
         }
+
+        Canvas.ForceUpdateCanvases();
+        RebuildTestimonyScrollContent();
+        ScrollRect scrollRect = testimonyViewport != null ? testimonyViewport.GetComponent<ScrollRect>() : null;
+        if (scrollRect != null)
+        {
+            scrollRect.verticalNormalizedPosition = 1f;
+        }
     }
 
     private void EnsureTestimonyListUsesVerticalLayout()
@@ -1445,6 +1454,222 @@ public class EvidencePanelUI : MonoBehaviour
         vertical.childControlHeight = true;
         vertical.childForceExpandWidth = true;
         vertical.childForceExpandHeight = false;
+
+        ContentSizeFitter fitter = testimonyList.GetComponent<ContentSizeFitter>();
+        if (fitter == null)
+        {
+            fitter = testimonyList.gameObject.AddComponent<ContentSizeFitter>();
+        }
+
+        fitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
+        fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+
+        EnsureTestimonyScrollSetup();
+    }
+
+    private void EnsureTestimonyScrollSetup()
+    {
+        if (testimonyPanel == null || testimonyList == null)
+        {
+            return;
+        }
+
+        RectTransform contentRect = testimonyList as RectTransform;
+        if (contentRect == null)
+        {
+            return;
+        }
+
+        if (testimonyViewport == null)
+        {
+            GameObject viewportObject = FindChildGameObject("TestimonyViewport");
+            if (viewportObject != null)
+            {
+                testimonyViewport = viewportObject.transform as RectTransform;
+            }
+        }
+
+        if (testimonyViewport == null)
+        {
+            RectTransform originalRect = contentRect;
+            GameObject viewportObject = new GameObject("TestimonyViewport", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(RectMask2D), typeof(ScrollRect));
+            viewportObject.transform.SetParent(testimonyPanel.transform, false);
+            testimonyViewport = viewportObject.GetComponent<RectTransform>();
+            testimonyViewport.SetSiblingIndex(originalRect.GetSiblingIndex());
+            testimonyViewport.anchorMin = originalRect.anchorMin;
+            testimonyViewport.anchorMax = originalRect.anchorMax;
+            testimonyViewport.pivot = originalRect.pivot;
+            testimonyViewport.anchoredPosition = originalRect.anchoredPosition;
+            testimonyViewport.sizeDelta = originalRect.sizeDelta;
+            testimonyViewport.offsetMin = originalRect.offsetMin;
+            testimonyViewport.offsetMax = originalRect.offsetMax;
+
+            Image viewportImage = viewportObject.GetComponent<Image>();
+            viewportImage.color = new Color(1f, 1f, 1f, 0.001f);
+            viewportImage.raycastTarget = true;
+        }
+
+        RectMask2D existingRectMask = testimonyViewport.GetComponent<RectMask2D>();
+        if (existingRectMask == null)
+        {
+            existingRectMask = testimonyViewport.gameObject.AddComponent<RectMask2D>();
+        }
+
+        existingRectMask.enabled = true;
+
+        Mask existingMask = testimonyViewport.GetComponent<Mask>();
+        if (existingMask != null)
+        {
+            existingMask.enabled = false;
+        }
+
+        if (contentRect.parent != testimonyViewport)
+        {
+            contentRect.SetParent(testimonyViewport, false);
+        }
+
+        ScrollRect scrollRect = testimonyViewport.GetComponent<ScrollRect>();
+        if (scrollRect == null)
+        {
+            scrollRect = testimonyViewport.gameObject.AddComponent<ScrollRect>();
+        }
+
+        scrollRect.viewport = testimonyViewport;
+        scrollRect.content = contentRect;
+        scrollRect.horizontal = false;
+        scrollRect.vertical = true;
+        scrollRect.movementType = ScrollRect.MovementType.Clamped;
+        scrollRect.scrollSensitivity = 28f;
+        scrollRect.verticalScrollbar = EnsureTestimonyScrollbar();
+        scrollRect.verticalScrollbarVisibility = ScrollRect.ScrollbarVisibility.Permanent;
+        scrollRect.verticalScrollbarSpacing = 0f;
+
+        ConfigureTestimonyContentRect(contentRect);
+        RebuildTestimonyScrollContent();
+    }
+
+    private void ConfigureTestimonyContentRect(RectTransform contentRect)
+    {
+        if (contentRect == null)
+        {
+            return;
+        }
+
+        contentRect.localScale = Vector3.one;
+        contentRect.localRotation = Quaternion.identity;
+        contentRect.anchorMin = new Vector2(0f, 1f);
+        contentRect.anchorMax = new Vector2(1f, 1f);
+        contentRect.pivot = new Vector2(0.5f, 1f);
+        contentRect.anchoredPosition = Vector2.zero;
+        contentRect.sizeDelta = new Vector2(-24f, contentRect.sizeDelta.y);
+        contentRect.offsetMax = new Vector2(-24f, 0f);
+    }
+
+    private void RebuildTestimonyScrollContent()
+    {
+        RectTransform contentRect = testimonyList as RectTransform;
+        if (contentRect == null)
+        {
+            return;
+        }
+
+        ConfigureTestimonyContentRect(contentRect);
+        LayoutRebuilder.ForceRebuildLayoutImmediate(contentRect);
+        contentRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, CalculateTestimonyContentHeight(contentRect));
+        contentRect.anchoredPosition = Vector2.zero;
+        LayoutRebuilder.ForceRebuildLayoutImmediate(contentRect);
+    }
+
+    private float CalculateTestimonyContentHeight(RectTransform contentRect)
+    {
+        VerticalLayoutGroup vertical = testimonyList != null ? testimonyList.GetComponent<VerticalLayoutGroup>() : null;
+        float spacing = vertical != null ? vertical.spacing : 0f;
+        RectOffset padding = vertical != null ? vertical.padding : new RectOffset();
+        float total = padding.top + padding.bottom;
+        int visibleChildren = 0;
+
+        foreach (Transform child in testimonyList)
+        {
+            if (child == null || !child.gameObject.activeSelf)
+            {
+                continue;
+            }
+
+            RectTransform childRect = child as RectTransform;
+            float childHeight = childRect != null ? LayoutUtility.GetPreferredHeight(childRect) : 0f;
+            LayoutElement layout = child.GetComponent<LayoutElement>();
+            if (layout != null)
+            {
+                childHeight = Mathf.Max(childHeight, layout.preferredHeight, layout.minHeight);
+            }
+
+            total += childHeight;
+            visibleChildren++;
+        }
+
+        if (visibleChildren > 1)
+        {
+            total += spacing * (visibleChildren - 1);
+        }
+
+        RectTransform viewportRect = testimonyViewport != null ? testimonyViewport : contentRect.parent as RectTransform;
+        if (viewportRect != null)
+        {
+            total = Mathf.Max(total, viewportRect.rect.height);
+        }
+
+        return Mathf.Max(total, 1f);
+    }
+
+    private Scrollbar EnsureTestimonyScrollbar()
+    {
+        if (testimonyViewport == null)
+        {
+            return null;
+        }
+
+        Transform existing = testimonyViewport.Find("TestimonyScrollbar");
+        if (existing != null)
+        {
+            return existing.GetComponent<Scrollbar>();
+        }
+
+        GameObject scrollbarObject = new GameObject("TestimonyScrollbar", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(Scrollbar));
+        scrollbarObject.transform.SetParent(testimonyViewport, false);
+        RectTransform scrollbarRect = scrollbarObject.GetComponent<RectTransform>();
+        scrollbarRect.anchorMin = new Vector2(1f, 0f);
+        scrollbarRect.anchorMax = new Vector2(1f, 1f);
+        scrollbarRect.pivot = new Vector2(1f, 1f);
+        scrollbarRect.offsetMin = new Vector2(-14f, 8f);
+        scrollbarRect.offsetMax = new Vector2(-2f, -8f);
+
+        Image scrollbarImage = scrollbarObject.GetComponent<Image>();
+        scrollbarImage.color = new Color(0.32f, 0.24f, 0.16f, 0.28f);
+
+        GameObject slidingAreaObject = new GameObject("Sliding Area", typeof(RectTransform));
+        slidingAreaObject.transform.SetParent(scrollbarObject.transform, false);
+        RectTransform slidingAreaRect = slidingAreaObject.GetComponent<RectTransform>();
+        slidingAreaRect.anchorMin = Vector2.zero;
+        slidingAreaRect.anchorMax = Vector2.one;
+        slidingAreaRect.offsetMin = new Vector2(2f, 2f);
+        slidingAreaRect.offsetMax = new Vector2(-2f, -2f);
+
+        GameObject handleObject = new GameObject("Handle", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        handleObject.transform.SetParent(slidingAreaObject.transform, false);
+        RectTransform handleRect = handleObject.GetComponent<RectTransform>();
+        handleRect.anchorMin = new Vector2(0f, 0f);
+        handleRect.anchorMax = new Vector2(1f, 1f);
+        handleRect.offsetMin = Vector2.zero;
+        handleRect.offsetMax = Vector2.zero;
+
+        Image handleImage = handleObject.GetComponent<Image>();
+        handleImage.color = new Color(0.50f, 0.37f, 0.18f, 0.92f);
+
+        Scrollbar scrollbar = scrollbarObject.GetComponent<Scrollbar>();
+        scrollbar.direction = Scrollbar.Direction.BottomToTop;
+        scrollbar.targetGraphic = handleImage;
+        scrollbar.handleRect = handleRect;
+        return scrollbar;
     }
 
     private void RefreshDoubtPanel()

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine.SceneManagement;
 using TMPro;
+using UnityEngine.Video;
 
 public class DialogueManager : MonoBehaviour
 {
@@ -50,6 +51,11 @@ public class DialogueManager : MonoBehaviour
     private readonly List<GameObject> activeHotspots = new List<GameObject>();
     private readonly HashSet<string> noticeIntroPlayedNodeIds = new HashSet<string>();
     private Coroutine noticeMomentRoutine;
+    private Coroutine dialogueVideoRoutine;
+
+    private const float DialogueVideoPrepareTimeoutSeconds = 8f;
+    private const float DialogueVideoPlaybackPadSeconds = 0.75f;
+    private const int DialogueVideoOverlaySortingOrder = 9650;
 
     private NotebookRewards pendingDeferredNotebookRewards;
 
@@ -343,7 +349,7 @@ public class DialogueManager : MonoBehaviour
                 return;
             }
 
-            AdvanceToNode(pendingNextNodeId, pendingNextDialogueId, pendingNextSceneName);
+            TryAdvanceCurrentNode();
         }
     }
 
@@ -624,6 +630,36 @@ public class DialogueManager : MonoBehaviour
 
         // ????????
         AdvanceToNode(option.nextNodeId, option.nextDialogueId, option.nextSceneName);
+    }
+
+    private void TryAdvanceCurrentNode()
+    {
+        if (currentDialogue == null
+            || currentDialogue.nodeLookup == null
+            || string.IsNullOrEmpty(currentNodeId)
+            || !currentDialogue.nodeLookup.TryGetValue(currentNodeId, out DialogueNode node))
+        {
+            AdvanceToNode(pendingNextNodeId, pendingNextDialogueId, pendingNextSceneName);
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(node.dialogueVideoResourcePath))
+        {
+            AdvanceToNode(pendingNextNodeId, pendingNextDialogueId, pendingNextSceneName);
+            return;
+        }
+
+        if (dialogueVideoRoutine != null)
+        {
+            return;
+        }
+
+        string videoPath = node.dialogueVideoResourcePath.Trim();
+        string nextNodeId = pendingNextNodeId;
+        string nextDialogueId = pendingNextDialogueId;
+        string nextSceneName = pendingNextSceneName;
+        waitingForClickAdvance = false;
+        dialogueVideoRoutine = StartCoroutine(PlayDialogueVideoThenAdvance(videoPath, nextNodeId, nextDialogueId, nextSceneName));
     }
 
     private void AdvanceToNode(string nextNodeId)
@@ -1442,6 +1478,136 @@ public class DialogueManager : MonoBehaviour
         else
         {
             ScreenFader.LoadSceneWithFade(sceneName);
+        }
+    }
+
+    private IEnumerator PlayDialogueVideoThenAdvance(string videoResourcePath, string nextNodeId, string nextDialogueId, string nextSceneName)
+    {
+        GameObject overlayRoot = null;
+        VideoPlayer player = null;
+        RenderTexture renderTexture = null;
+        bool shouldAdvance = true;
+
+        try
+        {
+            VideoClip clip = Resources.Load<VideoClip>(videoResourcePath);
+            if (clip == null)
+            {
+                Debug.LogWarning($"DialogueManager: 未找到 VideoClip Resources/{videoResourcePath}，将直接继续对话。");
+                shouldAdvance = true;
+            }
+            else
+            {
+                overlayRoot = CreateDialogueVideoOverlayRoot();
+                GameObject videoGo = new GameObject("DialogueVideoOverlay", typeof(RectTransform));
+                videoGo.transform.SetParent(overlayRoot.transform, false);
+                RectTransform videoRect = videoGo.GetComponent<RectTransform>();
+                videoRect.anchorMin = Vector2.zero;
+                videoRect.anchorMax = Vector2.one;
+                videoRect.offsetMin = Vector2.zero;
+                videoRect.offsetMax = Vector2.zero;
+
+                RawImage rawImage = videoGo.AddComponent<RawImage>();
+                rawImage.raycastTarget = true;
+                rawImage.color = Color.white;
+
+                renderTexture = new RenderTexture(1920, 1080, 0);
+                player = overlayRoot.AddComponent<VideoPlayer>();
+                player.playOnAwake = false;
+                player.isLooping = false;
+                player.renderMode = VideoRenderMode.RenderTexture;
+                player.targetTexture = renderTexture;
+                player.clip = clip;
+                player.audioOutputMode = VideoAudioOutputMode.Direct;
+                rawImage.texture = renderTexture;
+
+                yield return WaitUntilDialogueVideoPrepared(player);
+                if (player.isPrepared)
+                {
+                    yield return WaitUntilDialogueVideoPlaybackEnds(player, (float)clip.length);
+                }
+                else
+                {
+                    Debug.LogWarning($"DialogueManager: 视频 {videoResourcePath} Prepare 失败，将直接继续对话。");
+                }
+            }
+        }
+        finally
+        {
+            if (player != null)
+            {
+                player.Stop();
+            }
+
+            if (renderTexture != null)
+            {
+                renderTexture.Release();
+                Destroy(renderTexture);
+            }
+
+            if (overlayRoot != null)
+            {
+                Destroy(overlayRoot);
+            }
+
+            dialogueVideoRoutine = null;
+        }
+
+        if (shouldAdvance)
+        {
+            AdvanceToNode(nextNodeId, nextDialogueId, nextSceneName);
+        }
+    }
+
+    private static GameObject CreateDialogueVideoOverlayRoot()
+    {
+        GameObject root = new GameObject("DialogueVideoOverlayRoot");
+        DontDestroyOnLoad(root);
+        RectTransform rootRect = root.AddComponent<RectTransform>();
+        rootRect.anchorMin = Vector2.zero;
+        rootRect.anchorMax = Vector2.one;
+        rootRect.offsetMin = Vector2.zero;
+        rootRect.offsetMax = Vector2.zero;
+
+        Canvas canvas = root.AddComponent<Canvas>();
+        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        canvas.overrideSorting = true;
+        canvas.sortingOrder = DialogueVideoOverlaySortingOrder;
+        root.AddComponent<GraphicRaycaster>();
+
+        CanvasScaler scaler = root.AddComponent<CanvasScaler>();
+        scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+        scaler.referenceResolution = new Vector2(1920f, 1080f);
+        scaler.matchWidthOrHeight = 0.5f;
+
+        return root;
+    }
+
+    private static IEnumerator WaitUntilDialogueVideoPrepared(VideoPlayer player)
+    {
+        player.Prepare();
+        float elapsed = 0f;
+        while (!player.isPrepared && elapsed < DialogueVideoPrepareTimeoutSeconds)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            yield return null;
+        }
+    }
+
+    private static IEnumerator WaitUntilDialogueVideoPlaybackEnds(VideoPlayer player, float clipLengthSeconds)
+    {
+        player.Play();
+        float maxWait = Mathf.Max(45f, clipLengthSeconds + DialogueVideoPlaybackPadSeconds);
+        float elapsed = 0f;
+        while (player.isPlaying && elapsed < maxWait)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            yield return null;
+        }
+
+        if (player.isPlaying)
+        {
+            player.Stop();
         }
     }
 }

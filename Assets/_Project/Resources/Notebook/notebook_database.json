@@ -350,28 +350,46 @@
   ],
   "doubts": [
     {
-      "id": "golden_clock",
-      "type": "doubt",
-      "name": "金表上的时间",
-      "unlockBrief": "金表停在1:15。",
-      "question": "金表停在1:15，这说明了什么？",
-      "description": "现场发现一只金表，指针停在1:15。",
-      "finalConclusion": "",
-      "resolved": false,
-      "doubtInquiryLineScriptResourcePath": "Notebook/doubt/doubt_golden_clock",
-      "updates": []
-    },
-    {
       "id": "ratchett_enemy",
       "type": "doubt",
       "name": "雷切特的敌人",
-      "unlockBrief": "死者自认有仇家，随身佩枪。",
-      "question": "雷切特为什么认为自己正处于危险之中？他的敌人是谁？",
+      "unlockBrief": "雷切特声称自己有敌人，还随身佩枪。",
+      "question": "雷切特的敌人是谁？他的身份是什么？",
       "description": "雷切特声称自己受到威胁，并含糊地说自己有敌人，因此随身带着手枪。",
       "finalConclusion": "",
       "resolved": false,
       "doubtInquiryLineScriptResourcePath": "Notebook/doubt/doubt_ratchett_identitiy",
-      "updates": []
+      "updates": [
+        {
+          "stageId": "ratchett_enemy_2",
+          "description": "雷切特就是卡塞蒂，他的敌人想必是想为阿姆斯特朗一家复仇的人。",
+          "unlockBrief": "雷切特就是卡塞蒂",
+          "question": "雷切特就是卡塞蒂",
+          "finalConclusion": "雷切特就是卡塞蒂",
+          "resolved": true
+        }
+      ]
+    },
+    {
+      "id": "golden_clock",
+      "type": "doubt",
+      "name": "指向1:15的金表",
+      "unlockBrief": "雷切特胸口的金表停在了1:15",
+      "question": "雷切特的死亡时间？",
+      "description": "雷切特胸口的金表停在了1:15，这是否说明雷切特死于1:15？",
+      "finalConclusion": "",
+      "resolved": false,
+      "doubtInquiryLineScriptResourcePath": "Notebook/doubt/doubt_golden_clock",
+      "updates": [
+        {
+          "stageId": "golden_clock_2",
+          "description": "一般来说睡觉时表不会放在胸口这个不舒服的位置，表的证据是伪造的",
+          "unlockBrief": "金表的位置不对",
+          "question": "表的证据是伪造的",
+          "finalConclusion": "表的证据是伪造的",
+          "resolved": true
+        }
+      ]
     }
   ]
 }

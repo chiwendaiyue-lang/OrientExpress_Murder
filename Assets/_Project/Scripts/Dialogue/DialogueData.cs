@@ -67,6 +67,12 @@ public class DialogueNode
 
     /// <summary>延迟收录时，覆盖默认的右键/左键提示行（纯文本，会包在 TMP 颜色标签外由代码拼接）。</summary>
     public string dialogueRewardInteractHint;
+
+    /// <summary>
+    /// 可选。当前节点点击继续时，先播放指定 Resources 下的 VideoClip，再进入下一个节点/对话/场景。
+    /// 例如 "MOV/find" 对应 Resources/MOV/find。
+    /// </summary>
+    public string dialogueVideoResourcePath;
 }
 
 [Serializable]
