@@ -125,11 +125,6 @@
             }
           ]
         },
-        "rewards": {
-          "evidenceToAdd": [
-            "ratchett_knife_wound"
-          ]
-        },
         "nextNodeId": "node6"
       }
     },

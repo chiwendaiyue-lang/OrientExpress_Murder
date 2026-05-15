@@ -359,6 +359,7 @@
             }
           ]
         },
+        "dialogueVideoResourcePath": "MOV/find",
         "nextNodeId": "node16"
       }
     },
@@ -407,6 +408,11 @@
               "characterId": "doctor",
               "portrait": "doctor"
             }
+          ]
+        },
+        "rewards": {
+          "testimonyToAdd": [
+            "armstrong_case"
           ]
         },
         "nextNodeId": "node18"
@@ -519,8 +525,8 @@
         "nodeType": "dialogue",
         "speakerCharacterId": "poirot",
         "speakerName": "波洛",
-        "text": "所以，雷切特就是卡塞梯，那个绑架案的幕后真凶！",
-        "dialogueHighlightPhrase": "雷切特就是卡塞梯",
+        "text": "所以，雷切特就是卡塞蒂，那个绑架案的幕后真凶！",
+        "dialogueHighlightPhrase": "雷切特就是卡塞蒂",
         "stage": {
           "focusCharacterId": "poirot",
           "slots": [

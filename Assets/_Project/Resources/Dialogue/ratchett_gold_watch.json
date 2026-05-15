@@ -6,9 +6,49 @@
       "id": "node1",
       "node": {
         "nodeType": "dialogue",
+        "speakerCharacterId": "system",
+        "speakerName": "系统",
+        "text": "一块金表，表针停在1:15",
+        "rewards": {
+          "doubtToAdd": [
+            "golden_clock"
+          ]
+        },
+        "nextNodeId": "node2"
+      }
+    },
+    {
+      "id": "node2",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "doctor",
+        "speakerName": "大夫",
+        "text": "1:15，这刚好在我判断的死亡时间之内，这就是死亡时间了！",
+        "stage": {
+          "focusCharacterId": "doctor",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            },
+            {
+              "slotId": "right",
+              "characterId": "doctor",
+              "portrait": "doctor"
+            }
+          ]
+        },
+        "nextNodeId": "node3"
+      }
+    },
+    {
+      "id": "node3",
+      "node": {
+        "nodeType": "dialogue",
         "speakerCharacterId": "poirot",
         "speakerName": "波洛",
-        "text": "这块表……指针停住了。记下这一刻，我的朋友，它或许能告诉我们什么。",
+        "text": "是啊，有可能，有这种可能...",
         "stage": {
           "focusCharacterId": "poirot",
           "slots": [
@@ -24,16 +64,6 @@
             }
           ]
         },
-        "nextNodeId": "node2"
-      }
-    },
-    {
-      "id": "node2",
-      "node": {
-        "nodeType": "dialogue",
-        "speakerCharacterId": "system",
-        "speakerName": "系统",
-        "text": "波洛将金表小心收好。",
         "nextSceneName": "CrimeScene"
       }
     }

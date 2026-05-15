@@ -1,0 +1,167 @@
+{
+  "sceneId": "doubt_golden_clock",
+  "startNodeId": "node1",
+  "nodes": [
+    {
+      "id": "node1",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "这种表如果一段时间没有人调就会自动停下来，这是不是说明作案时间就在1：15前的某个时间段？",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        },
+        "nextNodeId": "node2"
+      }
+    },
+    {
+      "id": "node2",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "不对，有什么地方不对。",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        },
+        "options": [
+          {
+            "text": "表的时间不对",
+            "nextNodeId": "node_time_wrong"
+          },
+          {
+            "text": "表的材质不对",
+            "nextNodeId": "node_material_wrong"
+          },
+          {
+            "text": "表的位置不对",
+            "nextNodeId": "node_position_wrong"
+          }
+        ]
+      }
+    },
+    {
+      "id": "node_time_wrong",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "大夫说雷切特的死亡时间在12点到2点之间，而表指向1点15分，这个时间点正好在这个时间段内，这看起来没什么矛盾。",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        },
+        "nextNodeId": "node2"
+      }
+    },
+    {
+      "id": "node_material_wrong",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "这只金表不是雷切特的？雷切特之前就向我表明了他是个有钱人，而且他的装束也没有刻意去掩饰他的财富，所以这只金表很可能就是雷切特的。",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        },
+        "nextNodeId": "node2"
+      }
+    },
+    {
+      "id": "node_position_wrong",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "让我们想想，一般人睡觉的时候，会把表放在胸前口袋里吗？",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        },
+        "nextNodeId": "node6"
+      }
+    },
+    {
+      "id": "node6",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "显然不会，这太不舒服了，雷切特完全可以把表放在桌上。",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        },
+        "nextNodeId": "node7"
+      }
+    },
+    {
+      "id": "node7",
+      "node": {
+        "nodeType": "dialogue",
+        "speakerCharacterId": "poirot",
+        "speakerName": "波洛",
+        "text": "所以表的位置有问题，这表是凶手放在这里的，而且表的时间很可能也是伪造的。",
+        "stage": {
+          "focusCharacterId": "poirot",
+          "slots": [
+            {
+              "slotId": "left",
+              "characterId": "poirot",
+              "portrait": "poirot_normal"
+            }
+          ]
+        },
+        "rewards": {
+          "doubtStageToUpdate": [
+            {
+              "itemId": "golden_clock",
+              "stageId": "golden_clock_2"
+            }
+          ]
+        },
+        "nextSceneName": "CrimeScene"
+      }
+    }
+  ]
+}
