@@ -256,7 +256,7 @@
             {
               "slotId": "right",
               "characterId": "ratchett",
-              "portrait": "ratchett_nervous"
+              "portrait": "ratchett_cold"
             }
           ]
         },
@@ -418,7 +418,7 @@
             {
               "slotId": "right",
               "characterId": "ratchett",
-              "portrait": "ratchett_nervous"
+              "portrait": "ratchett_cold"
             }
           ]
         },

@@ -114,7 +114,7 @@
             {
               "slotId": "left",
               "characterId": "poirot",
-              "portrait": "poirot_normal"
+              "portrait": "poirot_doubt"
             },
             {
               "slotId": "right",
@@ -152,7 +152,7 @@
             {
               "slotId": "left",
               "characterId": "poirot",
-              "portrait": "poirot_normal"
+              "portrait": "poirot_doubt"
             },
             {
               "slotId": "right",
@@ -177,7 +177,7 @@
             {
               "slotId": "left",
               "characterId": "poirot",
-              "portrait": "poirot_normal"
+              "portrait": "poirot_doubt"
             }
           ]
         },
@@ -230,7 +230,7 @@
             {
               "slotId": "left",
               "characterId": "poirot",
-              "portrait": "poirot_normal"
+              "portrait": "poirot_doubt"
             }
           ]
         },
@@ -263,7 +263,7 @@
             {
               "slotId": "left",
               "characterId": "poirot",
-              "portrait": "poirot_normal"
+              "portrait": "poirot_doubt"
             },
             {
               "slotId": "right",
@@ -288,7 +288,7 @@
             {
               "slotId": "left",
               "characterId": "poirot",
-              "portrait": "poirot_normal"
+              "portrait": "poirot_doubt"
             }
           ]
         },

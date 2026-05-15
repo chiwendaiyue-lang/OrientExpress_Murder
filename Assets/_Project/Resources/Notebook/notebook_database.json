@@ -127,8 +127,8 @@
       "id": "ratchett_gold_watch",
       "type": "physical",
       "name": "雷切特的金表",
-      "description": "尸体旁发现的怀表，指针停在某一时刻。",
-      "unlockBrief": "尸体上的金表已停摆。",
+      "description": "尸体旁发现的怀表，指针停在1:15。",
+      "unlockBrief": "尸体上的金表停在1:15。",
       "foundLocation": "雷切特包厢·尸体",
       "icon": "",
       "updates": []

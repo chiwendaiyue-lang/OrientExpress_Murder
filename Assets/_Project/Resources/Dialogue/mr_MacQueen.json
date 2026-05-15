@@ -36,7 +36,7 @@
             {
               "slotId": "left",
               "characterId": "poirot",
-              "portrait": "poirot"
+              "portrait": "poirot_normal"
             },
             {
               "slotId": "right",
@@ -61,7 +61,7 @@
             {
               "slotId": "left",
               "characterId": "poirot",
-              "portrait": "poirot"
+              "portrait": "poirot_normal"
             },
             {
               "slotId": "right",
@@ -86,7 +86,7 @@
             {
               "slotId": "left",
               "characterId": "poirot",
-              "portrait": "poirot"
+              "portrait": "poirot_normal"
             },
             {
               "slotId": "right",
@@ -111,7 +111,7 @@
             {
               "slotId": "left",
               "characterId": "poirot",
-              "portrait": "poirot"
+              "portrait": "poirot_normal"
             },
             {
               "slotId": "right",
@@ -136,7 +136,7 @@
             {
               "slotId": "left",
               "characterId": "poirot",
-              "portrait": "poirot"
+              "portrait": "poirot_normal"
             },
             {
               "slotId": "right",
@@ -156,14 +156,14 @@
         "speakerName": "系统",
         "targetType": "portrait",
         "text": "",
-        "prompt": "麦克昆的反应过于激烈。请留意他身上的何处不符合常理。",
+        "prompt": "麦克昆的反应有点不对劲，请留意他身上的何处不符合常理。",
         "stage": {
           "focusCharacterId": "macqueen",
           "slots": [
             {
               "slotId": "left",
               "characterId": "poirot",
-              "portrait": "poirot"
+              "portrait": "poirot_doubt"
             },
             {
               "slotId": "right",
@@ -333,7 +333,7 @@
             {
               "slotId": "right",
               "characterId": "macqueen",
-              "portrait": "macqueen_agitated"
+              "portrait": "macqueen"
             }
           ]
         },
@@ -358,7 +358,7 @@
             {
               "slotId": "right",
               "characterId": "macqueen",
-              "portrait": "macqueen_agitated"
+              "portrait": "macqueen"
             }
           ]
         },
@@ -383,7 +383,7 @@
             {
               "slotId": "right",
               "characterId": "macqueen",
-              "portrait": "macqueen_agitated"
+              "portrait": "macqueen"
             }
           ]
         },
@@ -408,7 +408,7 @@
             {
               "slotId": "right",
               "characterId": "macqueen",
-              "portrait": "macqueen_agitated"
+              "portrait": "macqueen"
             }
           ]
         },
@@ -431,12 +431,12 @@
             {
               "slotId": "left",
               "characterId": "poirot",
-              "portrait": "poirot"
+              "portrait": "poirot_doubt"
             },
             {
               "slotId": "right",
               "characterId": "macqueen",
-              "portrait": "macqueen_agitated"
+              "portrait": "macqueen"
             }
           ]
         },
@@ -476,7 +476,7 @@
             {
               "slotId": "right",
               "characterId": "macqueen",
-              "portrait": "macqueen_agitated"
+              "portrait": "macqueen"
             }
           ]
         },
@@ -501,7 +501,7 @@
             {
               "slotId": "right",
               "characterId": "macqueen",
-              "portrait": "macqueen_agitated"
+              "portrait": "macqueen"
             }
           ]
         },
