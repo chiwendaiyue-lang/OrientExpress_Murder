@@ -95,7 +95,7 @@ MonoBehaviour:
   stageController: {fileID: 3070147013616990629}
   presentedImageDisplay: {fileID: 0}
   hotspotContainer: {fileID: 0}
-  hotspotButtonPrefab: {fileID: 0}
+  hotspotButtonPrefab: {fileID: 2372245168819841017, guid: a3749fd586fd22a43bf9673337772010, type: 3}
   dialogueFontOverride: {fileID: 11400000, guid: 732ca041bcd2b1545b7d93121c542b17, type: 2}
   useLeftSpeakerPortrait: 0
   optionsContainerAnchoredPositionOffset: {x: 0, y: 72}

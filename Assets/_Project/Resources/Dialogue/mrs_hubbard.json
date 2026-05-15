@@ -649,30 +649,36 @@
             "label": "床下",
             "correct": false,
             "failureNodeId": "notice_hubbard_latch_failure_bed",
-            "x": 0.22,
-            "y": 0.22,
-            "width": 0.14,
-            "height": 0.1
+            "x": 0.28,
+            "y": 0.2,
+            "width": 0.2,
+            "height": 0.3,
+            "xMax": 0.36,
+            "yMax": 0.32
           },
           {
             "id": "bell",
             "label": "门铃",
             "correct": false,
             "failureNodeId": "notice_hubbard_latch_failure_bell",
-            "x": 0.58,
-            "y": 0.24,
+            "x": 0.3,
+            "y": 0.7,
             "width": 0.12,
-            "height": 0.1
+            "height": 0.12,
+            "xMax": 0.7,
+            "yMax": 0.9
           },
           {
             "id": "latch",
             "label": "门闩",
             "correct": true,
             "successNodeId": "notice_hubbard_latch_success",
-            "x": 0.72,
-            "y": 0.52,
+            "x": 0.42,
+            "y": 0.6,
             "width": 0.12,
-            "height": 0.12
+            "height": 0.12,
+            "xMax": 0.84,
+            "yMax": 0.64
           }
         ],
         "stage": {

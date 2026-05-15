@@ -158,7 +158,7 @@ public class PresentedImageData
 [Serializable]
 public class DialogueHotspot
 {
-    /// <summary>逻辑 id；未填 <see cref="imageId"/> 时，会用于 <c>Resources/UI/{id}</c> 加载热点图（Sprite 资源名与 id 一致）。</summary>
+    /// <summary>逻辑 id；未使用 <c>hotspotButtonPrefab</c> 且未填 <see cref="imageId"/> 时，会尝试 <c>Resources/UI/{id}</c> 作为热点底图。</summary>
     public string id;
     public string targetType;
     public string targetId;
@@ -171,9 +171,15 @@ public class DialogueHotspot
     public float width;
     public float height;
 
+    /// <summary>可选。归一化矩形右边界 x+width，供 JSON 对照；运行时不参与布局。</summary>
+    public float xMax;
+
+    /// <summary>可选。归一化矩形上边界 y+height，供 JSON 对照；运行时不参与布局。</summary>
+    public float yMax;
+
     /// <summary>
     /// 可选。非空时优先用其作为 Resources 路径片段：先 <c>Resources/UI/{imageId}</c>，再 <c>Resources/backgrounds/{imageId}</c>。
-    /// 若为空，则用 <see cref="id"/> 尝试 <c>Resources/UI/{id}</c>（与 JSON 里热点 id 一致，如 <c>macqueen_agitated_hotspot</c>）。
+    /// 若使用 <c>hotspotButtonPrefab</c> 且希望覆盖预制体上的底图，必须填写本字段；否则不会按 <see cref="id"/> 自动加载 <c>Resources/UI/{id}</c>，以免误用测试 Sprite。
     /// </summary>
     public string imageId;
 }

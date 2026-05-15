@@ -177,9 +177,15 @@
             "id": "macqueen_agitated_hotspot",
             "targetType": "portrait",
             "targetId": "macqueen",
-            "label": "！",
+            "label": "",
             "correct": true,
-            "successNodeId": "notice_macqueen_agitated_success"
+            "successNodeId": "notice_macqueen_agitated_success",
+            "x": 0.72,
+            "y": 0.45,
+            "width": 0.1,
+            "height": 0.4,
+            "xMax": 1,
+            "yMax": 1
           }
         ]
       }
@@ -441,7 +447,13 @@
             "targetId": "macqueen_letter_slip_text",
             "label": "！",
             "correct": true,
-            "successNodeId": "notice_macqueen_slip_success"
+            "successNodeId": "notice_macqueen_slip_success",
+            "x": 0.25,
+            "y": 0.2,
+            "width": 0.15,
+            "height": 0.065,
+            "xMax": 0.8125,
+            "yMax": 0.2425
           }
         ]
       }

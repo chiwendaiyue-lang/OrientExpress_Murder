@@ -1001,6 +1001,7 @@ public class DialogueManager : MonoBehaviour
         presentedImageDisplay.sprite = sprite;
         ApplyPresentedImagePosition(imageData.position);
         presentedImageDisplay.gameObject.SetActive(true);
+        FinalizeHotspotAndPresentedImageStack();
     }
 
     private Sprite LoadPresentedSprite(string imageId)
@@ -1134,6 +1135,36 @@ public class DialogueManager : MonoBehaviour
             button.onClick.AddListener(() => OnHotspotClicked(capturedHotspot, allowFailure));
             activeHotspots.Add(hotspotObject);
         }
+
+        FinalizeHotspotAndPresentedImageStack();
+    }
+
+    /// <summary>
+    /// 与 <see cref="hotspotContainer"/> 同父节点时，后序兄弟会盖住先序兄弟。
+    /// 热点容器置顶以便点击；若有展示图则插在其正下方一层，作背景（如察觉 + 房间示意图）。
+    /// </summary>
+    private void FinalizeHotspotAndPresentedImageStack()
+    {
+        if (hotspotContainer == null)
+        {
+            return;
+        }
+
+        hotspotContainer.SetAsLastSibling();
+
+        if (presentedImageDisplay == null || !presentedImageDisplay.gameObject.activeSelf)
+        {
+            return;
+        }
+
+        Transform img = presentedImageDisplay.transform;
+        Transform hot = hotspotContainer.transform;
+        if (img.parent != hot.parent)
+        {
+            return;
+        }
+
+        img.SetSiblingIndex(hot.GetSiblingIndex());
     }
 
     private GameObject CreateHotspotObject(DialogueHotspot hotspot, int index)
@@ -1154,7 +1185,8 @@ public class DialogueManager : MonoBehaviour
         hotspotObject.name = string.IsNullOrEmpty(hotspot.id) ? $"Hotspot_{index}" : $"Hotspot_{hotspot.id}";
         RectTransform rect = hotspotObject.GetComponent<RectTransform>();
         ApplyHotspotRect(rect, hotspot, index);
-        TryApplyHotspotImageFromResources(hotspotObject, hotspot);
+        bool fromPrefab = hotspotButtonPrefab != null;
+        TryApplyHotspotImageFromResources(hotspotObject, hotspot, fromPrefab);
 
         TMP_Text tmpText = hotspotObject.GetComponentInChildren<TMP_Text>(true);
         if (tmpText != null)
@@ -1172,9 +1204,16 @@ public class DialogueManager : MonoBehaviour
         return hotspotObject;
     }
 
-    private static void TryApplyHotspotImageFromResources(GameObject hotspotObject, DialogueHotspot hotspot)
+    private static void TryApplyHotspotImageFromResources(GameObject hotspotObject, DialogueHotspot hotspot, bool instantiatedFromPrefab)
     {
         if (hotspotObject == null || hotspot == null)
+        {
+            return;
+        }
+
+        // 使用 hotspotButtonPrefab 时：保留预制体上的 Image/Sprite 与颜色（含透明度），除非 JSON 里显式写了 imageId 要换图。
+        // 否则会用热点 id 去加载 Resources/UI/{id}，若存在测试用 Sprite 会覆盖预制体外观（如 macqueen_agitated_hotspot.png）。
+        if (instantiatedFromPrefab && string.IsNullOrWhiteSpace(hotspot.imageId))
         {
             return;
         }
