@@ -1594,55 +1594,61 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
-    private IEnumerator PlayDialogueVideoThenAdvance(string videoResourcePath, string nextNodeId, string nextDialogueId, string nextSceneName)
+    /// <summary>
+    /// 全屏覆盖播放 Resources 下 <see cref="VideoClip"/>（路径不含扩展名，例如 <c>MOV/open</c>）。
+    /// 找不到资源或 Prepare 失败会打日志并尽快结束；结束后销毁临时覆盖层。
+    /// </summary>
+    public static IEnumerator PlayResourcesVideoFullscreen(string videoResourcePath)
     {
+        if (string.IsNullOrWhiteSpace(videoResourcePath))
+        {
+            yield break;
+        }
+
         GameObject overlayRoot = null;
         VideoPlayer player = null;
         RenderTexture renderTexture = null;
-        bool shouldAdvance = true;
 
         try
         {
             VideoClip clip = Resources.Load<VideoClip>(videoResourcePath);
             if (clip == null)
             {
-                Debug.LogWarning($"DialogueManager: 未找到 VideoClip Resources/{videoResourcePath}，将直接继续对话。");
-                shouldAdvance = true;
+                Debug.LogWarning($"DialogueManager: 未找到 VideoClip Resources/{videoResourcePath}，跳过视频。");
+                yield break;
+            }
+
+            overlayRoot = CreateDialogueVideoOverlayRoot();
+            GameObject videoGo = new GameObject("DialogueVideoOverlay", typeof(RectTransform));
+            videoGo.transform.SetParent(overlayRoot.transform, false);
+            RectTransform videoRect = videoGo.GetComponent<RectTransform>();
+            videoRect.anchorMin = Vector2.zero;
+            videoRect.anchorMax = Vector2.one;
+            videoRect.offsetMin = Vector2.zero;
+            videoRect.offsetMax = Vector2.zero;
+
+            RawImage rawImage = videoGo.AddComponent<RawImage>();
+            rawImage.raycastTarget = true;
+            rawImage.color = Color.white;
+
+            renderTexture = new RenderTexture(1920, 1080, 0);
+            player = overlayRoot.AddComponent<VideoPlayer>();
+            player.playOnAwake = false;
+            player.isLooping = false;
+            player.renderMode = VideoRenderMode.RenderTexture;
+            player.targetTexture = renderTexture;
+            player.clip = clip;
+            player.audioOutputMode = VideoAudioOutputMode.Direct;
+            rawImage.texture = renderTexture;
+
+            yield return WaitUntilDialogueVideoPrepared(player);
+            if (player.isPrepared)
+            {
+                yield return WaitUntilDialogueVideoPlaybackEnds(player, (float)clip.length);
             }
             else
             {
-                overlayRoot = CreateDialogueVideoOverlayRoot();
-                GameObject videoGo = new GameObject("DialogueVideoOverlay", typeof(RectTransform));
-                videoGo.transform.SetParent(overlayRoot.transform, false);
-                RectTransform videoRect = videoGo.GetComponent<RectTransform>();
-                videoRect.anchorMin = Vector2.zero;
-                videoRect.anchorMax = Vector2.one;
-                videoRect.offsetMin = Vector2.zero;
-                videoRect.offsetMax = Vector2.zero;
-
-                RawImage rawImage = videoGo.AddComponent<RawImage>();
-                rawImage.raycastTarget = true;
-                rawImage.color = Color.white;
-
-                renderTexture = new RenderTexture(1920, 1080, 0);
-                player = overlayRoot.AddComponent<VideoPlayer>();
-                player.playOnAwake = false;
-                player.isLooping = false;
-                player.renderMode = VideoRenderMode.RenderTexture;
-                player.targetTexture = renderTexture;
-                player.clip = clip;
-                player.audioOutputMode = VideoAudioOutputMode.Direct;
-                rawImage.texture = renderTexture;
-
-                yield return WaitUntilDialogueVideoPrepared(player);
-                if (player.isPrepared)
-                {
-                    yield return WaitUntilDialogueVideoPlaybackEnds(player, (float)clip.length);
-                }
-                else
-                {
-                    Debug.LogWarning($"DialogueManager: 视频 {videoResourcePath} Prepare 失败，将直接继续对话。");
-                }
+                Debug.LogWarning($"DialogueManager: 视频 {videoResourcePath} Prepare 失败，跳过播放。");
             }
         }
         finally
@@ -1655,21 +1661,28 @@ public class DialogueManager : MonoBehaviour
             if (renderTexture != null)
             {
                 renderTexture.Release();
-                Destroy(renderTexture);
+                UnityEngine.Object.Destroy(renderTexture);
             }
 
             if (overlayRoot != null)
             {
-                Destroy(overlayRoot);
+                UnityEngine.Object.Destroy(overlayRoot);
             }
+        }
+    }
 
+    private IEnumerator PlayDialogueVideoThenAdvance(string videoResourcePath, string nextNodeId, string nextDialogueId, string nextSceneName)
+    {
+        try
+        {
+            yield return PlayResourcesVideoFullscreen(videoResourcePath);
+        }
+        finally
+        {
             dialogueVideoRoutine = null;
         }
 
-        if (shouldAdvance)
-        {
-            AdvanceToNode(nextNodeId, nextDialogueId, nextSceneName);
-        }
+        AdvanceToNode(nextNodeId, nextDialogueId, nextSceneName);
     }
 
     private static GameObject CreateDialogueVideoOverlayRoot()
